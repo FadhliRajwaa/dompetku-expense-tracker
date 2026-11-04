@@ -12,10 +12,40 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_NAME = "DompetKu";
+const SITE_DESC =
+  "DompetKu — catat pemasukan & pengeluaran, kelola dompet dan transfer, atur budget bulanan per kategori, dan pantau lewat dashboard. Gratis untuk personal.";
+
 export const metadata: Metadata = {
-  title: "DompetKu — Catat Pengeluaran, Kendalikan Budget",
-  description:
-    "Aplikasi pencatatan keuangan personal: dompet, transaksi, budget, dan laporan.",
+  metadataBase: new URL("https://dompetku-expense-tracker.vercel.app"),
+  title: {
+    default: "DompetKu — Catat Pengeluaran, Kendalikan Budget",
+    template: "%s | DompetKu",
+  },
+  description: SITE_DESC,
+  applicationName: SITE_NAME,
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: "DompetKu — Catat Pengeluaran, Kendalikan Budget",
+    description: SITE_DESC,
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "DompetKu — catat pengeluaran, kendalikan budget bulanan" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DompetKu — Catat Pengeluaran, Kendalikan Budget",
+    description: SITE_DESC,
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({

@@ -46,7 +46,7 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
       <aside className="fixed left-0 top-0 hidden h-screen w-60 flex-col justify-between bg-white border-r p-4 lg:flex">
         <div>
           <Link href="/dashboard" className="flex items-center gap-2 px-2 py-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2FA084] text-lg font-bold text-white">D</span>
+            <img src="/logo.svg" alt="Logo DompetKu" className="h-9 w-9" />
             <span className="font-bold">DompetKu</span>
           </Link>
           <nav className="mt-6 flex flex-col gap-1">
