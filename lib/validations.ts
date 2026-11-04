@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Nama minimal 2 karakter').max(50),
-  email: z.string().email('Email tidak valid'),
+  name: z.string().trim().min(2, 'Nama minimal 2 karakter').max(50),
+  email: z.string().trim().toLowerCase().email('Email tidak valid').max(254),
   password: z.string().min(8, 'Password minimal 8 karakter').max(72),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  email: z.string().email('Email tidak valid'),
-  password: z.string().min(1, 'Password wajib diisi'),
+  email: z.string().trim().toLowerCase().email('Email tidak valid').max(254),
+  password: z.string().min(1, 'Password wajib diisi').max(72),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 
