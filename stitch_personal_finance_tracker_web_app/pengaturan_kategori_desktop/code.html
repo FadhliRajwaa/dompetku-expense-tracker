@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary":"#ffffff","surface-variant":"#dfe9e4","on-tertiary-container":"#67f4b7","text-strong":"#18181b","tertiary-container":"#006e4b","cat-shopping":"#b45309","error-container":"#ffdad6","text-body":"#52525b","outline-variant":"#c7c4d8","on-primary-fixed":"#052e20","surface-muted":"#f4f4f5","surface-container-highest":"#dfe9e4","inverse-surface":"#2f3038","on-primary-container":"#c9eddd","surface-card":"#ffffff","on-secondary-container":"#656466","on-tertiary-fixed-variant":"#005236","on-error":"#ffffff","income":"#10b981","surface-container-low":"#f2f7f4","tertiary":"#005338","on-surface-variant":"#464555","inverse-on-surface":"#f1effa","outline":"#777587","on-tertiary":"#ffffff","cat-transport":"#3b82f6","primary":"#2fa084","tertiary-fixed":"#6ffbbe","text-muted":"#71717a","secondary-fixed":"#dcefe7","primary-container":"#2fa084","cat-income":"#10b981","budget-warning":"#f59e0b","on-background":"#1a1b22","on-surface":"#1a1b22","surface-dim":"#dad9e3","on-secondary":"#ffffff","surface-container-lowest":"#ffffff","tertiary-fixed-dim":"#4edea3","cat-education":"#06b6d4","cat-entertainment":"#ec4899","cat-food":"#f97316","on-tertiary-fixed":"#002113","cat-bills":"#f59e0b","inverse-primary":"#bfe9d8","surface-container":"#eef4f0","on-secondary-fixed":"#1c1b1d","cat-health":"#14b8a6","secondary-fixed-dim":"#c8c6c8","primary-fixed-dim":"#bfe9d8","surface-bright":"#fafcfb","background":"#fafcfb","surface-tint":"#2fa084","secondary":"#5f5e60","primary-fixed":"#d9f2e7","on-secondary-fixed-variant":"#474649","expense":"#f43f5e","surface-container-high":"#e7efe9","surface":"#fafcfb","surface-bg":"#fafafa","on-primary-fixed-variant":"#1f6b4d","error":"#ba1a1a","on-error-container":"#93000a","secondary-container":"#dcefe7","border-subtle":"#e4e4e7","budget-danger":"#e11d48"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-md":"1rem","space-xl":"2rem","space-lg":"1.5rem","gutter":"1.5rem","margin-mobile":"1rem","gutter-mobile":"0.75rem","margin":"2rem","space-sm":"0.5rem","space-xs":"0.25rem"},"fontFamily":{"currency-stat":["Geist"],"headline-xl-mobile":["Geist"],"headline-xl":["Geist"],"body-sm":["Inter"],"headline-lg-mobile":["Geist"],"currency-display":["Geist"],"label-sm":["Inter"],"label-md":["Inter"],"headline-md":["Geist"],"headline-sm":["Geist"],"headline-lg":["Geist"],"body-md":["Inter"],"body-lg":["Inter"]},"fontSize":{"currency-stat":["22px",{"lineHeight":"28px","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","fontWeight":"700"}],"headline-xl":["36px",{"lineHeight":"44px","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-lg-mobile":["22px",{"lineHeight":"28px","fontWeight":"600"}],"currency-display":["32px",{"lineHeight":"38px","fontWeight":"700"}],"label-sm":["11px",{"lineHeight":"14px","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-bg text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-surface-card z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center gap-space-sm"><img alt="DompetKu Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wge1F3Xq4QaPUBlhsVfau2Q4OfPYhsFgAEa7xTV430HYubuc8J8fvjxpMnHfGTPcCcqoZqCiLSHZPJTBvPjVcBznSu0K7OmgI_Ke-pPhoIp7tMpb7oLXy3bFVxEXOFsw73Y0Lbwgm5XPyMnbInui35DoaoUj4tD8qRnqWB-gkykuETDRvFEghw2o2dXmi9GW0Hx-nrozt4tKY-uG-XXuPX_IbXH_aOsFwlib304LU0"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-strong font-bold leading-tight">DompetKu</span><span class="font-label-sm text-label-sm text-text-muted">Personal Finance</span></div></div><nav class="px-space-sm pt-space-sm flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-label-md rounded-lg"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-headline-sm">grid_view</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="transaksi" href="#"><span class="material-symbols-outlined text-headline-sm">receipt_long</span><span>Transaksi</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dompet-dan-transfer" href="#"><span class="material-symbols-outlined text-headline-sm">account_balance_wallet</span><span>Dompet &amp; Transfer</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="anggaran" href="#"><span class="material-symbols-outlined text-headline-sm">pie_chart</span><span>Anggaran</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="laporan-dan-tren" href="#"><span class="material-symbols-outlined text-headline-sm">insights</span><span>Laporan &amp; Tren</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-headline-sm">settings</span><span>Pengaturan</span></a></nav></div><div class="p-space-md m-space-sm rounded-xl bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)] flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-text-muted">Total Terkonsolidasi</span><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-card text-income font-medium">Aktif</span></div><div class="font-currency-stat text-currency-stat text-text-strong">Rp 24.850.000</div><div class="flex items-center justify-between text-text-muted font-label-sm text-label-sm pt-space-xs"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-income"></span>3 Dompet Aktif</span><span class="text-primary font-medium hover:underline cursor-pointer">Detail</span></div></div></aside><div class="pl-60 min-h-screen flex flex-col"><header class="fixed top-0 left-60 right-0 h-16 bg-surface-card/90 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-md"><div class="relative w-full flex items-center"><span class="material-symbols-outlined absolute left-3 text-text-muted text-headline-sm pointer-events-none">search</span><input class="w-full pl-9 pr-14 py-space-xs h-10 rounded-lg bg-surface-muted text-text-strong font-body-md text-body-md placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary-container transition-all" placeholder="Cari transaksi, kategori, dompet..." type="text"/><kbd class="absolute right-2.5 px-1.5 py-0.5 rounded bg-surface-card font-label-sm text-label-sm text-text-muted shadow-[0_1px_2px_rgba(0,0,0,0.04)]">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="inline-flex items-center gap-space-xs h-10 px-space-md rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all cursor-pointer active:scale-95" type="button"><span class="material-symbols-outlined text-headline-sm">add_circle</span><span>Catat Transaksi</span></button><button class="relative p-space-xs rounded-lg text-text-body hover:bg-surface-container-high hover:text-on-surface transition-colors cursor-pointer" type="button"><span class="material-symbols-outlined text-headline-sm">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-expense"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Bc5jdRdTwaVH5cun7DNFNbWjBLgjFsa2nYhagb5pvOeTLXPSe3SR7ol0zgFR7Fdm3XC6l8aAcL6oLkWtNgPGEkMWMAnR3SWob7AA336My0mDu3esifrOgIJeKq8KBPf8Oyrd7REgIYG_mmijU6Vo-uYppMq_PqkJsAxsTOdr8Wn6vyOIxorfIo1ki0EQis4DpVhhvLK7eNmU17Yhv-IGq2Vz6ENz1aBVry2Tn6g"/><div class="hidden md:flex flex-col text-left"><span class="font-label-md text-label-md text-text-strong leading-tight">Budi Santoso</span><span class="font-label-sm text-label-sm text-text-muted">Personal</span></div></div></div></div></header><main class="w-full pt-16 bg-surface-bg flex-1"><div class="flex flex-col w-full">
+<div class="max-w-[1200px] w-full mx-auto px-margin py-space-lg flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Pusat Kendali Akun</span>
+<span class="w-1.5 h-1.5 rounded-full bg-income"></span>
+<span class="font-label-sm text-label-sm text-income">Sinkronisasi Cloud Aktif</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-text-strong font-bold tracking-tight">Pengaturan &amp; Preferensi Sistem</h1>
+<p class="font-body-md text-body-md text-text-muted">Kelola kredensial profil, taksonomi kategori anggaran, parameter lokal, serta arsip data finansial DompetKu.</p>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-card p-1.5 rounded-xl shadow-sm self-start md:self-auto">
+<span class="material-symbols-outlined text-text-muted text-body-md ml-2">cloud_done</span>
+<span class="font-label-sm text-label-sm text-text-body pr-2">Pencadangan terakhir: Hari ini, 09:41 WIB</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<div class="lg:col-span-3 flex flex-col gap-space-md sticky top-20">
+<div class="bg-surface-card rounded-xl shadow-sm p-space-sm flex flex-col gap-1">
+<button class="settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md transition-all text-left bg-primary-container text-on-primary shadow-sm" id="tab-btn-profil" onclick="switchTab('profil')" type="button">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-headline-sm">account_circle</span>
+<span>Profil Akun</span>
+</span>
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+</button>
+<button class="settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md text-text-body hover:bg-surface-container-high transition-all text-left" id="tab-btn-kategori" onclick="switchTab('kategori')" type="button">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-headline-sm">category</span>
+<span>Kategori Transaksi</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-surface-muted text-text-muted">8</span>
+</button>
+<button class="settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md text-text-body hover:bg-surface-container-high transition-all text-left" id="tab-btn-preferensi" onclick="switchTab('preferensi')" type="button">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-headline-sm">tune</span>
+<span>Format &amp; Tampilan</span>
+</span>
+</button>
+<button class="settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md text-text-body hover:bg-surface-container-high transition-all text-left" id="tab-btn-keamanan" onclick="switchTab('keamanan')" type="button">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-headline-sm">lock</span>
+<span>Keamanan &amp; Sesi</span>
+</span>
+<span class="material-symbols-outlined text-income text-body-md">verified_user</span>
+</button>
+<button class="settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md text-text-body hover:bg-surface-container-high transition-all text-left" id="tab-btn-ekspor" onclick="switchTab('ekspor')" type="button">
+<span class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-headline-sm">database</span>
+<span>Backup &amp; Zona Bahaya</span>
+</span>
+</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-muted font-semibold">STATUS SUBSKRIPSI</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary text-on-primary">Personal Pro</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-body pt-1">Fitur multi-mata uang, ekspor tak terbatas, dan cadangan otomatis aktif selamanya.</p>
+</div>
+</div>
+<div class="lg:col-span-9 flex flex-col gap-space-lg">
+<div class="settings-section flex flex-col gap-space-lg" id="section-profil">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col gap-1 pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-text-strong font-bold">Identitas Profil Pribadi</h2>
+<p class="font-body-md text-body-md text-text-muted">Informasi dasar ini digunakan pada ringkasan laporan neraca dan bukti transfer.</p>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-lg p-space-md bg-surface-muted rounded-xl">
+<div class="relative">
+<img class="w-20 h-20 rounded-full object-cover shadow-sm" data-alt="Close up modern business portrait of Budi Santoso, confident Indonesian professional with warm friendly expression, clean neutral studio background, crisp soft lighting, modern indigo shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCICmbiBYDaqw1mPIV4OvHExNXz_YYy77fEA2PELEiB4E0Dxntrlyyf1CVLQGg-8hHn3vPPxHlC97y2_SkoT5fdYMDHaS7T8mJCwgf8M4sZCTzH4Lo3xHtVszAsIREV9mLEwG2zBGK3TqCye4xajVAXpwzN6ALYVY1METmb5px3NOu8q6j63mJ5UpjoQdTbqwJKv8S7rSh93_VrmT4eWMu8_phD0pfjfc40UO00b64"/>
+<button class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md hover:bg-primary-container transition-all" title="Ganti Avatar" type="button">
+<span class="material-symbols-outlined text-headline-sm">photo_camera</span>
+</button>
+</div>
+<div class="flex flex-col gap-1 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Budi Santoso</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-card text-primary font-semibold shadow-xs">Pemilik Akun (Utama)</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">ID Pengguna: DPK-89210-JKT • Terdaftar sejak Maret 2023</span>
+<span class="font-label-sm text-label-sm text-income flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-body-sm">check_circle</span> Terverifikasi dengan Email Google
+                </span>
+</div>
+</div>
+<form class="grid grid-cols-1 sm:grid-cols-2 gap-space-md" onsubmit="event.preventDefault(); showToast('Perubahan profil berhasil disimpan!');">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Nama Lengkap</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" required="" type="text" value="Budi Santoso"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Alamat Email Primer</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-muted text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" readonly="" type="email" value="budi.santoso@example.com"/>
+<span class="font-label-sm text-label-sm text-text-muted">Untuk mengubah alamat email, hubungi dukungan teknis.</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Nomor WhatsApp / Seluler</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" type="tel" value="+62 812-9840-7721"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Peran / Otoritas Akun</label>
+<div class="h-10 px-space-md rounded-lg bg-surface-muted flex items-center justify-between text-text-strong font-body-md text-body-md">
+<span>Administrator Penuh</span>
+<span class="material-symbols-outlined text-text-muted text-body-md">admin_panel_settings</span>
+</div>
+</div>
+<div class="sm:col-span-2 flex justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md h-10 rounded-lg bg-surface-muted hover:bg-surface-container-high text-text-strong font-label-md text-label-md transition-colors" type="reset">Batal</button>
+<button class="px-space-lg h-10 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-space-xs" type="submit">
+<span class="material-symbols-outlined text-headline-sm">save</span>
+<span>Simpan Perubahan</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<div class="settings-section flex flex-col gap-space-lg" id="section-kategori">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<h2 class="font-headline-md text-headline-md text-text-strong font-bold">Taksonomi Kategori Transaksi</h2>
+<p class="font-body-md text-body-md text-text-muted">Skema klasifikasi pengeluaran &amp; pemasukan sesuai struktur Prisma schema.</p>
+</div>
+<button class="h-10 px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-space-xs self-start" onclick="toggleModal('modal-kategori', true)" type="button">
+<span class="material-symbols-outlined text-headline-sm">add_circle</span>
+<span>+ Tambah Kategori Baru</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs p-1 bg-surface-muted rounded-xl self-start">
+<button class="cat-pill px-space-md py-1.5 rounded-lg font-label-md text-label-md bg-surface-card text-text-strong shadow-xs font-semibold" id="cat-filter-all" onclick="filterCategories('all')" type="button">Semua Kategori (8)</button>
+<button class="cat-pill px-space-md py-1.5 rounded-lg font-label-md text-label-md text-text-muted hover:text-text-strong" id="cat-filter-expense" onclick="filterCategories('expense')" type="button">Pengeluaran (6)</button>
+<button class="cat-pill px-space-md py-1.5 rounded-lg font-label-md text-label-md text-text-muted hover:text-text-strong" id="cat-filter-income" onclick="filterCategories('income')" type="button">Pemasukan (2)</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="kategori-list-grid">
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-food/15 text-cat-food flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">restaurant</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Makanan &amp; Minuman</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #food</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-transport/15 text-cat-transport flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">directions_car</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Transportasi</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #transit</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-shopping/15 text-cat-shopping flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">shopping_bag</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Belanja Kebutuhan</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Kustom • Tag: #belanja</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-error hover:bg-error-container/40 transition-colors" title="Hapus Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">delete</span>
+</button>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-bills/15 text-cat-bills flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">receipt</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Tagihan &amp; Utilitas</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #bills</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="income">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-income/15 text-income flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">payments</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Gaji &amp; Upah Bulanan</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-income/15 text-income">Pemasukan</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #salary</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="income">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-education/15 text-cat-education flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">trending_up</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Investasi &amp; Dividen</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-income/15 text-income">Pemasukan</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Kustom • Tag: #cuandev</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-error hover:bg-error-container/40 transition-colors" title="Hapus Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">delete</span>
+</button>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-entertainment/15 text-cat-entertainment flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">sports_esports</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Hiburan &amp; Rekreasi</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #fun</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+<div class="cat-card p-space-md rounded-xl bg-surface-muted flex items-center justify-between shadow-xs transition-all hover:bg-surface-container" data-type="expense">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-cat-health/15 text-cat-health flex items-center justify-center">
+<span class="material-symbols-outlined text-headline-md">medical_services</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Kesehatan &amp; Medis</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-expense/10 text-expense">Pengeluaran</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori Sistem • Tag: #health</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-card transition-colors" title="Ubah Kategori" type="button">
+<span class="material-symbols-outlined text-body-md">edit</span>
+</button>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-card text-text-muted font-mono">Baku</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="settings-section flex flex-col gap-space-lg" id="section-preferensi">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col gap-1 pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-text-strong font-bold">Parameter Format &amp; Lokalisasi</h2>
+<p class="font-body-md text-body-md text-text-muted">Atur konvensi matematis, simbol mata uang primer, dan standar representasi kalender.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs p-space-md bg-surface-muted rounded-xl">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-text-strong font-bold">Mata Uang Utama</label>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-income/15 text-income font-medium">Baku</span>
+</div>
+<select class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs">
+<option selected="" value="IDR">IDR (Rupiah Indonesia - Rp)</option>
+<option value="USD">USD (Dolar Amerika Serikat - $)</option>
+<option value="SGD">SGD (Dolar Singapura - S$)</option>
+<option value="EUR">EUR (Euro Uni Eropa - €)</option>
+</select>
+<span class="font-body-sm text-body-sm text-text-muted">Seluruh agregasi di dasbor menggunakan mata uang ini.</span>
+</div>
+<div class="flex flex-col gap-space-xs p-space-md bg-surface-muted rounded-xl">
+<label class="font-label-md text-label-md text-text-strong font-bold">Format Kalender &amp; Tanggal</label>
+<select class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs">
+<option selected="" value="DD/MM/YYYY">DD/MM/YYYY (Contoh: 28/05/2024)</option>
+<option value="YYYY-MM-DD">YYYY-MM-DD (ISO 8601: 2024-05-28)</option>
+<option value="DD MMMM YYYY">DD MMMM YYYY (28 Mei 2024)</option>
+</select>
+<span class="font-body-sm text-body-sm text-text-muted">Format standar pada seluruh tabel mutasi.</span>
+</div>
+<div class="flex flex-col gap-space-xs p-space-md bg-surface-muted rounded-xl">
+<label class="font-label-md text-label-md text-text-strong font-bold">Pemisah Desimal &amp; Ribuan</label>
+<select class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs">
+<option selected="">Titik Ribuan, Koma Desimal (Rp 1.500.000,00)</option>
+<option>Koma Ribuan, Titik Desimal (Rp 1,500,000.00)</option>
+<option>Spasi Ribuan (Rp 1 500 000)</option>
+</select>
+<span class="font-body-sm text-body-sm text-text-muted">Standar akuntansi Republik Indonesia (BI &amp; OJK).</span>
+</div>
+<div class="flex flex-col gap-space-xs p-space-md bg-surface-muted rounded-xl">
+<label class="font-label-md text-label-md text-text-strong font-bold">Awal Periode Anggaran Bulanan</label>
+<select class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs">
+<option selected="">Tanggal 1 setiap bulan (Kalender Normal)</option>
+<option>Tanggal 25 setiap bulan (Siklus Penggajian)</option>
+<option>Tanggal 28 setiap bulan (Akhir Bulan)</option>
+</select>
+<span class="font-body-sm text-body-sm text-text-muted">Kalkulasi progres anggaran akan di-reset pada tanggal ini.</span>
+</div>
+</div>
+<div class="flex justify-end pt-space-xs">
+<button class="px-space-lg h-10 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-space-xs" onclick="showToast('Preferensi lokalisasi berhasil diperbarui!')" type="button">
+<span class="material-symbols-outlined text-headline-sm">check</span>
+<span>Terapkan Format Baru</span>
+</button>
+</div>
+</div>
+</div>
+<div class="settings-section flex flex-col gap-space-lg" id="section-keamanan">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col gap-1 pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-text-strong font-bold">Keamanan Kredensial &amp; Sesi Masuk</h2>
+<p class="font-body-md text-body-md text-text-muted">Perlindungan berlapis dengan validasi Zod minimal 8 karakter dan manajemen perangkat.</p>
+</div>
+<form class="flex flex-col gap-space-md p-space-md bg-surface-muted rounded-xl" onsubmit="event.preventDefault(); handlePasswordChange();">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Ubah Kata Sandi Akun</span>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs sm:col-span-2">
+<label class="font-label-md text-label-md text-text-strong font-medium">Kata Sandi Saat Ini</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="pwd-curr" placeholder="••••••••••••" required="" type="password"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Kata Sandi Baru</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="pwd-new" minlength="8" oninput="checkPasswordStrength(this.value)" placeholder="Min. 8 karakter (Zod validation)" required="" type="password"/>
+<div class="w-full h-1.5 bg-surface-card rounded-full overflow-hidden mt-1">
+<div class="h-full bg-error transition-all duration-300 w-1/4" id="pwd-meter"></div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted" id="pwd-hint">Gunakan kombinasi huruf, angka, dan karakter spesial.</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Konfirmasi Kata Sandi Baru</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="pwd-confirm" minlength="8" placeholder="Ulangi kata sandi baru" required="" type="password"/>
+</div>
+</div>
+<div class="flex justify-end pt-space-xs">
+<button class="px-space-md h-10 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-space-xs" type="submit">
+<span class="material-symbols-outlined text-headline-sm">key</span>
+<span>Perbarui Kata Sandi</span>
+</button>
+</div>
+</form>
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-strong font-bold">Daftar Sesi Aktif Perangkat</h3>
+<p class="font-body-sm text-body-sm text-text-muted">Perangkat yang saat ini memiliki token autentikasi valid ke akun Anda.</p>
+</div>
+<button class="px-space-md h-8 rounded-lg bg-surface-muted hover:bg-surface-container-high text-error font-label-md text-label-md transition-colors" onclick="showToast('Sesi pada perangkat lain telah dicabut!')" type="button">
+                  Keluar dari Semua Sesi Lain
+                </button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between p-space-md bg-surface-muted rounded-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-card text-primary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-headline-md">laptop_mac</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-strong font-bold">MacBook Pro 14" (Google Chrome)</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-income/15 text-income font-semibold">Perangkat Ini</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Jakarta, Indonesia • IP 103.144.18.29 • Aktif sekarang</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-income">verified</span>
+</div>
+<div class="flex items-center justify-between p-space-md bg-surface-muted rounded-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-card text-text-muted flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-headline-md">phone_iphone</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-text-strong font-bold">iPhone 15 Pro (Aplikasi Mobile DompetKu)</span>
+<span class="font-body-sm text-body-sm text-text-muted">Tangerang Selatan, Indonesia • IP 180.252.12.8 • Kemarin 21:18</span>
+</div>
+</div>
+<button class="font-label-md text-label-md text-error hover:underline" onclick="showToast('Sesi iPhone telah dinonaktifkan')" type="button">Putuskan</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="settings-section flex flex-col gap-space-lg" id="section-ekspor">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col gap-1 pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-text-strong font-bold">Pencadangan &amp; Ekspor Portabilitas Data</h2>
+<p class="font-body-md text-body-md text-text-muted">Unduh seluruh rekaman transaksi, dompet, dan anggaran dalam format terbuka untuk audit mandiri.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="p-space-md rounded-xl bg-surface-muted flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-headline-md">data_object</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Backup Lengkap JSON</span>
+<p class="font-body-sm text-body-sm text-text-muted">Termasuk metadata kategori, relasi dompet, mutasi transaksi, serta pengaturan personalisasi.</p>
+</div>
+<button class="h-10 px-space-md rounded-lg bg-surface-card hover:bg-surface-container text-primary font-label-md text-label-md shadow-xs transition-all flex items-center justify-center gap-space-xs font-semibold" onclick="downloadBackup('json')" type="button">
+<span class="material-symbols-outlined text-headline-sm">download</span>
+<span>Unduh dompetku_backup.json</span>
+</button>
+</div>
+<div class="p-space-md rounded-xl bg-surface-muted flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="w-10 h-10 rounded-lg bg-cat-income text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-headline-md">table_view</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Ekspor Mutasi CSV (Excel)</span>
+<p class="font-body-sm text-body-sm text-text-muted">Format tabel baris tunggal berisi tanggal, nominal, dompet sumber, dan kategori untuk Microsoft Excel atau Google Sheets.</p>
+</div>
+<button class="h-10 px-space-md rounded-lg bg-surface-card hover:bg-surface-container text-income font-label-md text-label-md shadow-xs transition-all flex items-center justify-center gap-space-xs font-semibold" onclick="downloadBackup('csv')" type="button">
+<span class="material-symbols-outlined text-headline-sm">file_download</span>
+<span>Ekspor transaksi_all.csv</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-error-container/30 rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs text-error font-bold">
+<span class="material-symbols-outlined text-headline-md">warning</span>
+<span class="font-headline-sm text-headline-sm">Zona Bahaya (Tindakan Destruktif)</span>
+</div>
+<p class="font-body-md text-body-md text-text-strong">
+              Operasi berikut ini bersifat permanen dan tidak dapat dibatalkan. Pastikan Anda telah membuat cadangan JSON sebelum melanjutkan.
+            </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs">
+<div class="p-space-md rounded-xl bg-surface-card flex flex-col justify-between gap-space-md shadow-xs">
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-text-strong font-bold">Reset Seluruh Data Transaksi</span>
+<p class="font-body-sm text-body-sm text-text-muted">Menghapus seluruh rekaman mutasi dan riwayat transfer, tetapi tetap mempertahankan konfigurasi dompet dan kategori.</p>
+</div>
+<button class="h-10 px-space-md rounded-lg bg-error-container text-error hover:bg-error hover:text-on-error font-label-md text-label-md transition-all font-semibold flex items-center justify-center gap-1" onclick="promptDangerZone('reset')" type="button">
+<span class="material-symbols-outlined text-headline-sm">restart_alt</span>
+<span>Bersihkan Semua Transaksi</span>
+</button>
+</div>
+<div class="p-space-md rounded-xl bg-surface-card flex flex-col justify-between gap-space-md shadow-xs">
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-error font-bold">Hapus Akun Permanen</span>
+<p class="font-body-sm text-body-sm text-text-muted">Menghapus akun Budi Santoso, seluruh dompet saldo, relasi kategori, dan menghapus sesi cloud secara tuntas.</p>
+</div>
+<button class="h-10 px-space-md rounded-lg bg-error text-on-error hover:opacity-90 font-label-md text-label-md transition-all font-semibold flex items-center justify-center gap-1 shadow-sm" onclick="promptDangerZone('delete')" type="button">
+<span class="material-symbols-outlined text-headline-sm">delete_forever</span>
+<span>Hapus Akun DompetKu</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed inset-0 z-50 flex items-center justify-center p-space-md hidden bg-inverse-surface/40 backdrop-blur-sm" id="modal-kategori">
+<div class="bg-surface-card w-full max-w-lg rounded-xl shadow-lg p-space-lg flex flex-col gap-space-md animate-in fade-in zoom-in-95 duration-150">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-text-strong font-bold">+ Tambah Kategori Baru</span>
+<span class="font-body-sm text-body-sm text-text-muted">Kategori akan langsung tersinkronkan ke opsi transaksi harian.</span>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:text-text-strong hover:bg-surface-muted transition-colors" onclick="toggleModal('modal-kategori', false)">
+<span class="material-symbols-outlined text-headline-sm">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-md" onsubmit="event.preventDefault(); handleAddCategory();">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Tipe Kategori</label>
+<div class="grid grid-cols-2 gap-space-xs bg-surface-muted p-1 rounded-lg">
+<label class="flex items-center justify-center gap-1.5 py-1.5 rounded font-label-md text-label-md cursor-pointer transition-colors bg-surface-card shadow-xs text-text-strong font-semibold">
+<input checked="" class="hidden" name="new-cat-type" type="radio" value="expense"/>
+<span class="material-symbols-outlined text-body-md text-expense">arrow_upward</span>
+<span>Pengeluaran</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 py-1.5 rounded font-label-md text-label-md cursor-pointer transition-colors text-text-muted hover:text-text-strong">
+<input class="hidden" name="new-cat-type" type="radio" value="income"/>
+<span class="material-symbols-outlined text-body-md text-income">arrow_downward</span>
+<span>Pemasukan</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Nama Kategori</label>
+<input class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="input-cat-name" placeholder="Misal: Langganan SaaS, Freelance, Gym" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Pilih Aksen Warna</label>
+<div class="flex items-center gap-space-sm pt-1">
+<label class="cursor-pointer">
+<input checked="" class="hidden peer" name="cat-color" type="radio" value="cat-food"/>
+<span class="w-8 h-8 rounded-full bg-cat-food block peer-checked:ring-4 peer-checked:ring-cat-food/30 transition-all"></span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="cat-color" type="radio" value="cat-transport"/>
+<span class="w-8 h-8 rounded-full bg-cat-transport block peer-checked:ring-4 peer-checked:ring-cat-transport/30 transition-all"></span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="cat-color" type="radio" value="cat-shopping"/>
+<span class="w-8 h-8 rounded-full bg-cat-shopping block peer-checked:ring-4 peer-checked:ring-cat-shopping/30 transition-all"></span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="cat-color" type="radio" value="cat-bills"/>
+<span class="w-8 h-8 rounded-full bg-cat-bills block peer-checked:ring-4 peer-checked:ring-cat-bills/30 transition-all"></span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="cat-color" type="radio" value="income"/>
+<span class="w-8 h-8 rounded-full bg-income block peer-checked:ring-4 peer-checked:ring-income/30 transition-all"></span>
+</label>
+<label class="cursor-pointer">
+<input class="hidden peer" name="cat-color" type="radio" value="cat-entertainment"/>
+<span class="w-8 h-8 rounded-full bg-cat-entertainment block peer-checked:ring-4 peer-checked:ring-cat-entertainment/30 transition-all"></span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-strong font-medium">Ikon Material</label>
+<select class="h-10 px-space-md rounded-lg bg-surface-card text-text-strong font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" id="input-cat-icon">
+<option value="fitness_center">fitness_center (Olahraga &amp; Fitness)</option>
+<option value="subscriptions">subscriptions (Streaming &amp; Langganan)</option>
+<option value="coffee">coffee (Kopi &amp; Kafe)</option>
+<option value="school">school (Kursus &amp; Edukasi)</option>
+<option value="flight">flight (Perjalanan &amp; Tiket)</option>
+<option value="savings">savings (Tabungan Berjangka)</option>
+</select>
+</div>
+<div class="flex justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md h-10 rounded-lg bg-surface-muted hover:bg-surface-container text-text-strong font-label-md text-label-md transition-colors" onclick="toggleModal('modal-kategori', false)" type="button">Batal</button>
+<button class="px-space-lg h-10 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all font-semibold" type="submit">Simpan Kategori</button>
+</div>
+</form>
+</div>
+</div>
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-surface-card text-text-strong px-space-lg py-space-md rounded-xl shadow-lg flex items-center gap-space-sm" id="toast-notification">
+<span class="material-symbols-outlined text-income" id="toast-icon">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-message">Operasi berhasil dilakukan</span>
+</div>
+</div>
+<script>
+  function switchTab(tabId) {
+    const tabs = ['profil', 'kategori', 'preferensi', 'keamanan', 'ekspor'];
+    
+    tabs.forEach(t => {
+      const section = document.getElementById('section-' + t);
+      const btn = document.getElementById('tab-btn-' + t);
+      
+      if (t === tabId) {
+        if (section) section.classList.remove('hidden');
+        if (btn) {
+          btn.className = 'settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md transition-all text-left bg-primary-container text-on-primary shadow-sm';
+        }
+      } else {
+        if (section) section.classList.add('hidden');
+        if (btn) {
+          btn.className = 'settings-nav-item flex items-center justify-between px-space-md py-space-sm rounded-lg font-label-md text-label-md text-text-body hover:bg-surface-container-high transition-all text-left';
+        }
+      }
+    });
+  }
+
+  function filterCategories(type) {
+    const cards = document.querySelectorAll('.cat-card');
+    const pills = document.querySelectorAll('.cat-pill');
+    
+    pills.forEach(p => {
+      p.className = 'cat-pill px-space-md py-1.5 rounded-lg font-label-md text-label-md text-text-muted hover:text-text-strong';
+    });
+
+    const activePill = document.getElementById('cat-filter-' + type);
+    if (activePill) {
+      activePill.className = 'cat-pill px-space-md py-1.5 rounded-lg font-label-md text-label-md bg-surface-card text-text-strong shadow-xs font-semibold';
+    }
+
+    cards.forEach(c => {
+      if (type === 'all' || c.getAttribute('data-type') === type) {
+        c.classList.remove('hidden');
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+  }
+
+  function toggleModal(modalId, show) {
+    const m = document.getElementById(modalId);
+    if (m) {
+      if (show) m.classList.remove('hidden');
+      else m.classList.add('hidden');
+    }
+  }
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast-notification');
+    const txt = document.getElementById('toast-message');
+    const icon = document.getElementById('toast-icon');
+    
+    if (t && txt && icon) {
+      txt.textContent = msg;
+      icon.textContent = isError ? 'error' : 'check_circle';
+      icon.className = isError ? 'material-symbols-outlined text-error' : 'material-symbols-outlined text-income';
+      
+      t.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      t.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        t.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        t.classList.remove('translate-y-0', 'opacity-100');
+      }, 3200);
+    }
+  }
+
+  function checkPasswordStrength(val) {
+    const meter = document.getElementById('pwd-meter');
+    const hint = document.getElementById('pwd-hint');
+    if (!meter || !hint) return;
+
+    if (val.length === 0) {
+      meter.style.width = '0%';
+      hint.textContent = 'Gunakan kombinasi huruf, angka, dan karakter spesial.';
+    } else if (val.length < 8) {
+      meter.style.width = '25%';
+      meter.className = 'h-full bg-error transition-all duration-300';
+      hint.textContent = 'Minimal 8 karakter (Zod validation mensyaratkan 8+ huruf).';
+    } else if (val.length < 12) {
+      meter.style.width = '65%';
+      meter.className = 'h-full bg-budget-warning transition-all duration-300';
+      hint.textContent = 'Kekuatan sedang: Tambahkan angka dan simbol unik.';
+    } else {
+      meter.style.width = '100%';
+      meter.className = 'h-full bg-income transition-all duration-300';
+      hint.textContent = 'Sandi sangat kuat dan aman.';
+    }
+  }
+
+  function handlePasswordChange() {
+    const curr = document.getElementById('pwd-curr').value;
+    const newP = document.getElementById('pwd-new').value;
+    const conf = document.getElementById('pwd-confirm').value;
+
+    if (newP.length < 8) {
+      showToast('Validasi gagal: Kata sandi minimal 8 karakter!', true);
+      return;
+    }
+    if (newP !== conf) {
+      showToast('Konfirmasi kata sandi tidak cocok!', true);
+      return;
+    }
+    showToast('Kata sandi berhasil diperbarui dengan aman!');
+    document.getElementById('pwd-curr').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+    checkPasswordStrength('');
+  }
+
+  function downloadBackup(type) {
+    showToast(`Membuat arsip ${type.toUpperCase()}... Unduhan akan dimulai.`);
+    setTimeout(() => {
+      const dataStr = type === 'json' 
+        ? "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ user: "Budi Santoso", exported_at: new Date().toISOString(), balance: 24850000 }))
+        : "data:text/csv;charset=utf-8," + encodeURIComponent("ID,Tanggal,Kategori,Tipe,Nominal\n1,2024-05-28,Gaji,Pemasukan,15000000\n2,2024-05-27,Makanan,Pengeluaran,45000");
+      
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", type === 'json' ? "dompetku_backup.json" : "transaksi_all.csv");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }, 800);
+  }
+
+  function promptDangerZone(action) {
+    const promptMsg = action === 'reset' 
+      ? "Ketik 'RESET' untuk mengosongkan seluruh catatan mutasi keuangan Anda:"
+      : "Ketik 'HAPUS' untuk memusnahkan akun Budi Santoso selamanya:";
+    
+    const expected = action === 'reset' ? 'RESET' : 'HAPUS';
+    const res = prompt(promptMsg);
+    
+    if (res === expected) {
+      showToast(action === 'reset' ? 'Semua data transaksi telah dibersihkan.' : 'Permintaan penghapusan akun diproses.', true);
+    } else if (res !== null) {
+      showToast('Konfirmasi tidak sesuai. Operasi dibatalkan.', true);
+    }
+  }
+
+  function handleAddCategory() {
+    const nameInput = document.getElementById('input-cat-name');
+    const iconInput = document.getElementById('input-cat-icon');
+    const type = document.querySelector('input[name="new-cat-type"]:checked').value;
+    
+    if (!nameInput.value.trim()) return;
+
+    showToast(`Kategori "${nameInput.value}" berhasil didaftarkan!`);
+    nameInput.value = '';
+    toggleModal('modal-kategori', false);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    switchTab('profil');
+  });
+</script></main></div></body></html>

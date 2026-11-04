@@ -1,0 +1,4 @@
+stitch_personal_finance_tracker_web_app.zip
+.env*.local
+node_modules
+.next

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>Transaksi - DompetKu</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-primary": "#bfe9d8", "inverse-on-surface": "#f1effa", "on-error-container": "#93000a", "secondary-fixed-dim": "#c8c6c8", "outline-variant": "#c7c4d8", "tertiary": "#005338", "surface-container-highest": "#dfe9e4", "cat-transport": "#3b82f6", "expense": "#f43f5e", "primary": "#2fa084", "cat-shopping": "#b45309", "on-primary-fixed-variant": "#1f6b4d", "on-surface": "#1a1b22", "cat-education": "#06b6d4", "inverse-surface": "#2f3038", "error": "#ba1a1a", "primary-fixed-dim": "#bfe9d8", "secondary": "#5f5e60", "budget-danger": "#e11d48", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "surface-variant": "#dfe9e4", "on-background": "#1a1b22", "cat-entertainment": "#ec4899", "on-tertiary-fixed-variant": "#005236", "tertiary-container": "#006e4b", "secondary-fixed": "#dcefe7", "cat-bills": "#f59e0b", "surface-container-lowest": "#ffffff", "income": "#10b981", "on-primary": "#ffffff", "surface-bg": "#fafafa", "on-primary-container": "#c9eddd", "outline": "#777587", "on-secondary-fixed-variant": "#474649", "on-tertiary-container": "#67f4b7", "on-tertiary-fixed": "#002113", "background": "#fafcfb", "on-surface-variant": "#464555", "surface-muted": "#f4f4f5", "surface": "#fafcfb", "on-secondary-container": "#656466", "cat-food": "#f97316", "secondary-container": "#dcefe7", "text-body": "#52525b", "text-strong": "#18181b", "surface-container-low": "#f2f7f4", "on-primary-fixed": "#052e20", "primary-container": "#2fa084", "surface-dim": "#dad9e3", "cat-income": "#10b981", "cat-health": "#14b8a6", "on-secondary": "#ffffff", "on-error": "#ffffff", "surface-container": "#eef4f0", "border-subtle": "#e4e4e7", "tertiary-fixed-dim": "#4edea3", "text-muted": "#71717a", "primary-fixed": "#d9f2e7", "tertiary-fixed": "#6ffbbe", "surface-container-high": "#e7efe9", "on-secondary-fixed": "#1c1b1d", "surface-bright": "#fafcfb", "budget-warning": "#f59e0b", "surface-card": "#ffffff", "surface-tint": "#2fa084" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "margin-mobile": "1rem", "space-md": "1rem", "space-lg": "1.5rem", "margin": "2rem", "space-xs": "0.25rem", "space-xl": "2rem", "gutter-mobile": "0.75rem", "gutter": "1.5rem" }, fontFamily: { "label-md": ["Inter"], "headline-sm": ["Geist"], "currency-display": ["Geist"], "headline-lg": ["Geist"], "headline-xl-mobile": ["Geist"], "currency-stat": ["Geist"], "headline-md": ["Geist"], "headline-xl": ["Geist"], "label-sm": ["Inter"], "body-sm": ["Inter"], "headline-lg-mobile": ["Geist"], "body-md": ["Inter"], "body-lg": ["Inter"] }, fontSize: { "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "currency-display": ["32px", { "lineHeight": "38px", "fontWeight": "700" }], "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }], "currency-stat": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-xl": ["36px", { "lineHeight": "44px", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-strong tracking-tight">DompetKu</span><span class="font-label-sm text-label-sm text-text-muted">Transaksi</span></div></div><div class="flex items-center gap-space-xs"><a aria-label="Notifikasi" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative" data-path="notifikasi" href="#"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-expense ring-2 ring-surface"></span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-1 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full px-margin-mobile pt-16 pb-28 bg-surface"><div class="flex flex-col w-full gap-space-md">
+<!-- Sticky / Search & Action Header -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-11 pr-4 bg-surface-container-low text-on-surface font-body-md text-body-md rounded-xl outline-none placeholder:text-outline focus:bg-surface-container focus:ring-2 focus:ring-primary/20 transition-all" id="search-input" placeholder="Cari transaksi, toko, dompet..." type="text"/>
+<button class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface p-1" id="clear-search">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+<button aria-label="Filter Lengkap" class="h-11 w-11 shrink-0 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant flex items-center justify-center transition-colors active:scale-95 shadow-sm" id="btn-filter-modal">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Filter Pills (Horizontal Scroll) -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 -mx-margin-mobile px-margin-mobile">
+<button class="filter-pill active shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-all" data-type="all">
+        Semua
+      </button>
+<button class="filter-pill shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all" data-type="expense">
+        Pengeluaran
+      </button>
+<button class="filter-pill shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all" data-type="income">
+        Pemasukan
+      </button>
+<button class="filter-pill shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all" data-type="transfer">
+        Transfer
+      </button>
+<button class="filter-pill shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Bulan Ini</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Ringkasan Bulanan (Compact Stat Card) -->
+<div class="bg-surface-container-low rounded-2xl p-space-md shadow-sm flex flex-col gap-space-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">insights</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wide">Ringkasan November 2026</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">28 Transaksi</span>
+</div>
+<div class="grid grid-cols-2 gap-space-md pt-0.5">
+<!-- Pengeluaran -->
+<div class="flex flex-col bg-surface-container-lowest p-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-1 text-expense mb-1">
+<span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+<span class="font-label-sm text-label-sm">Pengeluaran</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-expense tracking-tight">Rp 9.150.000</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5">Limit aman 61%</span>
+</div>
+<!-- Pemasukan -->
+<div class="flex flex-col bg-surface-container-lowest p-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-1 text-income mb-1">
+<span class="material-symbols-outlined text-[16px]">south_west</span>
+<span class="font-label-sm text-label-sm">Pemasukan</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-income tracking-tight">Rp 12.500.000</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5">Surplus Rp 3.350.000</span>
+</div>
+</div>
+</div>
+<!-- Daftar Transaksi Per Tanggal -->
+<div class="flex flex-col gap-space-lg pt-1">
+<!-- GROUP 1: HARI INI -->
+<div class="transaction-group flex flex-col gap-2">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Hari Ini</span>
+<span class="font-label-sm text-label-sm text-outline">18 Nov 2026</span>
+</div>
+<span class="font-label-sm text-label-sm text-expense">-Rp 165.000</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Item 1: Makan Siang Cafe -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="-Rp 65.000" data-category="Makanan &amp; Minuman" data-category-color="cat-food" data-date="18 Nov 2026, 12:45 WIB" data-icon="restaurant" data-id="tx-1" data-note="Kopi susu oat + Rice bowl wagyu" data-raw-amount="-65000" data-title="Makan Siang Cafe" data-type="expense" data-wallet="GoPay">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-orange-100/70 text-cat-food flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">restaurant</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Makan Siang Cafe</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">GoPay</span>
+<span class="font-body-sm text-body-sm text-outline truncate">· Makanan &amp; Minuman</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-expense">-Rp 65.000</span>
+<span class="font-body-sm text-body-sm text-outline">12:45</span>
+</div>
+</div>
+<!-- Item 2: Pengisian e-Toll -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="-Rp 100.000" data-category="Transportasi" data-category-color="cat-transport" data-date="18 Nov 2026, 08:15 WIB" data-icon="directions_car" data-id="tx-2" data-note="Top up Flazz tol Jagorawi" data-raw-amount="-100000" data-title="Pengisian e-Toll" data-type="expense" data-wallet="BCA">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-blue-100/70 text-cat-transport flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">directions_car</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Pengisian e-Toll</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">BCA</span>
+<span class="font-body-sm text-body-sm text-outline truncate">· Transportasi</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-expense">-Rp 100.000</span>
+<span class="font-body-sm text-body-sm text-outline">08:15</span>
+</div>
+</div>
+</div>
+</div>
+<!-- GROUP 2: KEMARIN -->
+<div class="transaction-group flex flex-col gap-2">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Kemarin</span>
+<span class="font-label-sm text-label-sm text-outline">17 Nov 2026</span>
+</div>
+<span class="font-label-sm text-label-sm text-income">+Rp 2.080.000</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Item 3: Belanja Mingguan -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="-Rp 420.000" data-category="Kebutuhan Rumah" data-category-color="cat-shopping" data-date="17 Nov 2026, 19:20 WIB" data-icon="shopping_cart" data-id="tx-3" data-note="Supermarket GrandLucky kebutuhan dapur" data-raw-amount="-420000" data-title="Belanja Mingguan" data-type="expense" data-wallet="BCA">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-amber-100/70 text-cat-shopping flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">shopping_cart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Belanja Mingguan</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">BCA</span>
+<span class="font-body-sm text-body-sm text-outline truncate">· Kebutuhan Rumah</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-expense">-Rp 420.000</span>
+<span class="font-body-sm text-body-sm text-outline">19:20</span>
+</div>
+</div>
+<!-- Item 4: Freelance UI Design -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="+Rp 2.500.000" data-category="Pemasukan Usaha" data-category-color="income" data-date="17 Nov 2026, 14:10 WIB" data-icon="payments" data-id="tx-4" data-note="Pelunasan termin 2 mobile app redesign" data-raw-amount="2500000" data-title="Freelance UI Design" data-type="income" data-wallet="Bank Jago">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-income flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Freelance UI Design</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">Bank Jago</span>
+<span class="font-body-sm text-body-sm text-income truncate font-medium">· Pemasukan Usaha</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-income">+Rp 2.500.000</span>
+<span class="font-body-sm text-body-sm text-outline">14:10</span>
+</div>
+</div>
+</div>
+</div>
+<!-- GROUP 3: 15 NOV 2026 -->
+<div class="transaction-group flex flex-col gap-2">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">15 Nov 2026</span>
+<span class="font-label-sm text-label-sm text-outline">Jumat</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">-Rp 885.000</span>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Item 5: Tagihan Internet Indihome -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="-Rp 385.000" data-category="Tagihan &amp; Utilitas" data-category-color="cat-bills" data-date="15 Nov 2026, 09:30 WIB" data-icon="receipt_long" data-id="tx-5" data-note="Biaya langganan 50 Mbps paket internet rumah" data-raw-amount="-385000" data-title="Tagihan Internet Indihome" data-type="expense" data-wallet="BCA">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-amber-100/70 text-cat-bills flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Tagihan Internet Indihome</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">BCA</span>
+<span class="font-body-sm text-body-sm text-outline truncate">· Tagihan &amp; Utilitas</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-expense">-Rp 385.000</span>
+<span class="font-body-sm text-body-sm text-outline">09:30</span>
+</div>
+</div>
+<!-- Item 6: Transfer ke GoPay -->
+<div class="tx-item flex items-center justify-between p-3.5 bg-surface-container-lowest hover:bg-surface-container-low rounded-2xl shadow-sm transition-all active:scale-[0.99] cursor-pointer" data-amount="Rp 500.000" data-category="Transfer Antar Dompet" data-category-color="primary" data-date="15 Nov 2026, 08:05 WIB" data-icon="swap_horiz" data-id="tx-6" data-note="Top up saldo operasional harian" data-raw-amount="500000" data-title="Transfer ke GoPay" data-type="transfer" data-wallet="BCA → GoPay">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-emerald-100/70 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">swap_horiz</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Transfer ke GoPay</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">Transfer</span>
+<span class="font-body-sm text-body-sm text-outline truncate">· BCA → GoPay</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 pl-3">
+<span class="font-headline-sm text-headline-sm text-text-strong">Rp 500.000</span>
+<span class="font-body-sm text-body-sm text-outline">08:05</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Fallback (Hidden by default) -->
+<div class="hidden flex-col items-center justify-center py-12 px-4 text-center" id="empty-state">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-outline mb-3">
+<span class="material-symbols-outlined text-[32px]">search_off</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Transaksi Tidak Ditemukan</span>
+<p class="font-body-sm text-body-sm text-outline max-w-xs mt-1">Coba gunakan kata kunci pencarian lain atau sesuaikan filter jenis transaksi Anda.</p>
+<button class="mt-4 px-4 py-2 rounded-xl bg-surface-container-highest text-primary font-label-md text-label-md" id="reset-filter-btn">
+      Reset Semua Filter
+    </button>
+</div>
+<!-- Detail Transaction Bottom Sheet Modal -->
+<div class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="tx-modal-backdrop">
+<div class="absolute bottom-0 inset-x-0 bg-surface-card rounded-t-3xl p-margin-mobile flex flex-col gap-space-md translate-y-full transition-transform duration-300 shadow-2xl max-w-lg mx-auto pb-safe" id="tx-modal-sheet">
+<!-- Drag Handle -->
+<div class="w-12 h-1.5 rounded-full bg-surface-container-highest mx-auto -mt-1"></div>
+<!-- Header Detail Modal -->
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Rincian Transaksi</span>
+<button class="w-9 h-9 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center" id="close-modal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Amount Banner -->
+<div class="flex flex-col items-center justify-center py-2 bg-surface-container-lowest rounded-2xl shadow-sm text-center">
+<div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-2" id="modal-icon-container">
+<span class="material-symbols-outlined text-[28px]" id="modal-icon"></span>
+</div>
+<span class="font-currency-display text-currency-display tracking-tight" id="modal-amount"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-1" id="modal-title"></span>
+<span class="mt-2 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full" id="modal-type-badge"></span>
+</div>
+<!-- Information List -->
+<div class="flex flex-col bg-surface-container-lowest rounded-2xl p-space-md shadow-sm gap-space-sm">
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="text-outline">Waktu &amp; Tanggal</span>
+<span class="font-label-md text-label-md text-on-surface" id="modal-date"></span>
+</div>
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="text-outline">Sumber Dana / Dompet</span>
+<span class="font-label-md text-label-md text-on-surface" id="modal-wallet"></span>
+</div>
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="text-outline">Kategori</span>
+<span class="font-label-md text-label-md text-on-surface" id="modal-category"></span>
+</div>
+<div class="flex flex-col gap-1 text-body-md font-body-md pt-1">
+<span class="text-outline">Catatan</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant bg-surface-container-low p-2.5 rounded-xl" id="modal-note"></p>
+</div>
+</div>
+<!-- Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="h-11 rounded-xl bg-surface-container-low hover:bg-surface-container font-label-md text-label-md text-on-surface flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Ubah</span>
+</button>
+<button class="h-11 rounded-xl bg-error-container hover:bg-error/20 font-label-md text-label-md text-error flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Hapus</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const searchInput = document.getElementById('search-input');
+    const clearSearch = document.getElementById('clear-search');
+    const filterPills = document.querySelectorAll('.filter-pill');
+    const txItems = document.querySelectorAll('.tx-item');
+    const groups = document.querySelectorAll('.transaction-group');
+    const emptyState = document.getElementById('empty-state');
+    const resetBtn = document.getElementById('reset-filter-btn');
+
+    // Modal elements
+    const backdrop = document.getElementById('tx-modal-backdrop');
+    const sheet = document.getElementById('tx-modal-sheet');
+    const closeModal = document.getElementById('close-modal');
+    const modalAmount = document.getElementById('modal-amount');
+    const modalTitle = document.getElementById('modal-title');
+    const modalIcon = document.getElementById('modal-icon');
+    const modalIconContainer = document.getElementById('modal-icon-container');
+    const modalTypeBadge = document.getElementById('modal-type-badge');
+    const modalDate = document.getElementById('modal-date');
+    const modalWallet = document.getElementById('modal-wallet');
+    const modalCategory = document.getElementById('modal-category');
+    const modalNote = document.getElementById('modal-note');
+
+    let currentFilter = 'all';
+
+    function applyFilters() {
+      const query = (searchInput.value || '').toLowerCase().trim();
+      let visibleCount = 0;
+
+      txItems.forEach(item => {
+        const title = (item.dataset.title || '').toLowerCase();
+        const cat = (item.dataset.category || '').toLowerCase();
+        const wallet = (item.dataset.wallet || '').toLowerCase();
+        const type = item.dataset.type;
+
+        const matchesQuery = !query || title.includes(query) || cat.includes(query) || wallet.includes(query);
+        const matchesType = (currentFilter === 'all') || (type === currentFilter);
+
+        if (matchesQuery && matchesType) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Show/hide empty headers
+      groups.forEach(group => {
+        const visibleInGroup = group.querySelectorAll('.tx-item:not(.hidden)').length;
+        if (visibleInGroup === 0) {
+          group.classList.add('hidden');
+        } else {
+          group.classList.remove('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+      } else {
+        emptyState.classList.add('hidden');
+        emptyState.classList.remove('flex');
+      }
+
+      if (query.length > 0) {
+        clearSearch.classList.remove('hidden');
+      } else {
+        clearSearch.classList.add('hidden');
+      }
+    }
+
+    // Filter pill interaction
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const type = pill.dataset.type;
+        if (!type) return;
+
+        filterPills.forEach(p => {
+          if (p.dataset.type) {
+            p.classList.remove('bg-primary', 'text-on-primary', 'active');
+            p.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          }
+        });
+
+        pill.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+        pill.classList.add('bg-primary', 'text-on-primary', 'active');
+        currentFilter = type;
+        applyFilters();
+      });
+    });
+
+    // Search events
+    searchInput.addEventListener('input', applyFilters);
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      applyFilters();
+      searchInput.focus();
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentFilter = 'all';
+        filterPills.forEach(p => {
+          if (p.dataset.type === 'all') {
+            p.classList.add('bg-primary', 'text-on-primary', 'active');
+            p.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          } else if (p.dataset.type) {
+            p.classList.remove('bg-primary', 'text-on-primary', 'active');
+            p.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          }
+        });
+        applyFilters();
+      });
+    }
+
+    // Detail Modal interactions
+    function openModalWithData(item) {
+      const type = item.dataset.type;
+      const amount = item.dataset.amount;
+      const title = item.dataset.title;
+      const category = item.dataset.category;
+      const wallet = item.dataset.wallet;
+      const date = item.dataset.date;
+      const note = item.dataset.note;
+      const icon = item.dataset.icon;
+
+      modalTitle.textContent = title;
+      modalAmount.textContent = amount;
+      modalDate.textContent = date;
+      modalWallet.textContent = wallet;
+      modalCategory.textContent = category;
+      modalNote.textContent = note || 'Tidak ada catatan tambahan.';
+      modalIcon.textContent = icon;
+
+      // Colorize Amount & Icon Container
+      if (type === 'expense') {
+        modalAmount.className = 'font-currency-display text-currency-display tracking-tight text-expense';
+        modalIconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center mb-2 bg-rose-100 text-expense';
+        modalTypeBadge.textContent = 'Pengeluaran';
+        modalTypeBadge.className = 'mt-2 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-rose-100 text-expense';
+      } else if (type === 'income') {
+        modalAmount.className = 'font-currency-display text-currency-display tracking-tight text-income';
+        modalIconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center mb-2 bg-emerald-100 text-income';
+        modalTypeBadge.textContent = 'Pemasukan';
+        modalTypeBadge.className = 'mt-2 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-emerald-100 text-income';
+      } else {
+        modalAmount.className = 'font-currency-display text-currency-display tracking-tight text-text-strong';
+        modalIconContainer.className = 'w-14 h-14 rounded-2xl flex items-center justify-center mb-2 bg-emerald-100 text-primary';
+        modalTypeBadge.textContent = 'Transfer';
+        modalTypeBadge.className = 'mt-2 font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-emerald-100 text-primary';
+      }
+
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      sheet.classList.remove('translate-y-full');
+    }
+
+    function hideModal() {
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      sheet.classList.add('translate-y-full');
+    }
+
+    txItems.forEach(item => {
+      item.addEventListener('click', () => openModalWithData(item));
+    });
+
+    closeModal.addEventListener('click', hideModal);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) hideModal();
+    });
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"><div class="h-20 px-gutter-mobile grid grid-cols-5 items-center"><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Dashboard</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg transition-colors text-primary font-semibold" data-path="transaksi" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm">Transaksi</span></a><div class="flex flex-col items-center justify-center"><a aria-label="Catat Cepat" class="w-13 h-13 -mt-5 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-lg shadow-primary/25 transition-transform active:scale-95 hover:bg-primary" data-path="catat-cepat" href="#"><span class="material-symbols-outlined text-[28px]">add</span></a><span class="font-label-sm text-label-sm text-text-muted mt-1">Catat</span></div><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="dompet" href="#"><span class="material-symbols-outlined text-[24px]">wallet</span><span class="font-label-sm text-label-sm">Dompet</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="anggaran" href="#"><span class="material-symbols-outlined text-[24px]">pie_chart</span><span class="font-label-sm text-label-sm">Anggaran</span></a></div></nav></body></html>

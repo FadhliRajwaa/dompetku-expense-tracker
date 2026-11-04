@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>Dashboard - DompetKu</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-primary": "#bfe9d8", "inverse-on-surface": "#f1effa", "on-error-container": "#93000a", "secondary-fixed-dim": "#c8c6c8", "outline-variant": "#c7c4d8", "tertiary": "#005338", "surface-container-highest": "#dfe9e4", "cat-transport": "#3b82f6", "expense": "#f43f5e", "primary": "#2fa084", "cat-shopping": "#b45309", "on-primary-fixed-variant": "#1f6b4d", "on-surface": "#1a1b22", "cat-education": "#06b6d4", "inverse-surface": "#2f3038", "error": "#ba1a1a", "primary-fixed-dim": "#bfe9d8", "secondary": "#5f5e60", "budget-danger": "#e11d48", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "surface-variant": "#dfe9e4", "on-background": "#1a1b22", "cat-entertainment": "#ec4899", "on-tertiary-fixed-variant": "#005236", "tertiary-container": "#006e4b", "secondary-fixed": "#dcefe7", "cat-bills": "#f59e0b", "surface-container-lowest": "#ffffff", "income": "#10b981", "on-primary": "#ffffff", "surface-bg": "#fafafa", "on-primary-container": "#c9eddd", "outline": "#777587", "on-secondary-fixed-variant": "#474649", "on-tertiary-container": "#67f4b7", "on-tertiary-fixed": "#002113", "background": "#fafcfb", "on-surface-variant": "#464555", "surface-muted": "#f4f4f5", "surface": "#fafcfb", "on-secondary-container": "#656466", "cat-food": "#f97316", "secondary-container": "#dcefe7", "text-body": "#52525b", "text-strong": "#18181b", "surface-container-low": "#f2f7f4", "on-primary-fixed": "#052e20", "primary-container": "#2fa084", "surface-dim": "#dad9e3", "cat-income": "#10b981", "cat-health": "#14b8a6", "on-secondary": "#ffffff", "on-error": "#ffffff", "surface-container": "#eef4f0", "border-subtle": "#e4e4e7", "tertiary-fixed-dim": "#4edea3", "text-muted": "#71717a", "primary-fixed": "#d9f2e7", "tertiary-fixed": "#6ffbbe", "surface-container-high": "#e7efe9", "on-secondary-fixed": "#1c1b1d", "surface-bright": "#fafcfb", "budget-warning": "#f59e0b", "surface-card": "#ffffff", "surface-tint": "#2fa084" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "margin-mobile": "1rem", "space-md": "1rem", "space-lg": "1.5rem", "margin": "2rem", "space-xs": "0.25rem", "space-xl": "2rem", "gutter-mobile": "0.75rem", "gutter": "1.5rem" }, fontFamily: { "label-md": ["Inter"], "headline-sm": ["Geist"], "currency-display": ["Geist"], "headline-lg": ["Geist"], "headline-xl-mobile": ["Geist"], "currency-stat": ["Geist"], "headline-md": ["Geist"], "headline-xl": ["Geist"], "label-sm": ["Inter"], "body-sm": ["Inter"], "headline-lg-mobile": ["Geist"], "body-md": ["Inter"], "body-lg": ["Inter"] }, fontSize: { "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }], "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "currency-display": ["32px", { "lineHeight": "38px", "fontWeight": "700" }], "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }], "currency-stat": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "headline-xl": ["36px", { "lineHeight": "44px", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-strong tracking-tight">DompetKu</span><span class="font-label-sm text-label-sm text-text-muted">Dashboard</span></div></div><div class="flex items-center gap-space-xs"><a aria-label="Notifikasi" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative" data-path="notifikasi" href="#"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-expense ring-2 ring-surface"></span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-1 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full px-margin-mobile pt-16 pb-28 bg-surface"><div class="flex flex-col w-full gap-space-md">
+<!-- Salutation & Month Period Header -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex flex-col min-w-0">
+<h1 class="font-headline-md text-headline-md text-text-strong truncate">Halo, Budi Santoso 👋</h1>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">calendar_month</span>
+<span class="font-body-sm text-body-sm text-text-muted">November 2026 • Pekan ke-3</span>
+</div>
+</div>
+<button aria-label="Filter Periode" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-text-strong shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Primary Wealth Card: Engineered Cockpit Metaphor -->
+<div class="w-full rounded-xl bg-gradient-to-br from-primary via-primary-container to-surface-tint p-space-md text-on-primary shadow-md relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-36 h-36 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+<div class="absolute -left-6 -bottom-6 w-28 h-28 rounded-full bg-inverse-primary/20 blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary-fixed-dim">account_balance</span>
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider">Total Kekayaan Bersih</span>
+</div>
+<button aria-label="Sembunyikan Saldo" class="flex items-center gap-1 text-primary-fixed hover:text-white transition-colors" id="toggleBalanceBtn">
+<span class="material-symbols-outlined text-[18px]" id="balanceIcon">visibility</span>
+</button>
+</div>
+<div class="flex items-baseline gap-1.5">
+<span class="font-headline-sm text-headline-sm text-primary-fixed font-medium">Rp</span>
+<span class="font-headline-xl-mobile text-headline-xl-mobile tracking-tight text-white tabular-nums" id="mainBalanceDisplay">24.850.000</span>
+</div>
+<!-- Quick Wallets Breakdown Chips -->
+<div class="pt-2 border-none">
+<span class="font-label-sm text-label-sm text-primary-fixed-dim block mb-2">3 Dompet Terhubung Aktif:</span>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-black/20 rounded-lg p-2 backdrop-blur-md flex flex-col min-w-0">
+<div class="flex items-center gap-1 text-primary-fixed text-[11px] font-label-sm">
+<span class="material-symbols-outlined text-[13px]">credit_card</span>
+<span class="truncate">BCA</span>
+</div>
+<span class="font-label-md text-label-md text-white font-semibold tabular-nums mt-0.5 truncate">Rp 14,2 Jt</span>
+</div>
+<div class="bg-black/20 rounded-lg p-2 backdrop-blur-md flex flex-col min-w-0">
+<div class="flex items-center gap-1 text-primary-fixed text-[11px] font-label-sm">
+<span class="material-symbols-outlined text-[13px]">account_balance</span>
+<span class="truncate">Mandiri</span>
+</div>
+<span class="font-label-md text-label-md text-white font-semibold tabular-nums mt-0.5 truncate">Rp 9,8 Jt</span>
+</div>
+<div class="bg-black/20 rounded-lg p-2 backdrop-blur-md flex flex-col min-w-0">
+<div class="flex items-center gap-1 text-primary-fixed text-[11px] font-label-sm">
+<span class="material-symbols-outlined text-[13px]">payments</span>
+<span class="truncate">GoPay</span>
+</div>
+<span class="font-label-md text-label-md text-white font-semibold tabular-nums mt-0.5 truncate">Rp 850 Rb</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 2x2 Mini Mobile Stat Cards Grid -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Pemasukan -->
+<div class="bg-surface-card rounded-xl p-3 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<div class="w-7 h-7 rounded-lg bg-income/10 text-income flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">south_west</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full bg-income/10 text-income font-label-sm text-[10px] tabular-nums font-semibold">+12%</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Pemasukan Bln Ini</span>
+<span class="font-headline-sm text-headline-sm text-text-strong tabular-nums font-bold mt-0.5">Rp 12.500.000</span>
+</div>
+</div>
+<!-- Pengeluaran -->
+<div class="bg-surface-card rounded-xl p-3 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<div class="w-7 h-7 rounded-lg bg-expense/10 text-expense flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">north_east</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full bg-expense/10 text-expense font-label-sm text-[10px] tabular-nums font-semibold">+4.5%</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Pengeluaran Bln Ini</span>
+<span class="font-headline-sm text-headline-sm text-text-strong tabular-nums font-bold mt-0.5">Rp 9.150.000</span>
+</div>
+</div>
+<!-- Sisa Kuota Budget -->
+<div class="bg-surface-card rounded-xl p-3 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<div class="w-7 h-7 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">savings</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-income font-label-sm text-[10px] font-semibold">Aman</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Sisa Kuota Budget</span>
+<span class="font-headline-sm text-headline-sm text-income tabular-nums font-bold mt-0.5">Rp 4.150.000</span>
+</div>
+</div>
+<!-- Kuota Harian Aman -->
+<div class="bg-surface-card rounded-xl p-3 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">speed</span>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted font-medium">15 hari tersisa</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Kuota Harian Aman</span>
+<span class="font-headline-sm text-headline-sm text-text-strong tabular-nums font-bold mt-0.5">Rp 276.600<span class="text-xs font-normal text-text-muted">/hr</span></span>
+</div>
+</div>
+</div>
+<!-- Cash Flow: Mini Interactive Timeline Chart -->
+<div class="w-full bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-strong">Arus Kas 30 Hari</span>
+<span class="font-body-sm text-body-sm text-text-muted">Perbandingan Pemasukan vs Pengeluaran</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-2.5 rounded-full bg-income"></span>
+<span class="font-label-sm text-[10px] text-text-muted">Masuk</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-2.5 rounded-full bg-expense"></span>
+<span class="font-label-sm text-[10px] text-text-muted">Keluar</span>
+</div>
+</div>
+</div>
+<!-- Scalable Inline SVG Bar Chart with Tap Highlights -->
+<div class="w-full pt-2">
+<div class="h-28 w-full flex items-end justify-between gap-1.5 px-1 pb-1">
+<!-- Week 1 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end cursor-pointer group" onclick="showChartDetail('Pekan 1', 'Rp 3.500.000', 'Rp 2.100.000')">
+<div class="w-full flex items-end justify-center gap-1 h-20">
+<div class="w-2.5 bg-income/80 rounded-t-sm transition-all group-hover:bg-income" style="height: 65%;"></div>
+<div class="w-2.5 bg-expense/80 rounded-t-sm transition-all group-hover:bg-expense" style="height: 40%;"></div>
+</div>
+<span class="font-label-sm text-[10px] text-text-muted group-hover:text-text-strong">W1</span>
+</div>
+<!-- Week 2 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end cursor-pointer group" onclick="showChartDetail('Pekan 2', 'Rp 2.000.000', 'Rp 2.800.000')">
+<div class="w-full flex items-end justify-center gap-1 h-20">
+<div class="w-2.5 bg-income/80 rounded-t-sm transition-all group-hover:bg-income" style="height: 40%;"></div>
+<div class="w-2.5 bg-expense/80 rounded-t-sm transition-all group-hover:bg-expense" style="height: 55%;"></div>
+</div>
+<span class="font-label-sm text-[10px] text-text-muted group-hover:text-text-strong">W2</span>
+</div>
+<!-- Week 3 (Current) -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end cursor-pointer group" onclick="showChartDetail('Pekan 3 (Berjalan)', 'Rp 6.000.000', 'Rp 3.250.000')">
+<div class="w-full flex items-end justify-center gap-1 h-20 relative">
+<div class="absolute -top-3 w-1.5 h-1.5 rounded-full bg-primary animate-ping"></div>
+<div class="w-2.5 bg-income rounded-t-sm shadow-sm" style="height: 100%;"></div>
+<div class="w-2.5 bg-expense rounded-t-sm shadow-sm" style="height: 60%;"></div>
+</div>
+<span class="font-label-sm text-[10px] text-primary font-semibold">W3</span>
+</div>
+<!-- Week 4 -->
+<div class="flex-1 flex flex-col items-center gap-1 h-full justify-end cursor-pointer group" onclick="showChartDetail('Pekan 4 (Proyeksi)', 'Rp 1.000.000', 'Rp 1.000.000')">
+<div class="w-full flex items-end justify-center gap-1 h-20 opacity-50">
+<div class="w-2.5 bg-income/60 rounded-t-sm" style="height: 25%;"></div>
+<div class="w-2.5 bg-expense/60 rounded-t-sm" style="height: 20%;"></div>
+</div>
+<span class="font-label-sm text-[10px] text-text-muted group-hover:text-text-strong">W4</span>
+</div>
+</div>
+<!-- Detail Drawer / Banner below chart -->
+<div class="mt-2 bg-surface-container-low rounded-lg p-2 flex items-center justify-between text-xs" id="chartDetailBanner">
+<span class="font-label-sm text-text-strong font-medium" id="detailPeriodLabel">Pekan 3 (Berjalan)</span>
+<div class="flex items-center gap-3 tabular-nums font-semibold">
+<span class="text-income font-label-sm" id="detailIncomeLabel">+Rp 6.000.000</span>
+<span class="text-expense font-label-sm" id="detailExpenseLabel">-Rp 3.250.000</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Budget Progress: Top Active Categories -->
+<div class="w-full bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">donut_large</span>
+<span class="font-headline-sm text-headline-sm text-text-strong">Progress Anggaran</span>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:underline" data-path="anggaran" href="#">Kelola →</a>
+</div>
+<!-- Category 1: Makanan & Minuman -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-6 h-6 rounded-md bg-cat-food/15 text-cat-food flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[15px]">restaurant</span>
+</div>
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Makanan &amp; Minuman</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-emerald-500/10 text-income font-medium shrink-0">73.8% Aman</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-income rounded-full transition-all duration-500" style="width: 73.8%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-text-muted tabular-nums">
+<span>Terpakai: <b class="text-text-strong">Rp 2.950.000</b></span>
+<span>Limit: Rp 4.000.000</span>
+</div>
+</div>
+<!-- Category 2: Tagihan & Utilitas (Warning Zone) -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-6 h-6 rounded-md bg-cat-bills/15 text-cat-bills flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[15px]">receipt</span>
+</div>
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Tagihan &amp; Utilitas</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-amber-500/15 text-budget-warning font-semibold shrink-0">93.5% Hampir Limit</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-budget-warning rounded-full transition-all duration-500" style="width: 93.5%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-text-muted tabular-nums">
+<span>Terpakai: <b class="text-text-strong">Rp 2.150.000</b></span>
+<span>Limit: Rp 2.300.000</span>
+</div>
+</div>
+<!-- Category 3: Transportasi -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-6 h-6 rounded-md bg-cat-transport/15 text-cat-transport flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[15px]">directions_car</span>
+</div>
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Transportasi</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-emerald-500/10 text-income font-medium shrink-0">78.7% Aman</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-income rounded-full transition-all duration-500" style="width: 78.7%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-text-muted tabular-nums">
+<span>Terpakai: <b class="text-text-strong">Rp 1.180.000</b></span>
+<span>Limit: Rp 1.500.000</span>
+</div>
+</div>
+</div>
+<!-- Recent Transactions (5 Latest Records) -->
+<div class="w-full bg-surface-card rounded-xl p-space-md shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-text-strong">history</span>
+<span class="font-headline-sm text-headline-sm text-text-strong">Transaksi Terakhir</span>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:underline" data-path="transaksi" href="#">Semua →</a>
+</div>
+<div class="flex flex-col divide-y-0 gap-2">
+<!-- TX 1: Belanja Supermarket -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-cat-food/15 text-cat-food flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Belanja Supermarket</span>
+<div class="flex items-center gap-1.5 text-text-muted font-body-sm text-body-sm mt-0.5">
+<span>BCA</span>
+<span>•</span>
+<span>Hari ini, 10:45</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-body-md text-body-md text-expense font-bold tabular-nums">-Rp 350.000</span>
+<span class="block font-label-sm text-[10px] text-text-muted">Makanan</span>
+</div>
+</div>
+<!-- TX 2: Gaji Bulanan -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors bg-income/5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-income/20 text-income flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-text-strong font-semibold truncate">Gaji Bulanan</span>
+<div class="flex items-center gap-1.5 text-text-muted font-body-sm text-body-sm mt-0.5">
+<span>Mandiri</span>
+<span>•</span>
+<span>Kemarin</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-body-md text-body-md text-income font-bold tabular-nums">+Rp 12.500.000</span>
+<span class="block font-label-sm text-[10px] text-income font-medium">Pendapatan</span>
+</div>
+</div>
+<!-- TX 3: Bensin Pertamax -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-cat-transport/15 text-cat-transport flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_gas_station</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Bensin Pertamax</span>
+<div class="flex items-center gap-1.5 text-text-muted font-body-sm text-body-sm mt-0.5">
+<span>GoPay</span>
+<span>•</span>
+<span>Kemarin</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-body-md text-body-md text-expense font-bold tabular-nums">-Rp 100.000</span>
+<span class="block font-label-sm text-[10px] text-text-muted">Transportasi</span>
+</div>
+</div>
+<!-- TX 4: Kopi & Makan Siang -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-cat-food/15 text-cat-food flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Kopi &amp; Makan Siang</span>
+<div class="flex items-center gap-1.5 text-text-muted font-body-sm text-body-sm mt-0.5">
+<span>GoPay</span>
+<span>•</span>
+<span>18 Nov</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-body-md text-body-md text-expense font-bold tabular-nums">-Rp 45.000</span>
+<span class="block font-label-sm text-[10px] text-text-muted">Makanan</span>
+</div>
+</div>
+<!-- TX 5: Token Listrik PLN -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-cat-bills/15 text-cat-bills flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-text-strong font-medium truncate">Token Listrik PLN</span>
+<div class="flex items-center gap-1.5 text-text-muted font-body-sm text-body-sm mt-0.5">
+<span>BCA</span>
+<span>•</span>
+<span>17 Nov</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-body-md text-body-md text-expense font-bold tabular-nums">-Rp 200.000</span>
+<span class="block font-label-sm text-[10px] text-text-muted">Tagihan</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Smart Financial Health Tip Banner -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-md flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md font-semibold text-text-strong">Saran Cerdas DompetKu</span>
+<p class="font-body-sm text-body-sm text-text-muted mt-0.5">
+        Tagihan &amp; Utilitas telah menyentuh 93.5%. Alokasikan sisa anggaran harian Rp 276.600 agar arus kas bulanan tetap positif hingga gajian berikutnya!
+      </p>
+</div>
+</div>
+</div>
+<script>
+  // Dynamic Balance Masking / Unmasking
+  const toggleBtn = document.getElementById('toggleBalanceBtn');
+  const balanceDisplay = document.getElementById('mainBalanceDisplay');
+  const balanceIcon = document.getElementById('balanceIcon');
+  let isMasked = false;
+
+  if (toggleBtn && balanceDisplay && balanceIcon) {
+    toggleBtn.addEventListener('click', () => {
+      isMasked = !isMasked;
+      if (isMasked) {
+        balanceDisplay.textContent = '••••••••';
+        balanceIcon.textContent = 'visibility_off';
+      } else {
+        balanceDisplay.textContent = '24.850.000';
+        balanceIcon.textContent = 'visibility';
+      }
+    });
+  }
+
+  // Interactive Timeline Inspection
+  function showChartDetail(period, inc, exp) {
+    const periodLabel = document.getElementById('detailPeriodLabel');
+    const incLabel = document.getElementById('detailIncomeLabel');
+    const expLabel = document.getElementById('detailExpenseLabel');
+
+    if (periodLabel && incLabel && expLabel) {
+      periodLabel.textContent = period;
+      incLabel.textContent = '+' + inc;
+      expLabel.textContent = '-' + exp;
+    }
+  }
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"><div class="h-20 px-gutter-mobile grid grid-cols-5 items-center"><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg transition-colors text-primary font-semibold" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Dashboard</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="transaksi" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm">Transaksi</span></a><div class="flex flex-col items-center justify-center"><a aria-label="Catat Cepat" class="w-13 h-13 -mt-5 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-lg shadow-primary/25 transition-transform active:scale-95 hover:bg-primary" data-path="catat-cepat" href="#"><span class="material-symbols-outlined text-[28px]">add</span></a><span class="font-label-sm text-label-sm text-text-muted mt-1">Catat</span></div><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="dompet" href="#"><span class="material-symbols-outlined text-[24px]">wallet</span><span class="font-label-sm text-label-sm">Dompet</span></a><a class="flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-text-muted transition-colors hover:text-on-surface" data-path="anggaran" href="#"><span class="material-symbols-outlined text-[24px]">pie_chart</span><span class="font-label-sm text-label-sm">Anggaran</span></a></div></nav></body></html>
