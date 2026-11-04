@@ -3,6 +3,7 @@
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
+import { GoogleSignInButton } from '@/components/google-signin-button';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,6 +58,10 @@ function LoginForm() {
             <Button type="submit" disabled={loading} className="bg-[#2FA084] hover:bg-[#27856d] text-white w-full">
               {loading ? 'Masuk...' : 'Masuk'}
             </Button>
+            <div className="flex items-center gap-3 text-xs text-zinc-400">
+              <span className="h-px flex-1 bg-zinc-200" /> atau <span className="h-px flex-1 bg-zinc-200" />
+            </div>
+            <GoogleSignInButton mode="login" />
             <p className="text-center text-sm text-zinc-500">
               Belum punya akun?{' '}
               <Link href="/register" className="font-medium text-[#2FA084] hover:underline">

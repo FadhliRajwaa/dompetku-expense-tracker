@@ -9,17 +9,40 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  name         String
-  email        String        @unique
-  passwordHash String
-  image        String?
-  wallets      Wallet[]
-  transactions Transaction[]
-  transfers    Transfer[]
-  budgets      Budget[]
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  emailVerified DateTime?
+  passwordHash  String? // null = user Google-only
+  image         String?
+  accounts      Account[]
+  wallets       Wallet[]
+  transactions  Transaction[]
+  transfers     Transfer[]
+  budgets       Budget[]
   categories   Category[]
   createdAt    DateTime      @default(now())
+}
+
+// Standar Auth.js (Google login). sessions diabaikan: JWT strategy.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 enum WalletType {

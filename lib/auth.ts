@@ -1,10 +1,13 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import Google from 'next-auth/providers/google';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import { db } from './db';
 import { loginSchema } from './validations';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   pages: { signIn: '/login' },
   callbacks: {
@@ -22,12 +25,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   providers: [
+    Google({
+      // Izinkan tautan otomatis bila email Google == email terdaftar kredensial
+      // (aman: Google sudah verifikasi kepemilikan email via email_verified).
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       async authorize(credentials) {
         const parsed = loginSchema.safeParse(credentials);
         if (!parsed.success) return null;
         const user = await db.user.findUnique({ where: { email: parsed.data.email.toLowerCase().trim() } });
-        if (!user) {
+        if (!user || !user.passwordHash) {
           // Samakan waktu respons agar email terdaftar/tidak tak bisa dibedakan (anti user-enumeration)
           await bcrypt.compare(parsed.data.password, '$2b$12$invalidinvalidinvalidinvalidinvalidinvali');
           return null;

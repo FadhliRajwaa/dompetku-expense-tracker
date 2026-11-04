@@ -22,6 +22,9 @@ export async function PATCH(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
   const user = await db.user.findUnique({ where: { id: userId } });
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!user.passwordHash) {
+    return NextResponse.json({ error: 'Akun ini login via Google, tidak memiliki password' }, { status: 400 });
+  }
   const ok = await bcrypt.compare(parsed.data.oldPassword, user.passwordHash);
   if (!ok) return NextResponse.json({ error: 'Password lama salah' }, { status: 400 });
   await db.user.update({ where: { id: userId }, data: { passwordHash: await bcrypt.hash(parsed.data.newPassword, 12) } });
