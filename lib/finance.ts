@@ -16,7 +16,8 @@ export function reverseEffect(balance: number, type: TxnType, amount: number): n
   return type === 'EXPENSE' ? balance + amount : balance - amount;
 }
 
-export function canArchiveWallet(_w: { txCount: number }): { ok: true } {
+export function canArchiveWallet(_w?: { txCount: number }): { ok: true } {
+  void _w;
   return { ok: true };
 }
 
