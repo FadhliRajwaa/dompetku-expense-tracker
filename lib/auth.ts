@@ -26,6 +26,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     Google({
+      // Env kita bernama GOOGLE_CLIENT_ID/SECRET (eksplisit, tidak bergantung
+      // konvensi prefix AUTH_* milik Auth.js).
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       // Izinkan tautan otomatis bila email Google == email terdaftar kredensial
       // (aman: Google sudah verifikasi kepemilikan email via email_verified).
       allowDangerousEmailAccountLinking: true,
