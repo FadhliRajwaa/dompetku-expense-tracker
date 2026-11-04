@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  image        String?
+  wallets      Wallet[]
+  transactions Transaction[]
+  transfers    Transfer[]
+  budgets      Budget[]
+  categories   Category[]
+  createdAt    DateTime      @default(now())
+}
+
+enum WalletType {
+  CASH
+  BANK
+  E_WALLET
+}
+
+model Wallet {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  type      WalletType
+  balance   Decimal    @db.Decimal(19, 2) @default(0)
+  icon      String     @default("wallet")
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+
+  @@index([userId])
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id     String       @id @default(cuid())
+  userId String? // null = kategori global bawaan
+  user   User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  icon   String       @default("tag")
+  color  String       @default("#2fa084")
+  type   CategoryType
+}
+
+model Transaction {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletId   String
+  categoryId String
+  type       CategoryType
+  amount     Decimal      @db.Decimal(19, 2)
+  date       DateTime
+  note       String?
+  createdAt  DateTime     @default(now())
+
+  @@index([userId, date(sort: Desc)])
+  @@index([walletId])
+  @@index([categoryId])
+}
+
+model Transfer {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromWalletId String
+  toWalletId   String
+  amount       Decimal  @db.Decimal(19, 2)
+  fee          Decimal? @db.Decimal(19, 2)
+  date         DateTime
+  note         String?
+  createdAt    DateTime @default(now())
+
+  @@index([userId, date(sort: Desc)])
+}
+
+model Budget {
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String
+  month      Int // 1..12
+  year       Int
+  limit      Decimal @db.Decimal(19, 2)
+
+  @@unique([userId, categoryId, month, year])
+  @@index([userId, year, month])
+}
