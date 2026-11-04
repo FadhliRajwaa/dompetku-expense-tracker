@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DompetKu — Pencatatan Keuangan Personal
 
-## Getting Started
+Web app pencatatan pemasukan/pengeluaran personal: banyak dompet (Cash/Bank/E-Wallet) + transfer atomic, budget bulanan per kategori + peringatan, dashboard grafik, laporan + export CSV. Satu role: user.
 
-First, run the development server:
+**Stack:** Next.js 15 + TypeScript + Tailwind + shadcn/ui + Auth.js v5 + Prisma 6 + PostgreSQL (Aiven) + Recharts. Primer hijau `#2FA084`.
+
+## Prasyarat
+
+- Node.js ≥ 20, pnpm (`npm i -g pnpm`)
+- Database PostgreSQL (repo ini memakai Aiven: service `postgresql-aiven`, database `expense_tracker`)
+
+## Menjalankan lokal
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
+# Isi .env.local:
+# - DATABASE_URL / DIRECT_URL: Service URI dari Aiven Console
+#   (service postgresql-aiven → Connection information → Reveal),
+#   ganti /defaultdb menjadi /expense_tracker + ?sslmode=require
+# - AUTH_SECRET: string acak ≥ 32 karakter
+# - AUTH_URL: http://localhost:3000
+pnpm exec prisma migrate dev   # butuh service Aiven RUNNING (plan free auto power-off bila idle!)
+pnpm exec prisma db seed        # 13 kategori global
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka http://localhost:3000 → daftar → buat dompet pertama → catat transaksi.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Test & kualitas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm test                        # unit (Vitest): saldo, budget, transfer, CSV, format
+pnpm exec tsc --noEmit           # typecheck
+pnpm lint                        # eslint (0 error)
+E2E_BASE_URL=http://localhost:3000 pnpm exec playwright test   # E2E (butuh dev server jalan)
+pnpm build                       # build production
+```
 
-## Learn More
+## Deploy ke Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Push repo ini ke GitHub, import di Vercel (framework Next.js).
+2. Isi Environment Variables (sama seperti `.env.local`, `AUTH_URL` = URL production):
+   - `DATABASE_URL` = Service URI (ganti db → `expense_tracker`), tambah `&connection_limit=2`
+   - `DIRECT_URL` = sama tanpa `connection_limit`
+   - `AUTH_SECRET`, `AUTH_URL`
+3. Deploy. Migrasi DB: jalankan `prisma migrate deploy` dari lokal dengan `DIRECT_URL` menunjuk Aiven.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Catatan plan gratis Aiven: service **otomatis power-off saat idle** (dan limit 1 service/organisasi). Bila koneksi gagal tiba-tiba, nyalakan ulang dari Aiven Console → service `postgresql-aiven` → Power on.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Keamanan (ringkas)
 
-## Deploy on Vercel
+- Password bcrypt 12 rounds; session JWT httpOnly; email dinormalisasi (lowercase+trim); respons login disamakan (anti user-enumeration).
+- Rate-limit: register 10x/10 mnt/IP, ganti password 5x/10 mnt/akun (in-memory per instance — best-effort di serverless; untuk proteksi serius pasang WAF/CDN di depan).
+- Security headers (nosniff, DENY frame, referrer-policy) di `next.config.ts`.
+- Semua query memakai `userId` session (ownership); validasi Zod di client + server; body JSON dibatasi 1MB; export CSV di-escape.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Struktur
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/(marketing)` → landing; `app/(auth)` → login/register; `app/(app)` → dashboard, transaksi, dompet, anggaran, laporan, pengaturan
+- `app/api` → Route Handlers (wallets, transactions, transfers, budgets, categories, dashboard, reports/export, account, auth)
+- `lib` → db, auth, validations, dashboard (agregat), finance, format, csv, rate-limit
+- `prisma` → schema + seed; `tests` → unit (Vitest) + e2e (Playwright)
