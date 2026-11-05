@@ -34,6 +34,7 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
   const [walletId, setWalletId] = useState('');
   const [toWalletId, setToWalletId] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [currency, setCurrency] = useState('IDR');
   const [note, setNote] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -85,6 +86,7 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
                 amount: numAmount,
                 date: new Date().toISOString(),
                 note: note || undefined,
+                currency,
               }),
             });
       const json = await res.json();
@@ -119,15 +121,36 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
           </Tabs>
 
           <div>
-            <Label htmlFor="qa-amount">Nominal (Rp)</Label>
+            <div className="flex items-end justify-between gap-2">
+              <Label htmlFor="qa-amount">Nominal</Label>
+              {tab !== 'TRANSFER' && (
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  aria-label="Mata uang"
+                  className="h-7 rounded-lg border border-border bg-card px-1.5 text-[11.5px] font-semibold text-muted-foreground outline-none focus:border-brand-400"
+                >
+                  {['IDR', 'USD', 'EUR', 'SGD', 'MYR'].map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
             <Input
               id="qa-amount"
               inputMode="numeric"
               value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ''))}
+              onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
               placeholder="0"
               className="mt-1 text-2xl font-bold h-14"
             />
+            {currency !== 'IDR' && tab !== 'TRANSFER' && (
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Dikonversi ke Rupiah oleh server memakai kurs terkini.
+              </p>
+            )}
             <div className="mt-2 flex gap-2">
               {CHIPS.map((c) => (
                 <Button key={c} type="button" variant="outline" size="sm" onClick={() => setAmount(String((Number(amount) || 0) + c))}>

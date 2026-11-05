@@ -1,5 +1,6 @@
 import { db } from './db';
 import { getBudgetStatus } from './finance';
+import { runDueRecurring } from './recurring';
 
 export interface DashboardFilter {
   userId: string;
@@ -8,6 +9,11 @@ export interface DashboardFilter {
 }
 
 export async function getDashboardData({ userId, month, year }: DashboardFilter) {
+  // Jalankan transaksi berulang yang sudah jatuh tempo sebelum agregasi,
+  // supaya angka yang dilihat pengguna sudah termasuk transaksi otomatis.
+  // Kegagalan di sini tidak boleh menggagalkan dashboard.
+  await runDueRecurring(userId).catch(() => 0);
+
   const start = new Date(year, month - 1, 1);
   const end = new Date(year, month, 1);
   const now = new Date();

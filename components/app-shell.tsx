@@ -18,6 +18,7 @@ const NAV = [
   { href: '/transaksi', label: 'Transaksi', icon: 'receipt_long' },
   { href: '/dompet', label: 'Dompet', icon: 'account_balance_wallet' },
   { href: '/anggaran', label: 'Anggaran', icon: 'donut_small' },
+  { href: '/target', label: 'Target', icon: 'savings' },
   { href: '/laporan', label: 'Laporan', icon: 'insights' },
   { href: '/pengaturan', label: 'Pengaturan', icon: 'settings' },
 ];
@@ -49,7 +50,7 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* ============ Sidebar desktop ============ */}
-      <aside className="fixed inset-y-0 left-0 hidden w-[264px] flex-col lg:flex">
+      <aside className="fixed inset-y-0 left-0 hidden w-[264px] flex-col border-r border-border/60 bg-sidebar lg:flex">
         <div className="flex h-full flex-col px-4 py-5">
           <Link href="/dashboard" className="group flex items-center gap-2.5 px-2">
             <img src="/logo.svg" alt="" className="h-9 w-9 rounded-xl shadow-sm transition-transform group-hover:scale-105" />
@@ -69,7 +70,7 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
                   aria-current={active ? 'page' : undefined}
                   className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                     active
-                      ? 'bg-brand-50 text-brand-800'
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`}
                 >
@@ -89,26 +90,26 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
           </nav>
 
           {/* Kartu saldo */}
-          <div className="relative mt-4 overflow-hidden rounded-2xl bg-foreground p-4 text-background grain">
+          <div className="relative mt-4 overflow-hidden rounded-2xl card-ink p-4 grain">
             <div
               className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-25 blur-2xl"
               style={{ background: 'var(--brand-400)' }}
             />
-            <p className="relative text-[11px] font-medium uppercase tracking-[0.12em] text-background/55">
+            <p className="relative text-[11px] font-medium uppercase tracking-[0.12em] text-white/55">
               Total saldo
             </p>
-            <p className="numeral relative mt-1 text-[22px] text-background">{formatIDR(totalBalance)}</p>
-            <div className="relative mt-4 flex items-center gap-2.5 border-t border-background/12 pt-3">
+            <p className="numeral relative mt-1 text-[22px] text-white">{formatIDR(totalBalance)}</p>
+            <div className="relative mt-4 flex items-center gap-2.5 border-t border-white/12 pt-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-500/25 text-[11px] font-bold text-brand-200">
                 {initials(user.name)}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-semibold text-background/90">{user.name}</p>
-                <p className="truncate text-[10px] text-background/45">{user.email}</p>
+                <p className="truncate text-xs font-semibold text-white/90">{user.name}</p>
+                <p className="truncate text-[10px] text-white/45">{user.email}</p>
               </div>
               <button
                 onClick={() => signOut({ redirectTo: '/login' })}
-                className="rounded-lg p-1.5 text-background/50 transition-colors hover:bg-background/10 hover:text-background"
+                className="rounded-lg p-1.5 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
                 aria-label="Keluar"
                 title="Keluar"
               >

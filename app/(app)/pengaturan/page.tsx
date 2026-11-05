@@ -3,7 +3,9 @@ import { db } from '@/lib/db';
 import { ProfileForm } from '@/components/profile-form';
 import { PasswordForm } from '@/components/password-form';
 import { CategoryManager } from '@/components/category-manager';
-import { DangerZone } from '@/components/danger-zone';
+import { DangerZone } from "@/components/danger-zone";
+import { PreferencesForm } from "@/components/preferences-form";
+import Link from "next/link";
 
 function Section({
   icon,
@@ -103,6 +105,41 @@ export default async function PengaturanPage() {
           desc={isGoogleOnly ? 'Akun ini masuk lewat Google' : 'Ganti kata sandi secara berkala'}
         >
           <PasswordForm />
+        </Section>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Section icon="palette" title="Tampilan & mata uang" desc="Tema dan acuan konversi">
+          <PreferencesForm initialCurrency={user?.currency ?? 'IDR'} />
+        </Section>
+
+        <Section icon="apps" title="Fitur lainnya" desc="Alat lain yang tersedia">
+          <ul className="divide-y divide-border/60">
+            {[
+              { href: '/target', icon: 'savings', t: 'Target tabungan', d: 'Sisihkan dana untuk tujuan' },
+              { href: '/berulang', icon: 'event_repeat', t: 'Transaksi berulang', d: 'Otomatis tiap bulan' },
+              { href: '/keluarga', icon: 'group', t: 'Rumah tangga', d: 'Bagikan dompet' },
+              { href: '/aktivitas', icon: 'history', t: 'Riwayat aktivitas', d: 'Jejak perubahan' },
+            ].map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="group flex items-center gap-3 py-2.5 transition-colors hover:text-brand-700"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground group-hover:bg-brand-50 group-hover:text-brand-600">
+                    <span className="material-symbols-outlined text-[16px]">{l.icon}</span>
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[13px] font-semibold leading-tight">{l.t}</p>
+                    <p className="truncate text-[11px] text-muted-foreground">{l.d}</p>
+                  </div>
+                  <span className="material-symbols-outlined shrink-0 text-[17px] text-muted-foreground/60 transition-transform group-hover:translate-x-0.5">
+                    chevron_right
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </Section>
       </div>
 

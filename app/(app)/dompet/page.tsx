@@ -50,7 +50,7 @@ export default async function DompetPage() {
                 key={w.id}
                 className={
                   featured
-                    ? 'relative overflow-hidden rounded-2xl bg-foreground p-5 text-background grain'
+                    ? 'relative overflow-hidden rounded-2xl card-ink p-5 grain'
                     : 'rounded-2xl border border-border/70 bg-card p-5 shadow-xs'
                 }
               >
@@ -64,14 +64,14 @@ export default async function DompetPage() {
                   <div className="min-w-0">
                     <p
                       className={`truncate text-[13.5px] font-bold ${
-                        featured ? 'text-background' : 'text-foreground'
+                        featured ? 'text-white' : 'text-foreground'
                       }`}
                     >
                       {w.name}
                     </p>
                     <p
                       className={`mt-0.5 flex items-center gap-1 text-[11px] ${
-                        featured ? 'text-background/45' : 'text-muted-foreground'
+                        featured ? 'text-white/45' : 'text-muted-foreground'
                       }`}
                     >
                       <span className="material-symbols-outlined text-[13px]">{meta.icon}</span>
@@ -80,7 +80,7 @@ export default async function DompetPage() {
                   </div>
                   <span
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                      featured ? 'bg-background/10 text-brand-300' : 'bg-brand-50 text-brand-600'
+                      featured ? 'bg-white/10 text-brand-300' : 'bg-brand-50 text-brand-600'
                     }`}
                   >
                     <span className="material-symbols-outlined text-[17px]">{meta.icon}</span>
@@ -88,7 +88,7 @@ export default async function DompetPage() {
                 </div>
                 <p
                   className={`numeral relative mt-4 text-[1.45rem] leading-none ${
-                    featured ? 'text-background' : 'text-foreground'
+                    featured ? 'text-white' : 'text-foreground'
                   }`}
                 >
                   {formatIDR(Number(w.balance))}
@@ -96,7 +96,7 @@ export default async function DompetPage() {
                 {total > 0 && (
                   <div
                     className={`relative mt-3 h-1 w-full overflow-hidden rounded-full ${
-                      featured ? 'bg-background/15' : 'bg-muted'
+                      featured ? 'bg-white/15' : 'bg-muted'
                     }`}
                   >
                     <div
@@ -110,7 +110,7 @@ export default async function DompetPage() {
                 {total > 0 && (
                   <p
                     className={`relative mt-1.5 text-[10.5px] ${
-                      featured ? 'text-background/40' : 'text-muted-foreground/80'
+                      featured ? 'text-white/40' : 'text-muted-foreground/80'
                     }`}
                   >
                     {((Number(w.balance) / total) * 100).toFixed(0)}% dari total

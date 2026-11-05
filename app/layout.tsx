@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { PwaRegister } from "@/components/pwa-register";
 
 // Display: Fraunces — serif variabel dengan optical sizing, berkarakter premium.
 // UI/body: Manrope — grotesque geometris yang rapi di ukuran kecil.
@@ -77,8 +79,20 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"
         />
+        {/* Terapkan tema sebelum paint pertama agar tidak ada kedipan terang
+            saat pengguna memilih mode gelap. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('dompetku-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}}catch(e){}})();`,
+          }}
+        />
+        <meta name="theme-color" content="#2FA084" />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <ThemeProvider initial="system" />
+        <PwaRegister />
+      </body>
     </html>
   );
 }

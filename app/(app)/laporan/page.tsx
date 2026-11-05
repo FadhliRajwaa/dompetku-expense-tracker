@@ -92,11 +92,18 @@ export default async function LaporanPage({
           </form>
 
           <a
+            href={csvHref.replace('format=csv', 'format=pdf')}
+            className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-border bg-card px-3.5 text-[12.5px] font-semibold text-foreground shadow-xs transition-colors hover:bg-muted"
+          >
+            <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+            PDF
+          </a>
+          <a
             href={csvHref}
             className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-semibold text-white shadow-sm transition-colors hover:bg-brand-600"
           >
             <span className="material-symbols-outlined text-[16px]">download</span>
-            Export CSV
+            CSV
           </a>
         </div>
       </div>

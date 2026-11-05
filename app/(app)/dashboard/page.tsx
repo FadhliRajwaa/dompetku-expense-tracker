@@ -81,7 +81,7 @@ export default async function DashboardPage() {
         const doneCount = steps.filter((s) => s.done).length;
         if (doneCount === steps.length) return null;
         return (
-          <div className="flex flex-col gap-3 rounded-2xl border border-brand-200/60 bg-brand-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 rounded-2xl border border-brand-200/60 bg-brand-50/50 p-4 dark:border-brand-500/20 dark:bg-brand-900/25 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
                 <span className="material-symbols-outlined text-[18px]">flag</span>
@@ -124,40 +124,40 @@ export default async function DashboardPage() {
       {/* ---------- Baris atas: hero saldo + 2 metrik ---------- */}
       <div className="grid gap-3 lg:grid-cols-[1.5fr_0.75fr_0.75fr]">
         {/* Hero saldo */}
-        <div className="relative overflow-hidden rounded-2xl bg-foreground p-5 text-background grain sm:p-6">
+        <div className="relative overflow-hidden rounded-2xl card-ink p-5 grain sm:p-6">
           <div
             className="absolute -right-20 -top-20 h-52 w-52 rounded-full opacity-30 blur-3xl"
             style={{ background: 'var(--brand-400)' }}
           />
           <div className="relative">
             <div className="flex items-center justify-between">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-background/55">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-white/55">
                 Total saldo
               </p>
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-background/10">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
                 <span className="material-symbols-outlined text-[18px] text-brand-300">
                   account_balance_wallet
                 </span>
               </span>
             </div>
-            <p className="numeral mt-3 text-[2rem] leading-none text-background sm:text-[2.5rem]">
+            <p className="numeral mt-3 text-[2rem] leading-none text-white sm:text-[2.5rem]">
               {formatIDR(d.totalBalance)}
             </p>
-            <p className="mt-2 text-[12.5px] text-background/45">
+            <p className="mt-2 text-[12.5px] text-white/45">
               tersebar di {d.activeWallets} dompet aktif
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
               <Link
                 href="/dompet"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-background/10 px-3 text-[12px] font-semibold text-background/90 transition-colors hover:bg-background/15"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-white/10 px-3 text-[12px] font-semibold text-white/90 transition-colors hover:bg-white/15"
               >
                 Kelola dompet
                 <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
               </Link>
               <Link
                 href="/transaksi"
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-background/10 px-3 text-[12px] font-semibold text-background/90 transition-colors hover:bg-background/15"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-white/10 px-3 text-[12px] font-semibold text-white/90 transition-colors hover:bg-white/15"
               >
                 Semua transaksi
               </Link>

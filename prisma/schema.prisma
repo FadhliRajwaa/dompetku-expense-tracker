@@ -8,6 +8,10 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ============================================================================
+// FASE 1 — dasar (tidak diubah strukturnya, hanya ditambah relasi)
+// ============================================================================
+
 model User {
   id            String        @id @default(cuid())
   name          String
@@ -15,13 +19,26 @@ model User {
   emailVerified DateTime?
   passwordHash  String? // null = user Google-only
   image         String?
-  accounts      Account[]
-  wallets       Wallet[]
-  transactions  Transaction[]
-  transfers     Transfer[]
-  budgets       Budget[]
+
+  // Fase 2 — preferensi
+  theme         String  @default("system") // system | light | dark
+  currency      String  @default("IDR") // Fase 3 — mata uang utama tampilan
+  locale        String  @default("id-ID")
+
+  accounts     Account[]
+  wallets      Wallet[]
+  transactions Transaction[]
+  transfers    Transfer[]
+  budgets      Budget[]
   categories   Category[]
+  recurring    RecurringRule[]
+  goals        Goal[]
+  goalEntries  GoalEntry[]
+  auditLogs    AuditLog[]
+  memberships  Membership[]
   createdAt    DateTime      @default(now())
+
+  @@index([email])
 }
 
 // Standar Auth.js (Google login). sessions diabaikan: JWT strategy.
@@ -62,7 +79,12 @@ model Wallet {
   isActive  Boolean    @default(true)
   createdAt DateTime   @default(now())
 
+  /// Fase 3 — dompet milik household (null = milik pribadi)
+  householdId String?
+  household   Household? @relation(fields: [householdId], references: [id], onDelete: SetNull)
+
   @@index([userId])
+  @@index([householdId])
 }
 
 enum CategoryType {
@@ -78,6 +100,8 @@ model Category {
   icon   String       @default("tag")
   color  String       @default("#2fa084")
   type   CategoryType
+
+  @@index([userId])
 }
 
 model Transaction {
@@ -92,9 +116,18 @@ model Transaction {
   note       String?
   createdAt  DateTime     @default(now())
 
+  /// Fase 3 — multi-currency: nilai asli + kurs saat transaksi
+  currency   String  @default("IDR")
+  fxRate     Decimal @db.Decimal(19, 8) @default(1)
+
+  /// Fase 2 — jejak bila transaksi dibuat oleh aturan berulang
+  recurringRuleId String?
+  recurringRule   RecurringRule? @relation(fields: [recurringRuleId], references: [id], onDelete: SetNull)
+
   @@index([userId, date(sort: Desc)])
   @@index([walletId])
   @@index([categoryId])
+  @@index([recurringRuleId])
 }
 
 model Transfer {
@@ -123,4 +156,147 @@ model Budget {
 
   @@unique([userId, categoryId, month, year])
   @@index([userId, year, month])
+}
+
+// ============================================================================
+// FASE 2 — transaksi berulang, audit log, penyimpanan sesi PDF
+// ============================================================================
+
+enum RecurrenceFreq {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum RecurrenceStatus {
+  ACTIVE
+  PAUSED
+}
+
+model RecurringRule {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletId   String
+  categoryId String
+  type       CategoryType
+  amount     Decimal      @db.Decimal(19, 2)
+  note       String?
+  freq       RecurrenceFreq
+  interval   Int          @default(1) // tiap N satuan freq
+  startDate  DateTime
+  endDate    DateTime? // null = selamanya
+  nextRun    DateTime
+  status     RecurrenceStatus @default(ACTIVE)
+  lastRun    DateTime?
+  createdAt  DateTime     @default(now())
+
+  transactions Transaction[]
+
+  @@index([userId, status, nextRun])
+}
+
+/// Audit log perubahan penting (Fase 2). Ditulis server-side, tidak pernah dari client.
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String // budget.update, budget.delete, goal.update, member.invite, dst.
+  entity    String // nama model: Budget, Goal, Household...
+  entityId  String?
+  summary   String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([entity, entityId])
+}
+
+// ============================================================================
+// FASE 3 — target menabung, multi-currency, sharing keluarga
+// ============================================================================
+
+model Goal {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  targetAmount Decimal   @db.Decimal(19, 2)
+  savedAmount  Decimal   @db.Decimal(19, 2) @default(0)
+  currency     String    @default("IDR")
+  targetDate   DateTime?
+  icon         String    @default("savings")
+  color        String    @default("#2fa084")
+  isArchived   Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  entries GoalEntry[]
+
+  @@index([userId, isArchived])
+}
+
+enum GoalEntryType {
+  DEPOSIT
+  WITHDRAW
+}
+
+model GoalEntry {
+  id        String        @id @default(cuid())
+  goalId    String
+  goal      Goal          @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Decimal       @db.Decimal(19, 2)
+  type      GoalEntryType
+  note      String?
+  date      DateTime      @default(now())
+  createdAt DateTime      @default(now())
+
+  @@index([goalId, date(sort: Desc)])
+  @@index([userId])
+}
+
+/// Kurs mata uang terhadap IDR. Diisi server (seed/manual), bukan input bebas.
+model FxRate {
+  id        String   @id @default(cuid())
+  currency  String // USD, EUR, SGD...
+  rateToIdr Decimal  @db.Decimal(19, 8) // 1 unit currency = N IDR
+  fetchedAt DateTime @default(now())
+  source    String   @default("manual")
+
+  @@unique([currency])
+}
+
+// Sharing keluarga
+enum HouseholdRole {
+  OWNER
+  MEMBER
+}
+
+model Household {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String
+  inviteCode String  @unique
+  createdAt DateTime @default(now())
+
+  wallets   Wallet[]
+  memberships Membership[]
+
+  @@index([ownerId])
+}
+
+model Membership {
+  id          String        @id @default(cuid())
+  householdId String
+  household   Household     @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        HouseholdRole @default(MEMBER)
+  createdAt   DateTime      @default(now())
+
+  @@unique([householdId, userId])
+  @@index([userId])
 }

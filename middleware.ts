@@ -2,7 +2,19 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-const PROTECTED = ['/dashboard', '/transaksi', '/dompet', '/anggaran', '/laporan', '/pengaturan', '/lainnya'];
+const PROTECTED = [
+  '/dashboard',
+  '/transaksi',
+  '/dompet',
+  '/anggaran',
+  '/target',
+  '/berulang',
+  '/keluarga',
+  '/aktivitas',
+  '/laporan',
+  '/pengaturan',
+  '/lainnya',
+];
 const AUTH_PAGES = ['/login', '/register'];
 
 // RINGAN untuk Edge (limit 1MB plan gratis): hanya verifikasi JWT via

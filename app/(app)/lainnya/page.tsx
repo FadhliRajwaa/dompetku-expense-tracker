@@ -2,8 +2,12 @@ import Link from 'next/link';
 
 const LINKS = [
   { href: '/anggaran', label: 'Anggaran', icon: 'donut_small', desc: 'Batas pengeluaran per kategori' },
-  { href: '/laporan', label: 'Laporan', icon: 'insights', desc: 'Tren bulanan dan export CSV' },
-  { href: '/pengaturan', label: 'Pengaturan', icon: 'settings', desc: 'Profil, kata sandi, dan kategori' },
+  { href: '/target', label: 'Target tabungan', icon: 'savings', desc: 'Sisihkan dana untuk tujuan' },
+  { href: '/berulang', label: 'Transaksi berulang', icon: 'event_repeat', desc: 'Gaji, sewa, langganan otomatis' },
+  { href: '/keluarga', label: 'Rumah tangga', icon: 'group', desc: 'Bagikan dompet dengan keluarga' },
+  { href: '/laporan', label: 'Laporan', icon: 'insights', desc: 'Tren bulanan, export CSV & PDF' },
+  { href: '/aktivitas', label: 'Riwayat aktivitas', icon: 'history', desc: 'Jejak perubahan akun' },
+  { href: '/pengaturan', label: 'Pengaturan', icon: 'settings', desc: 'Profil, tema, dan kategori' },
 ];
 
 export default function LainnyaPage() {

@@ -419,7 +419,7 @@ export default function LandingPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {/* Paket aktif */}
-            <div className="relative flex flex-col overflow-hidden rounded-2xl bg-foreground p-6 text-background grain">
+            <div className="relative flex flex-col overflow-hidden rounded-2xl card-ink p-6 grain">
               <div
                 className="absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-30 blur-3xl"
                 style={{ background: 'var(--brand-400)' }}
@@ -434,7 +434,7 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="numeral mt-4 text-[2.6rem] leading-none">Rp 0</p>
-                <p className="mt-1 text-[12px] text-background/45">selamanya, tanpa syarat</p>
+                <p className="mt-1 text-[12px] text-white/45">selamanya, tanpa syarat</p>
 
                 <ul className="mt-5 space-y-2.5 text-[12.5px]">
                   {[
@@ -444,7 +444,7 @@ export default function LandingPage() {
                     'Export CSV',
                     'Login email atau Google',
                   ].map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-background/85">
+                    <li key={item} className="flex items-start gap-2 text-white/85">
                       <span className="material-symbols-outlined mt-px text-[15px] text-brand-400">check</span>
                       {item}
                     </li>

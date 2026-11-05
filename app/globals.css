@@ -209,6 +209,17 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-md);
   }
+  /* Kartu "tinta": selalu gelap di light MAUPUN dark mode.
+     `bg-foreground` salah untuk ini karena ikut terbalik menjadi terang di
+     dark mode sehingga kartu menyala. */
+  .card-ink {
+    background: oklch(0.213 0.019 167);
+    color: oklch(0.99 0.006 167);
+  }
+  .dark .card-ink {
+    background: oklch(0.145 0.014 167);
+    color: oklch(0.985 0.008 167);
+  }
   /* Latar hero: mesh halus berarah brand */
   .mesh-brand {
     background-image:
