@@ -7,6 +7,8 @@ import { signOut } from 'next-auth/react';
 import { cn } from 'cn';
 import {
   ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
   CircleDollarSign,
   History,
   House,
@@ -70,6 +72,10 @@ const MOBILE_TABS = [
   { href: '/lainnya', label: 'Lainnya', icon: MoreHorizontal },
 ];
 
+const EXPANDED_W = 264;
+const COLLAPSED_W = 76;
+const STORAGE_KEY = 'dompetku-sidebar-collapsed';
+
 function initials(name: string) {
   return name
     .split(' ')
@@ -79,11 +85,47 @@ function initials(name: string) {
     .join('');
 }
 
+/** Label mengambang saat sidebar diciutkan — pengganti teks yang hilang. */
+function TooltipLabel({ show, children }: { show: boolean; children: React.ReactNode }) {
+  if (!show) return null;
+  return (
+    <span
+      role="tooltip"
+      className="pointer-events-none absolute left-full z-50 ml-3 hidden whitespace-nowrap rounded-lg bg-foreground px-2.5 py-1.5 text-[11.5px] font-semibold text-background opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 lg:block"
+    >
+      {children}
+    </span>
+  );
+}
+
 export function AppShell({ user, totalBalance, children }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Baca pilihan terakhir setelah mount. Tidak dilakukan saat render agar
+  // HTML server dan klien identik (tidak ada hydration mismatch).
+  useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem(STORAGE_KEY) === '1');
+    } catch {
+      /* localStorage bisa diblokir; pakai default terbuka. */
+    }
+  }, []);
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(STORAGE_KEY, next ? '1' : '0');
+      } catch {
+        /* abaikan */
+      }
+      return next;
+    });
+  }
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
@@ -105,47 +147,113 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
     };
   }, [drawerOpen]);
 
-  const SidebarContent = (
+  /**
+   * Isi sidebar, dirender langsung (bukan sebagai komponen) supaya identitas
+   * fungsinya stabil antar-render — kalau dideklarasikan sebagai komponen di
+   * dalam AppShell, React menganggapnya tipe baru setiap render dan me-remount
+   * seluruh menu.
+   *
+   * `mini` hanya berlaku di desktop: drawer mobile selalu lebar penuh karena
+   * layar kecil tidak punya ruang untuk ikon tanpa label.
+   */
+  const renderSidebar = (mini: boolean) => (
     <div className="flex h-full flex-col">
-      {/* Brand + kembali ke beranda */}
-      <div className="flex items-center justify-between gap-2 px-4 pb-1 pt-5">
-        <Link href="/dashboard" className="group flex items-center gap-2.5">
+      {/* Brand + kontrol */}
+      <div
+        className={cn(
+          'flex items-center gap-2 pb-1 pt-5 transition-[padding] duration-200',
+          mini ? 'flex-col px-2' : 'justify-between px-4',
+        )}
+      >
+        <Link
+          href="/dashboard"
+          className="group flex items-center gap-2.5"
+          aria-label="Ke dashboard"
+        >
           <img
             src="/logo.svg"
             alt=""
-            className="size-9 rounded-xl shadow-sm transition-transform group-hover:scale-105"
+            className="size-9 shrink-0 rounded-xl shadow-sm transition-transform group-hover:scale-105"
           />
-          <span className="text-[17px] font-extrabold tracking-tight">DompetKu</span>
+          {!mini && (
+            <span className="text-[17px] font-extrabold tracking-tight">DompetKu</span>
+          )}
         </Link>
-        <Link
-          href="/"
-          aria-label="Kembali ke beranda"
-          title="Kembali ke beranda"
-          className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-        </Link>
+
+        {mini ? (
+          <div className="mt-1 flex flex-col gap-0.5">
+            <button
+              onClick={toggleCollapsed}
+              aria-label="Lebarkan sidebar"
+              aria-expanded={!collapsed}
+              title="Lebarkan sidebar"
+              className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <ChevronRight className="size-4" aria-hidden="true" />
+            </button>
+            <Link
+              href="/"
+              aria-label="Kembali ke beranda"
+              title="Kembali ke beranda"
+              className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" aria-hidden="true" />
+            </Link>
+          </div>
+        ) : (
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={toggleCollapsed}
+              aria-label="Ciutkan sidebar"
+              aria-expanded={!collapsed}
+              title="Ciutkan sidebar"
+              className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <ChevronLeft className="size-4" aria-hidden="true" />
+            </button>
+            <Link
+              href="/"
+              aria-label="Kembali ke beranda"
+              title="Kembali ke beranda"
+              className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
       </div>
 
-      {/* Total saldo ringkas */}
-      <div className="mx-3 mt-4 rounded-2xl border border-border/70 bg-card px-3.5 py-3 shadow-xs">
-        <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-          Total saldo
-        </p>
-        <p className="numeral mt-1 text-[19px] leading-none text-foreground">
-          {formatIDR(totalBalance)}
-        </p>
-      </div>
+      {/* Saldo ringkas. Saat mini hanya ikon dompet dengan tooltip saldo. */}
+      {mini ? (
+        <div className="group relative mx-auto mt-4 flex size-10 items-center justify-center rounded-xl border border-border/70 bg-card text-brand-600 shadow-xs">
+          <Wallet className="size-4.5" aria-hidden="true" />
+          <TooltipLabel show>{formatIDR(totalBalance)}</TooltipLabel>
+          <span className="sr-only">Total saldo {formatIDR(totalBalance)}</span>
+        </div>
+      ) : (
+        <div className="mx-3 mt-4 rounded-2xl border border-border/70 bg-card px-3.5 py-3 shadow-xs">
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+            Total saldo
+          </p>
+          <p className="numeral mt-1 text-[19px] leading-none text-foreground">
+            {formatIDR(totalBalance)}
+          </p>
+        </div>
+      )}
 
-      {/* Tombol catat cepat — di desktop tidak ada bottom nav, jadi ini
-          satu-satunya jalan pintas tanpa pindah halaman. */}
-      <div className="px-3 pt-3">
+      {/* Catat cepat */}
+      <div className={cn('pt-3', mini ? 'px-2' : 'px-3')}>
         <button
           onClick={() => setQuickAddOpen(true)}
-          className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-[13px] font-bold text-white shadow-sm shadow-brand-500/25 transition-all hover:bg-brand-600 active:translate-y-px"
+          aria-label="Catat transaksi"
+          title="Catat transaksi"
+          className={cn(
+            'flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-[13px] font-bold text-white shadow-sm shadow-brand-500/25 transition-all hover:bg-brand-600 active:translate-y-px',
+            'h-10',
+          )}
         >
-          <Plus className="size-4" aria-hidden="true" />
-          Catat transaksi
+          <Plus className="size-4 shrink-0" aria-hidden="true" />
+          {!mini && <span>Catat transaksi</span>}
         </button>
       </div>
 
@@ -156,37 +264,54 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
       <nav
         aria-label="Menu aplikasi"
         data-lenis-prevent
-        className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3"
+        className={cn(
+          'mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pb-3',
+          mini ? 'px-2' : 'px-3',
+        )}
       >
         {NAV_GROUPS.map((g) => (
           <div key={g.label} className="mt-3 first:mt-0">
-            <p className="mb-1.5 px-2.5 text-[9.5px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60">
-              {g.label}
-            </p>
+            {mini ? (
+              <div className="mx-auto mb-2 h-px w-6 bg-border/70" aria-hidden="true" />
+            ) : (
+              <p className="mb-1.5 px-2.5 text-[9.5px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60">
+                {g.label}
+              </p>
+            )}
             <ul className="flex flex-col gap-0.5">
               {g.items.map((n) => {
                 const active = isActive(n.href);
                 const Icon = n.icon;
                 return (
-                  <li key={n.href}>
+                  <li key={n.href} className="relative">
                     <Link
                       href={n.href}
                       aria-current={active ? 'page' : undefined}
+                      aria-label={mini ? n.label : undefined}
+                      title={mini ? undefined : n.label}
                       className={cn(
-                        'relative flex items-center gap-3 rounded-xl px-2.5 py-2 text-[13.5px] font-medium transition-all duration-200',
+                        'group relative flex items-center rounded-xl text-[13.5px] font-medium transition-all duration-200',
+                        mini ? 'mx-auto size-10 justify-center' : 'gap-3 px-2.5 py-2',
                         active
                           ? 'bg-sidebar-accent font-semibold text-sidebar-accent-foreground'
                           : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                       )}
                     >
-                      {active && (
+                      {active && !mini && (
                         <span className="absolute -left-3 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-brand-500" />
                       )}
+                      {active && mini && (
+                        <span className="absolute -left-2 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-brand-500" />
+                      )}
                       <Icon
-                        className={cn('size-[17px] shrink-0', active && 'text-brand-600 dark:text-brand-400')}
+                        className={cn(
+                          'size-[17px] shrink-0',
+                          active && 'text-brand-600 dark:text-brand-400',
+                        )}
                         aria-hidden="true"
                       />
-                      {n.label}
+                      {!mini && n.label}
+                      <TooltipLabel show={mini}>{n.label}</TooltipLabel>
                     </Link>
                   </li>
                 );
@@ -197,33 +322,62 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
       </nav>
 
       {/* Kartu pengguna */}
-      <div className="border-t border-border/60 p-3">
-        <div className="flex items-center gap-2.5 rounded-xl px-1.5 py-1.5">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white">
-            {initials(user.name)}
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-[12.5px] font-semibold leading-tight">{user.name}</p>
-            <p className="truncate text-[10.5px] text-muted-foreground">{user.email}</p>
+      <div className={cn('border-t border-border/60 p-3', mini && 'px-2')}>
+        {mini ? (
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href="/pengaturan"
+              className="group relative flex size-9 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white"
+              aria-label={`Pengaturan akun ${user.name}`}
+            >
+              {initials(user.name)}
+              <TooltipLabel show>{user.name}</TooltipLabel>
+            </Link>
+            <button
+              onClick={() => signOut({ redirectTo: '/login' })}
+              className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40"
+              aria-label="Keluar dari akun"
+              title="Keluar"
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+            </button>
           </div>
-          <button
-            onClick={() => signOut({ redirectTo: '/login' })}
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40"
-            aria-label="Keluar dari akun"
-            title="Keluar"
-          >
-            <LogOut className="size-4" />
-          </button>
-        </div>
+        ) : (
+          <div className="flex items-center gap-2.5 rounded-xl px-1.5 py-1.5">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white">
+              {initials(user.name)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[12.5px] font-semibold leading-tight">{user.name}</p>
+              <p className="truncate text-[10.5px] text-muted-foreground">{user.email}</p>
+            </div>
+            <button
+              onClick={() => signOut({ redirectTo: '/login' })}
+              className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/40"
+              aria-label="Keluar dari akun"
+              title="Keluar"
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 
+  const sidebarW = collapsed ? COLLAPSED_W : EXPANDED_W;
+
   return (
     <div className="min-h-screen bg-background">
       {/* ============ Sidebar desktop ============ */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] overflow-hidden border-r border-border/60 bg-sidebar lg:block">
-        {SidebarContent}
+      <aside
+        // Lebar dianimasikan lewat `width` (bukan transform) karena isi di
+        // dalamnya harus ikut menyesuaikan: label menghilang, ikon memusat.
+        style={{ width: sidebarW }}
+        className="fixed inset-y-0 left-0 z-30 hidden overflow-hidden border-r border-border/60 bg-sidebar transition-[width] duration-200 ease-out lg:block"
+        data-collapsed={collapsed ? '' : undefined}
+      >
+        {renderSidebar(collapsed)}
       </aside>
 
       {/* ============ Drawer mobile ============ */}
@@ -257,12 +411,17 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
           >
             <X className="size-4" />
           </button>
-          {SidebarContent}
+          {renderSidebar(false)}
         </div>
       </div>
 
       {/* ============ Konten ============ */}
-      <div className="lg:pl-[264px]">
+      <div
+        className={cn(
+          'transition-[padding] duration-200 ease-out',
+          collapsed ? 'lg:pl-[76px]' : 'lg:pl-[264px]',
+        )}
+      >
         {/* Header mobile */}
         <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur-xl lg:hidden">
           <div className="flex items-center justify-between gap-2 px-4 py-2.5">

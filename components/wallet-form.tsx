@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Select } from '@/components/ui/select-premium';
 import { FieldError, FieldLabel, MoneyInput, TextField } from '@/components/ui/money-input';
+import { requestJson } from '@/components/ui/toast';
 
 const TYPES = [
   { value: 'CASH', label: 'Tunai', icon: 'payments' },
@@ -49,21 +50,22 @@ export function WalletForm() {
     setNameError('');
     setSaving(true);
     try {
-      const res = await fetch('/api/wallets', {
+      const result = await requestJson('/api/wallets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), type, balance: Number(balance) || 0 }),
+        successTitle: 'Dompet dibuat',
+        successDescription: name.trim(),
+        errorTitle: 'Gagal membuat dompet',
+        context: { type },
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal menyimpan dompet.');
+      if (!result.ok) {
+        setError(result.error);
         return;
       }
       setOpen(false);
       reset();
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }

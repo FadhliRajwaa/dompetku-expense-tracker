@@ -8,6 +8,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { MoneyInput, TextField } from '@/components/ui/money-input';
 import { createCategory } from '@/lib/categories-client';
 import { useConfirm } from '@/components/ui/confirm-dialog';
+import { requestJson } from '@/components/ui/toast';
 
 interface Rule {
   id: string;
@@ -84,7 +85,7 @@ export function RecurringManager({
 
     setBusy(true);
     try {
-      const res = await fetch('/api/recurring', {
+      const result = await requestJson('/api/recurring', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,15 +99,16 @@ export function RecurringManager({
           // Tengah hari lokal: cegah pergeseran hari di zona waktu negatif.
           startDate: new Date(`${startDate}T12:00:00`).toISOString(),
         }),
+        successTitle: 'Aturan berulang dibuat',
+        successDescription: `${formatIDR(value)} · ${FREQ.find((f) => f.value === freq)?.label ?? freq}`,
+        errorTitle: 'Gagal membuat aturan berulang',
+        context: { type, freq },
       });
-      const json = await res.json();
-      if (!res.ok) return setError(json.error ?? 'Gagal menyimpan');
+      if (!result.ok) return setError(result.error);
       setOpen(false);
       setAmount('');
       setNote('');
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan');
     } finally {
       setBusy(false);
     }
@@ -114,12 +116,16 @@ export function RecurringManager({
 
   async function toggle(rule: Rule) {
     const action = rule.status === 'ACTIVE' ? 'pause' : 'resume';
-    const res = await fetch(`/api/recurring/${rule.id}`, {
+    const result = await requestJson(`/api/recurring/${rule.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action }),
+      successTitle: action === 'pause' ? 'Aturan dijeda' : 'Aturan dilanjutkan',
+      successDescription: rule.note ?? rule.categoryName,
+      errorTitle: 'Gagal mengubah status aturan',
+      context: { ruleId: rule.id, action },
     });
-    if (res.ok) router.refresh();
+    if (result.ok) router.refresh();
   }
 
   async function remove(id: string) {
@@ -130,8 +136,13 @@ export function RecurringManager({
       destructive: true,
     });
     if (!ok) return;
-    const res = await fetch(`/api/recurring/${id}`, { method: 'DELETE' });
-    if (res.ok) router.refresh();
+    const result = await requestJson(`/api/recurring/${id}`, {
+      method: 'DELETE',
+      successTitle: 'Aturan dihapus',
+      errorTitle: 'Gagal menghapus aturan',
+      context: { ruleId: id },
+    });
+    if (result.ok) router.refresh();
   }
 
   return (

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTheme } from '@/components/theme-provider';
 import { Select } from '@/components/ui/select-premium';
 import { CURRENCY_META, SUPPORTED_CURRENCIES } from '@/lib/currency';
+import { requestJson } from '@/components/ui/toast';
 
 const THEMES = [
   { value: 'system', label: 'Ikuti sistem', icon: 'brightness_auto' },
@@ -14,28 +15,23 @@ const THEMES = [
 export function PreferencesForm({ initialCurrency }: { initialCurrency: string }) {
   const { theme, setTheme } = useTheme();
   const [currency, setCurrency] = useState(initialCurrency);
-  const [msg, setMsg] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function saveCurrency(next: string) {
+    const previous = currency;
+    // Optimistis: pilihan langsung berpindah, dikembalikan bila server menolak.
     setCurrency(next);
-    setMsg('');
     setSaving(true);
     try {
-      const res = await fetch('/api/account/profile', {
+      const result = await requestJson('/api/account/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currency: next }),
+        successTitle: 'Mata uang disimpan',
+        successDescription: `${next} — ${CURRENCY_META[next as keyof typeof CURRENCY_META]?.label ?? next}`,
+        errorTitle: 'Gagal menyimpan mata uang',
       });
-      if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        setMsg(j.error ?? 'Gagal menyimpan');
-        return;
-      }
-      setMsg('Mata uang disimpan');
-      setTimeout(() => setMsg(''), 2500);
-    } catch {
-      setMsg('Terjadi kesalahan jaringan');
+      if (!result.ok) setCurrency(previous);
     } finally {
       setSaving(false);
     }
@@ -91,8 +87,6 @@ export function PreferencesForm({ initialCurrency }: { initialCurrency: string }
           />
         </div>
       </div>
-
-      {msg && <p className="text-[12px] font-medium text-brand-700">{msg}</p>}
 
       <p className="rounded-xl bg-muted/50 px-3 py-2.5 text-[11.5px] leading-relaxed text-muted-foreground">
         Preferensi tema disimpan di perangkat ini dan disinkronkan ke akunmu saat memilih mata uang.

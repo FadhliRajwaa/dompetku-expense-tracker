@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select-premium';
 import { FieldLabel, MoneyInput, TextField } from '@/components/ui/money-input';
 import { formatIDR } from '@/lib/format';
+import { requestJson } from '@/components/ui/toast';
 
 interface W {
   id: string;
@@ -40,7 +41,7 @@ export function TransferForm({ wallets }: { wallets: W[] }) {
     }
     setSaving(true);
     try {
-      const res = await fetch('/api/transfers', {
+      const result = await requestJson('/api/transfers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -50,17 +51,18 @@ export function TransferForm({ wallets }: { wallets: W[] }) {
           date: new Date().toISOString(),
           note: note.trim() || undefined,
         }),
+        successTitle: 'Transfer berhasil',
+        successDescription: `${formatIDR(num)} dipindahkan antar dompet.`,
+        errorTitle: 'Transfer gagal',
+        context: { fromId, toId },
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal memproses transfer.');
+      if (!result.ok) {
+        setError(result.error);
         return;
       }
       setAmount('');
       setNote('');
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }

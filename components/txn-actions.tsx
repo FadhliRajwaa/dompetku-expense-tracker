@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { requestJson } from '@/components/ui/toast';
 
 export function TxnActions({ id }: { id: string }) {
   const router = useRouter();
@@ -12,8 +13,17 @@ export function TxnActions({ id }: { id: string }) {
   async function remove() {
     setLoading(true);
     try {
-      const res = await fetch(`/api/transactions/${id}`, { method: 'DELETE' });
-      if (res.ok) router.refresh();
+      const result = await requestJson(`/api/transactions/${id}`, {
+        method: 'DELETE',
+        successTitle: 'Transaksi dihapus',
+        successDescription: 'Saldo dompet sudah disesuaikan kembali.',
+        errorTitle: 'Gagal menghapus transaksi',
+        context: { transactionId: id },
+      });
+      if (result.ok) {
+        setConfirming(false);
+        router.refresh();
+      }
     } finally {
       setLoading(false);
     }
@@ -22,8 +32,12 @@ export function TxnActions({ id }: { id: string }) {
   if (confirming) {
     return (
       <span className="inline-flex gap-1">
-        <Button size="sm" variant="destructive" disabled={loading} onClick={remove}>Ya</Button>
-        <Button size="sm" variant="outline" onClick={() => setConfirming(false)}>Batal</Button>
+        <Button size="sm" variant="destructive" disabled={loading} onClick={remove}>
+          {loading ? '…' : 'Ya'}
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => setConfirming(false)}>
+          Batal
+        </Button>
       </span>
     );
   }

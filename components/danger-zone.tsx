@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { requestJson, toast } from '@/components/ui/toast';
 
 export function DangerZone({ email }: { email: string }) {
   const [confirm, setConfirm] = useState('');
@@ -14,17 +15,18 @@ export function DangerZone({ email }: { email: string }) {
   async function destroy() {
     setError('');
     setLoading(true);
-    try {
-      const res = await fetch('/api/account', { method: 'DELETE' });
-      if (!res.ok) {
-        setError('Gagal menghapus akun');
-        return;
-      }
-      await signOut({ redirectTo: '/' });
-    } catch {
-      setError('Terjadi kesalahan jaringan');
+    const result = await requestJson('/api/account', {
+      method: 'DELETE',
+      errorTitle: 'Gagal menghapus akun',
+      context: { email },
+    });
+    if (!result.ok) {
+      setError(result.error);
       setLoading(false);
+      return;
     }
+    toast.info('Akun dihapus', 'Sampai jumpa. Kamu dialihkan ke halaman utama.');
+    await signOut({ redirectTo: '/' });
   }
 
   return (

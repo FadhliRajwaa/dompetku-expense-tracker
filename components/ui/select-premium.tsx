@@ -5,6 +5,7 @@ import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 import { cn } from 'cn';
 import { Check, ChevronDown, Loader2, Plus, Search } from 'lucide-react';
 import { useDebouncedValue } from '@/lib/use-debounced';
+import { toast } from '@/components/ui/toast';
 
 export interface SelectOption {
   value: string;
@@ -169,7 +170,11 @@ export function Select({
       onValueChange(created.value);
       setOpen(false);
     } catch (err) {
-      setCreateError(err instanceof Error ? err.message : 'Gagal menambah');
+      const message = err instanceof Error ? err.message : 'Gagal menambah';
+      setCreateError(message);
+      // Notifikasi tetap muncul walau pengguna mungkin sedang melihat daftar;
+      // popup bisa tertutup karena klik di luar, pesan jangan ikut hilang.
+      toast.error(`${createLabel} gagal`, message);
     } finally {
       setCreating(false);
     }

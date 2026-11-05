@@ -1,0 +1,148 @@
+/* Mesin alur uang — token tema yang mengikuti dark mode aplikasi. */
+
+.flow-machine.iso {
+  /* Terang: kertas krem, tinta hijau-tua. Kontras shade dibuat lebih tegas
+     daripada default kit supaya volume mesin terbaca di latar terang. */
+  --anatomy-paper: #f7f5ef;
+  --anatomy-face: #fdfcf8;
+  --anatomy-top: #ffffff;
+  --anatomy-shade-0: #c4c2b8;
+  --anatomy-shade-1: #d2cfc4;
+  --anatomy-shade-2: #dedbd1;
+  --anatomy-shade-3: #eae7dd;
+  --anatomy-lit-top: #ffffff;
+  --anatomy-lit-shade: #dcefe7;
+  --anatomy-hi: #16241f;
+  --anatomy-mid: #4e635a;
+  --anatomy-lo: #8b9c94;
+  --anatomy-faint: #bfc9c2;
+  --anatomy-lit: #17705a;
+  --anatomy-halo: #4f6559;
+  --anatomy-halo-opacity: 0.26;
+  --anatomy-dot: #22392f;
+  --anatomy-red: #c74440;
+  --anatomy-green: #2fa084;
+  --anatomy-blue: #3e63dd;
+  --anatomy-weight: 0.62px;
+}
+
+.dark .flow-machine.iso {
+  --anatomy-paper: #101613;
+  --anatomy-face: #17201c;
+  --anatomy-top: #1a2420;
+  --anatomy-shade-0: #0b100e;
+  --anatomy-shade-1: #0e1512;
+  --anatomy-shade-2: #121a16;
+  --anatomy-shade-3: #16201b;
+  --anatomy-lit-top: #24332c;
+  --anatomy-lit-shade: #1b2a24;
+  --anatomy-hi: #d7e4de;
+  --anatomy-mid: #7d918a;
+  --anatomy-lo: #45564f;
+  --anatomy-faint: #2b3a34;
+  --anatomy-lit: #7fe3c3;
+  --anatomy-halo: #020604;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #cfe3db;
+  --anatomy-red: #ff8a84;
+  --anatomy-green: #6be0a0;
+  --anatomy-blue: #8fb0ff;
+}
+
+/* Bingkai kartu disesuaikan dengan sistem desain DompetKu, bukan kotak
+   gelap bawaan kit. */
+.flow-machine-wrap .iso-plate {
+  /* Kertas netral: warna latar kartu aplikasi, bukan tint brand. Tint hijau
+     di belakang mesin membuat shade kuning-abu terbaca keruh. */
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--border) 80%, transparent),
+    0 1px 2px -1px rgb(0 0 0 / 0.05),
+    0 18px 40px -24px rgb(0 0 0 / 0.3);
+  border-radius: 24px;
+  padding: 46px 20px 40px;
+}
+
+.flow-machine-wrap .iso-plate-corner {
+  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.flow-machine-wrap .iso-legend {
+  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}
+
+.flow-machine-wrap .iso-key {
+  color: var(--muted-foreground);
+  /* Label legenda boleh turun baris; tanpa ini teks panjang terpotong tepi
+     layar di HP, bukan pindah baris. */
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.flow-machine-wrap .iso-swatch path {
+  stroke: var(--foreground);
+}
+
+.flow-machine-wrap .iso-caption {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+/* Koin: satu-satunya benda yang menyala, supaya mata mengikutinya. */
+.flow-machine .coin .iso-top {
+  fill: color-mix(in oklch, var(--anatomy-lit) 22%, var(--anatomy-top));
+}
+
+.flow-machine .coin .iso-edge {
+  stroke: var(--anatomy-lit);
+}
+
+/* Di layar kecil label sudut saling menabrak karena tidak muat sebaris.
+   HINT dan READOUT ditumpuk, dan judul diberi ruang di kanan. */
+@media (max-width: 560px) {
+  .flow-machine-wrap .iso-plate {
+    padding: 42px 14px 64px;
+  }
+
+  .flow-machine-wrap .iso-plate-corners {
+    inset: 14px 14px 22px;
+  }
+
+  .flow-machine-wrap .iso-plate-corner[data-corner='title'] {
+    max-width: 46%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flow-machine-wrap .iso-plate-corner[data-corner='hint'] {
+    bottom: 20px;
+    right: 0;
+    left: 0;
+    white-space: normal;
+  }
+
+  .flow-machine-wrap .iso-plate-corner[data-corner='readout'] {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: left;
+  }
+
+  .flow-machine-wrap .iso-legend {
+    font-size: 12px;
+  }
+
+  /* Legenda ditumpuk vertikal di HP: tiga label dalam satu baris tidak muat
+     dan label terpanjang terpotong di tepi kanan layar. */
+  .flow-machine-wrap .iso-keys {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

@@ -119,7 +119,13 @@ function SectionHead({
   );
 }
 
-export function LandingSections({ loggedIn }: { loggedIn: boolean }) {
+export function LandingSections({
+  loggedIn,
+  figure,
+}: {
+  loggedIn: boolean;
+  figure: React.ReactNode;
+}) {
   return (
     <>
       {/* ============ ANGKATAN ANGKA ============ */}
@@ -226,79 +232,11 @@ export function LandingSections({ loggedIn }: { loggedIn: boolean }) {
             </ul>
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="relative rounded-3xl border border-border/70 bg-card p-5 shadow-[var(--shadow-lg)]">
-              <div className="flex items-center justify-between">
-                <p className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                  Ringkasan bulan ini
-                </p>
-                <span className="rounded-full bg-brand-50 px-2 py-0.5 text-[9.5px] font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
-                  Tersinkron
-                </span>
-              </div>
-
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {[
-                  { l: 'Masuk', v: '17,2 jt', tone: 'text-brand-700 dark:text-brand-300' },
-                  { l: 'Keluar', v: '9,4 jt', tone: 'text-foreground' },
-                  { l: 'Sisa', v: '7,8 jt', tone: 'text-brand-700 dark:text-brand-300' },
-                ].map((m) => (
-                  <div key={m.l} className="rounded-xl bg-muted/60 px-2.5 py-2">
-                    <p className="text-[9.5px] font-semibold uppercase tracking-wide text-muted-foreground">
-                      {m.l}
-                    </p>
-                    <p className={`numeral mt-0.5 text-[13.5px] ${m.tone}`}>{m.v}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bar arus kas mini — murni presentasi, tanpa data asli */}
-              <div className="mt-4">
-                <div className="flex items-end gap-1.5" aria-hidden="true">
-                  {[42, 58, 35, 72, 48, 88, 64, 76, 55, 92, 68, 80].map((h, i) => (
-                    <div key={i} className="flex-1">
-                      <div
-                        className="w-full rounded-sm bg-brand-500/85"
-                        style={{ height: `${h * 0.72}px` }}
-                      />
-                      <div
-                        className="mt-0.5 w-full rounded-sm bg-rose-400/70"
-                        style={{ height: `${h * 0.34}px` }}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground">
-                  <span>1 Nov</span>
-                  <span>15 Nov</span>
-                  <span>30 Nov</span>
-                </div>
-              </div>
-
-              <div className="mt-4 space-y-2 border-t border-border/60 pt-3">
-                {[
-                  { l: 'Makan & minum', pct: 48, amt: 'Rp 1,24 jt' },
-                  { l: 'Transportasi', pct: 72, amt: 'Rp 720 rb' },
-                  { l: 'Hiburan', pct: 91, amt: 'Rp 455 rb' },
-                ].map((b) => (
-                  <div key={b.l}>
-                    <div className="flex items-center justify-between text-[11.5px]">
-                      <span className="font-medium text-foreground/85">{b.l}</span>
-                      <span className="tabular text-muted-foreground">{b.amt}</span>
-                    </div>
-                    <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-muted">
-                      <div
-                        className={`h-full rounded-full ${
-                          b.pct >= 90 ? 'bg-rose-500' : b.pct >= 70 ? 'bg-amber-500' : 'bg-brand-500'
-                        }`}
-                        style={{ width: `${b.pct}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
+          {/* Mesin alur uang — ilustrasi isometrik yang benar-benar bergerak:
+              koin turun, drum berputar, jarum dial mencatat total.
+              Dikirim sebagai prop dari server supaya geometri tidak ikut ke
+              bundle klien; hanya komponen live-nya yang berjalan di browser. */}
+          <Reveal delay={0.1}>{figure}</Reveal>
         </div>
       </section>
 

@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/select-premium';
 import { DatePicker, toISODate } from '@/components/ui/date-picker';
 import { formatIDR } from '@/lib/format';
 import { createCategory } from '@/lib/categories-client';
+import { requestJson } from '@/components/ui/toast';
 
 interface QuickAddSheetProps {
   open: boolean;
@@ -154,35 +155,43 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
       // Tanggal dipilih sebagai hari lokal; simpan pada tengah hari lokal
       // agar tidak bergeser ke hari sebelumnya saat dikonversi ke UTC.
       const d = new Date(`${date}T12:00:00`);
-      const res =
-        tab === 'TRANSFER'
-          ? await fetch('/api/transfers', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                fromWalletId: walletId,
-                toWalletId,
-                amount: numericAmount,
-                date: d.toISOString(),
-              }),
-            })
-          : await fetch('/api/transactions', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                walletId,
-                categoryId,
-                type: tab,
-                amount: numericAmount,
-                date: d.toISOString(),
-                note: note.trim() || undefined,
-                currency,
-              }),
-            });
+      const result = await requestJson(
+        tab === 'TRANSFER' ? '/api/transfers' : '/api/transactions',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(
+            tab === 'TRANSFER'
+              ? {
+                  fromWalletId: walletId,
+                  toWalletId,
+                  amount: numericAmount,
+                  date: d.toISOString(),
+                }
+              : {
+                  walletId,
+                  categoryId,
+                  type: tab,
+                  amount: numericAmount,
+                  date: d.toISOString(),
+                  note: note.trim() || undefined,
+                  currency,
+                },
+          ),
+          successTitle:
+            tab === 'TRANSFER'
+              ? 'Transfer tercatat'
+              : tab === 'INCOME'
+                ? 'Pemasukan tercatat'
+                : 'Pengeluaran tercatat',
+          successDescription: formatIDR(numericAmount),
+          errorTitle: 'Gagal menyimpan transaksi',
+          context: { tab, walletId, categoryId },
+        },
+      );
 
-      const json = (await res.json().catch(() => ({}))) as { error?: string };
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal menyimpan. Coba lagi.');
+      if (!result.ok) {
+        setError(result.error);
         return;
       }
       setAmount('');
@@ -190,8 +199,6 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
       setDate(toISODate(new Date()));
       onOpenChange(false);
       onSaved();
-    } catch {
-      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }

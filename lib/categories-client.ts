@@ -23,6 +23,8 @@ export async function createCategory(
     error?: string;
   };
   if (!res.ok || !json.data) {
+    // Pesan diteruskan ke pemanggil; Select yang memunculkan toast dan pesan
+    // inline, sehingga tidak ada pelaporan ganda di dua lapisan sekaligus.
     throw new Error(json.error ?? 'Gagal menambah kategori');
   }
   return { value: json.data.id, label: json.data.name };

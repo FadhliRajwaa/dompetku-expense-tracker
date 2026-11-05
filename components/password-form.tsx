@@ -1,21 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FieldError, FieldLabel, TextField } from '@/components/ui/money-input';
 import { PasswordStrength } from '@/components/auth/field';
+import { requestJson } from '@/components/ui/toast';
 
 export function PasswordForm() {
   const [oldPw, setOldPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [err, setErr] = useState('');
-  const [msg, setMsg] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function save() {
     setErr('');
-    setMsg('');
     if (newPw.length < 8) {
       setErr('Kata sandi baru minimal 8 karakter.');
       return;
@@ -26,21 +24,20 @@ export function PasswordForm() {
     }
     setSaving(true);
     try {
-      const res = await fetch('/api/account/password', {
+      const result = await requestJson('/api/account/password', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ oldPassword: oldPw, newPassword: newPw }),
+        successTitle: 'Kata sandi diubah',
+        successDescription: 'Gunakan kata sandi baru pada login berikutnya.',
+        errorTitle: 'Gagal mengubah kata sandi',
       });
-      const json = await res.json();
-      if (res.ok) {
-        setMsg('Kata sandi berhasil diubah.');
-        setOldPw('');
-        setNewPw('');
-      } else {
-        setErr(json.error ?? 'Gagal mengubah kata sandi.');
+      if (!result.ok) {
+        setErr(result.error);
+        return;
       }
-    } catch {
-      setErr('Terjadi kesalahan jaringan.');
+      setOldPw('');
+      setNewPw('');
     } finally {
       setSaving(false);
     }
@@ -87,12 +84,6 @@ export function PasswordForm() {
         >
           {saving ? 'Menyimpan…' : 'Ubah kata sandi'}
         </Button>
-        {msg && (
-          <p className="flex items-center gap-1 text-[12px] font-medium text-brand-700 dark:text-brand-400">
-            <Check className="size-3.5" aria-hidden="true" />
-            {msg}
-          </p>
-        )}
       </div>
     </div>
   );

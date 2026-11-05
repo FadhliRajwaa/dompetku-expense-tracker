@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select-premium';
 import { FieldError, TextField } from '@/components/ui/money-input';
+import { requestJson } from '@/components/ui/toast';
 
 interface C {
   id: string;
@@ -29,20 +30,21 @@ export function CategoryManager({ categories }: { categories: C[] }) {
     }
     setSaving(true);
     try {
-      const res = await fetch('/api/categories', {
+      const result = await requestJson('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), type }),
+        successTitle: 'Kategori ditambahkan',
+        successDescription: name.trim(),
+        errorTitle: 'Gagal menambah kategori',
+        context: { type },
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal menambah');
+      if (!result.ok) {
+        setError(result.error);
         return;
       }
       setName('');
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan');
     } finally {
       setSaving(false);
     }

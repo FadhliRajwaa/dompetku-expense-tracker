@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { PwaRegister } from "@/components/pwa-register";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { Toaster } from "@/components/ui/toast";
 
 // Display: Fraunces — serif variabel dengan optical sizing, berkarakter premium.
 // UI/body: Manrope — grotesque geometris yang rapi di ukuran kecil.
@@ -92,6 +93,7 @@ export default function RootLayout({
       <body className="antialiased">
         <SmoothScroll />
         {children}
+        <Toaster />
         <ThemeProvider initial="system" />
         <PwaRegister />
       </body>

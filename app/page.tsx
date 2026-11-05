@@ -4,6 +4,7 @@ import { LandingNav } from '@/components/landing/landing-nav';
 import { Hero } from '@/components/landing/hero';
 import { LandingSections } from '@/components/landing/landing-sections';
 import { LandingFooter } from '@/components/landing/landing-footer';
+import { FlowMachineFigure } from '@/components/figures/flow-machine/figure';
 
 export const metadata: Metadata = {
   title: 'DompetKu — Catat Pengeluaran, Kendalikan Budget',
@@ -23,7 +24,7 @@ export default async function LandingPage() {
       <LandingNav loggedIn={loggedIn} />
       <main>
         <Hero loggedIn={loggedIn} />
-        <LandingSections loggedIn={loggedIn} />
+        <LandingSections loggedIn={loggedIn} figure={<FlowMachineFigure />} />
       </main>
       <LandingFooter loggedIn={loggedIn} />
     </div>

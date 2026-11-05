@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/select-premium';
 import { DatePicker } from '@/components/ui/date-picker';
 import { MoneyInput, TextField } from '@/components/ui/money-input';
 import { useConfirm } from '@/components/ui/confirm-dialog';
+import { requestJson } from '@/components/ui/toast';
 
 interface Entry {
   id: string;
@@ -60,7 +61,7 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
     if (!value) return setError('Target harus lebih dari nol');
     setBusy(true);
     try {
-      const res = await fetch('/api/goals', {
+      const result = await requestJson('/api/goals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -72,16 +73,17 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
           // tengah hari supaya tanggal yang dipilih tetap sama.
           targetDate: targetDate ? new Date(`${targetDate}T12:00:00`).toISOString() : null,
         }),
+        successTitle: 'Target dibuat',
+        successDescription: `${name} · ${formatMoney(value, currency)}`,
+        errorTitle: 'Gagal membuat target',
+        context: { currency },
       });
-      const json = await res.json();
-      if (!res.ok) return setError(json.error ?? 'Gagal membuat target');
+      if (!result.ok) return setError(result.error);
       setName('');
       setTarget('');
       setTargetDate('');
       setOpen(false);
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan');
     } finally {
       setBusy(false);
     }
@@ -93,18 +95,19 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
     if (!value) return setError('Nominal harus lebih dari nol');
     setBusy(true);
     try {
-      const res = await fetch(`/api/goals/${goalId}/entries`, {
+      const result = await requestJson(`/api/goals/${goalId}/entries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: value, type: depositType }),
+        successTitle: depositType === 'DEPOSIT' ? 'Dana disetor' : 'Dana ditarik',
+        successDescription: formatMoney(value, 'IDR'),
+        errorTitle: 'Gagal menyimpan setoran',
+        context: { goalId, depositType },
       });
-      const json = await res.json();
-      if (!res.ok) return setError(json.error ?? 'Gagal menyimpan');
+      if (!result.ok) return setError(result.error);
       setDepositAmount('');
       setDepositFor(null);
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan');
     } finally {
       setBusy(false);
     }
@@ -117,8 +120,13 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
       confirmLabel: 'Arsipkan',
     });
     if (!ok) return;
-    const res = await fetch(`/api/goals/${id}`, { method: 'DELETE' });
-    if (res.ok) router.refresh();
+    const result = await requestJson(`/api/goals/${id}`, {
+      method: 'DELETE',
+      successTitle: 'Target diarsipkan',
+      errorTitle: 'Gagal mengarsipkan target',
+      context: { goalId: id },
+    });
+    if (result.ok) router.refresh();
   }
 
   return (

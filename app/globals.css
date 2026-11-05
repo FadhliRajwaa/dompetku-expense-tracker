@@ -301,6 +301,71 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Skeleton
+   Kilau bergerak dari kiri ke kanan dengan gradien yang di-tint ke arah
+   hijau brand, bukan abu-abu datar. Hanya `background-position` yang
+   dianimasikan sehingga tidak memicu layout maupun paint ulang tiap frame.
+   -------------------------------------------------------------------------- */
+@keyframes skeleton-sweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes toast-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@layer utilities {
+  .skeleton {
+    background-color: color-mix(in oklch, var(--muted) 82%, var(--brand-500) 18%);
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in oklch, var(--card) 70%, white 30%) 50%,
+      transparent 80%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: skeleton-sweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    border-radius: calc(var(--radius) * 0.55);
+  }
+
+  .dark .skeleton {
+    background-color: color-mix(in oklch, var(--muted) 88%, var(--brand-500) 12%);
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in oklch, var(--muted) 55%, white 12%) 50%,
+      transparent 80%
+    );
+  }
+
+  /* Isi yang muncul setelah skeleton: naik pelan, bukan berkedip. */
+  .content-in {
+    animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -309,5 +374,14 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Skeleton tetap harus terlihat "memuat", tetapi tanpa sapuan yang bergerak.
+     Denyut opasitas sangat lambat ini tidak memicu keluhan vestibular. */
+  .skeleton {
+    background-image: none;
+    animation: skeleton-pulse 2.4s ease-in-out infinite !important;
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
   }
 }

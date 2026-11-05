@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatIDR } from '@/lib/format';
 import { useConfirm } from '@/components/ui/confirm-dialog';
+import { requestJson } from '@/components/ui/toast';
 
 interface Member {
   id: string;
@@ -50,25 +51,28 @@ export function HouseholdManager({
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
-  async function post(url: string, body?: unknown) {
+  async function post(
+    url: string,
+    body?: unknown,
+    messages?: { success: string; error: string },
+  ) {
     setError('');
     setBusy(true);
     try {
-      const res = await fetch(url, {
+      const result = await requestJson(url, {
         method: 'POST',
         headers: body ? { 'Content-Type': 'application/json' } : undefined,
         body: body ? JSON.stringify(body) : undefined,
+        successTitle: messages?.success,
+        errorTitle: messages?.error ?? 'Gagal memproses',
+        context: { url },
       });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal memproses');
+      if (!result.ok) {
+        setError(result.error);
         return false;
       }
       router.refresh();
       return true;
-    } catch {
-      setError('Terjadi kesalahan jaringan');
-      return false;
     } finally {
       setBusy(false);
     }
@@ -88,7 +92,11 @@ export function HouseholdManager({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              post('/api/household', { name });
+              post(
+                '/api/household',
+                { name },
+                { success: 'Rumah tangga dibuat', error: 'Gagal membuat rumah tangga' },
+              );
             }}
             className="rounded-2xl border border-border/70 bg-card p-5 shadow-xs"
           >
@@ -120,7 +128,11 @@ export function HouseholdManager({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              post('/api/household/join', { inviteCode: code });
+              post(
+                '/api/household/join',
+                { inviteCode: code },
+                { success: 'Berhasil bergabung', error: 'Gagal bergabung ke rumah tangga' },
+              );
             }}
             className="rounded-2xl border border-border/70 bg-card p-5 shadow-xs"
           >
@@ -250,7 +262,14 @@ export function HouseholdManager({
                   <p className="min-w-0 flex-1 truncate text-[13px] font-semibold">{w.name}</p>
                   <button
                     onClick={() =>
-                      post('/api/household/wallet', { walletId: w.id, shared: !w.isShared })
+                      post(
+                        '/api/household/wallet',
+                        { walletId: w.id, shared: !w.isShared },
+                        {
+                          success: w.isShared ? 'Berhenti dibagikan' : 'Dompet dibagikan',
+                          error: 'Gagal mengubah status berbagi',
+                        },
+                      )
                     }
                     disabled={busy}
                     className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold transition-colors disabled:opacity-60 ${
@@ -294,7 +313,11 @@ export function HouseholdManager({
             confirmLabel: household.isOwner ? 'Bubarkan' : 'Keluar',
             destructive: true,
           });
-          if (ok) post('/api/household/leave');
+          if (ok)
+            post('/api/household/leave', undefined, {
+              success: 'Kamu keluar dari rumah tangga',
+              error: 'Gagal keluar dari rumah tangga',
+            });
         }}
         disabled={busy}
         className="self-start rounded-xl border border-rose-500/30 px-4 py-2 text-[12.5px] font-semibold text-rose-600 transition-colors hover:bg-rose-50 disabled:opacity-60"

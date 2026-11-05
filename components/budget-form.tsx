@@ -16,6 +16,7 @@ import {
 import { Select } from '@/components/ui/select-premium';
 import { FieldError, FieldLabel, MoneyInput } from '@/components/ui/money-input';
 import { createCategory } from '@/lib/categories-client';
+import { requestJson } from '@/components/ui/toast';
 
 export function BudgetForm({
   categories: initialCategories,
@@ -48,21 +49,22 @@ export function BudgetForm({
     }
     setSaving(true);
     try {
-      const res = await fetch('/api/budgets', {
+      const result = await requestJson('/api/budgets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ categoryId, month, year, limit: Number(limit) }),
+        successTitle: 'Anggaran disimpan',
+        successDescription: `Batas bulan ini diperbarui.`,
+        errorTitle: 'Gagal menyimpan anggaran',
+        context: { month, year },
       });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? 'Gagal menyimpan anggaran.');
+      if (!result.ok) {
+        setError(result.error);
         return;
       }
       setOpen(false);
       setLimit('');
       router.refresh();
-    } catch {
-      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }

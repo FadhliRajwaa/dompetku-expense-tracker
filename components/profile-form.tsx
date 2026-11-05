@@ -1,18 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { FieldError, FieldLabel, TextField } from '@/components/ui/money-input';
+import { requestJson } from '@/components/ui/toast';
 
 export function ProfileForm({ name, email }: { name: string; email: string }) {
+  const router = useRouter();
   const [n, setN] = useState(name);
-  const [msg, setMsg] = useState('');
   const [err, setErr] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function save() {
-    setMsg('');
     setErr('');
     if (n.trim().length < 2) {
       setErr('Nama minimal 2 karakter.');
@@ -20,16 +20,19 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
     }
     setSaving(true);
     try {
-      const res = await fetch('/api/account/profile', {
+      const result = await requestJson('/api/account/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: n.trim() }),
+        successTitle: 'Profil tersimpan',
+        successDescription: `Nama ditampilkan sebagai “${n.trim()}”.`,
+        errorTitle: 'Gagal menyimpan profil',
       });
-      const json = await res.json();
-      if (res.ok) setMsg('Profil tersimpan.');
-      else setErr(json.error ?? 'Gagal menyimpan.');
-    } catch {
-      setErr('Terjadi kesalahan jaringan.');
+      if (!result.ok) {
+        setErr(result.error);
+        return;
+      }
+      router.refresh();
     } finally {
       setSaving(false);
     }
@@ -45,7 +48,6 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
           onChange={(v) => {
             setN(v);
             setErr('');
-            setMsg('');
           }}
           maxLength={80}
           invalid={Boolean(err)}
@@ -74,12 +76,6 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
         >
           {saving ? 'Menyimpan…' : 'Simpan profil'}
         </Button>
-        {msg && (
-          <p className="flex items-center gap-1 text-[12px] font-medium text-brand-700 dark:text-brand-400">
-            <Check className="size-3.5" aria-hidden="true" />
-            {msg}
-          </p>
-        )}
       </div>
     </div>
   );
