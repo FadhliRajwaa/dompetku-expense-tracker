@@ -52,3 +52,6 @@ client_secret*.json
 
 # Screenshot QA lokal
 .shots/
+
+# engram project identity
+.engram/
