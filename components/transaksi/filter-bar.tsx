@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { Select } from '@/components/ui/select-premium';
 import { DatePicker } from '@/components/ui/date-picker';
+import { useDebouncedValue } from '@/lib/use-debounced';
 
 interface WalletOpt {
   id: string;
@@ -35,6 +36,20 @@ export function FilterBar({
   const [to, setTo] = useState(initial.to ?? '');
   const [expanded, setExpanded] = useState(Boolean(initial.from || initial.to));
 
+  /**
+   * Pencarian menerapkan query otomatis setelah pengguna berhenti mengetik.
+   * Tanpa debounce, setiap ketukan memicu navigasi server dan riwayat
+   * `router.replace` bisa bertumpuk.
+   */
+  const debouncedQ = useDebouncedValue(q, 350);
+  const appliedQ = useRef(initial.q ?? '');
+  useEffect(() => {
+    if (debouncedQ.trim() === appliedQ.current.trim()) return;
+    appliedQ.current = debouncedQ;
+    apply({ q: debouncedQ });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQ]);
+
   const activeCount =
     (initial.q ? 1 : 0) +
     (initial.type ? 1 : 0) +
@@ -59,6 +74,7 @@ export function FilterBar({
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            appliedQ.current = q;
             apply();
           }}
           role="search"
@@ -70,12 +86,27 @@ export function FilterBar({
           />
           <input
             name="q"
+            type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Cari catatan transaksi…"
             aria-label="Cari catatan transaksi"
-            className="h-10 w-full rounded-xl border border-input bg-card pl-9 pr-3 text-[13px] outline-none transition-all placeholder:text-muted-foreground/60 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12"
+            className="h-10 w-full rounded-xl border border-input bg-card pl-9 pr-9 text-[13px] outline-none transition-all placeholder:text-muted-foreground/60 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12 [&::-webkit-search-cancel-button]:appearance-none"
           />
+          {q && (
+            <button
+              type="button"
+              onClick={() => {
+                setQ('');
+                appliedQ.current = '';
+                apply({ q: '' });
+              }}
+              aria-label="Hapus kata kunci"
+              className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <X className="size-3.5" aria-hidden="true" />
+            </button>
+          )}
         </form>
 
         {/* Di HP kontrol turun ke baris sendiri dengan lebar penuh; di

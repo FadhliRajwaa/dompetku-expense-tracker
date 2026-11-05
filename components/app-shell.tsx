@@ -149,8 +149,15 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
         </button>
       </div>
 
-      {/* Menu */}
-      <nav aria-label="Menu aplikasi" className="mt-2 flex-1 overflow-y-auto px-3 pb-3">
+      {/* Menu.
+          `min-h-0` WAJIB pada flex child yang menggulir: tanpa itu min-height
+          bawaannya `auto`, nav tumbuh setinggi seluruh item, dan `overflow-y-auto`
+          tidak pernah aktif — inilah sebab sidebar tidak bisa di-scroll. */}
+      <nav
+        aria-label="Menu aplikasi"
+        data-lenis-prevent
+        className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3"
+      >
         {NAV_GROUPS.map((g) => (
           <div key={g.label} className="mt-3 first:mt-0">
             <p className="mb-1.5 px-2.5 text-[9.5px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60">
@@ -215,7 +222,7 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* ============ Sidebar desktop ============ */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] border-r border-border/60 bg-sidebar lg:block">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] overflow-hidden border-r border-border/60 bg-sidebar lg:block">
         {SidebarContent}
       </aside>
 

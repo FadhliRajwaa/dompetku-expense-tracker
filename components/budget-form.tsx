@@ -4,12 +4,21 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Select } from '@/components/ui/select-premium';
 import { FieldError, FieldLabel, MoneyInput } from '@/components/ui/money-input';
+import { createCategory } from '@/lib/categories-client';
 
 export function BudgetForm({
-  categories,
+  categories: initialCategories,
   month,
   year,
 }: {
@@ -18,8 +27,9 @@ export function BudgetForm({
   year: number;
 }) {
   const router = useRouter();
+  const [categories, setCategories] = useState(initialCategories);
   const [open, setOpen] = useState(false);
-  const [categoryId, setCategoryId] = useState(categories[0]?.id ?? '');
+  const [categoryId, setCategoryId] = useState(initialCategories[0]?.id ?? '');
   const [limit, setLimit] = useState('');
   const [error, setError] = useState('');
   const [limitError, setLimitError] = useState('');
@@ -63,6 +73,15 @@ export function BudgetForm({
     year: 'numeric',
   });
 
+  /** Anggaran hanya untuk kategori pengeluaran. */
+  async function onCreateCategory(name: string) {
+    const created = await createCategory(name, 'EXPENSE');
+    const opt = { id: created.value, name: created.label };
+    setCategories((prev) => [...prev, opt]);
+    setCategoryId(opt.id);
+    return created;
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
@@ -73,16 +92,16 @@ export function BudgetForm({
           </Button>
         }
       />
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="text-display text-[1.3rem]">Tambah anggaran</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-4 p-4 pt-0">
-          <p className="rounded-xl bg-muted px-3 py-2 text-[12px] text-muted-foreground">
+          <DialogTitle className="text-display text-[1.35rem]">Tambah anggaran</DialogTitle>
+          <p className="text-[12.5px] text-muted-foreground">
             Berlaku untuk <span className="font-semibold text-foreground">{monthName}</span>. Batas
             diulang tiap bulan hanya bila kamu menambahkannya lagi.
           </p>
+        </DialogHeader>
 
+        <DialogBody>
           <div className="flex flex-col gap-1.5">
             <FieldLabel>Kategori</FieldLabel>
             <Select
@@ -91,6 +110,10 @@ export function BudgetForm({
               options={categories.map((c) => ({ value: c.id, label: c.name }))}
               placeholder="Pilih kategori"
               aria-label="Kategori anggaran"
+              searchable
+              onCreate={onCreateCategory}
+              createLabel="Tambah kategori"
+              emptyText="Belum ada kategori pengeluaran"
             />
           </div>
 
@@ -118,14 +141,16 @@ export function BudgetForm({
             </p>
           )}
 
-          <Button
-            onClick={save}
-            disabled={saving}
-            className="h-11 w-full rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
-          >
-            {saving ? 'Menyimpan…' : 'Simpan anggaran'}
-          </Button>
-        </div>
+          <DialogActions>
+            <Button
+              onClick={save}
+              disabled={saving}
+              className="h-11 w-full rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
+            >
+              {saving ? 'Menyimpan…' : 'Simpan anggaran'}
+            </Button>
+          </DialogActions>
+        </DialogBody>
       </DialogContent>
     </Dialog>
   );

@@ -150,11 +150,15 @@ export function DatePicker({
           side="bottom"
           align="start"
           sideOffset={6}
-          className="isolate z-50 max-w-[calc(100vw-1.5rem)]"
+          collisionPadding={8}
+          className="isolate z-50 max-w-[calc(100vw-1rem)]"
         >
           <PopoverPrimitive.Popup
+            // Lenis mencegat wheel di seluruh dokumen; tanpa atribut ini popup
+            // yang lebih tinggi dari layar tidak bisa digulir di desktop.
+            data-lenis-prevent
             className={cn(
-              'w-[19.5rem] rounded-2xl border border-border/70 bg-popover p-3 text-popover-foreground shadow-lg outline-none',
+              'w-[19.5rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/70 bg-popover p-3 text-popover-foreground shadow-lg outline-none',
               'origin-(--transform-origin)',
               'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
               'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',

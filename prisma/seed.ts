@@ -10,7 +10,6 @@ const EXPENSE = [
   { name: 'Hiburan', icon: 'movie', color: '#ec4899' },
   { name: 'Kesehatan', icon: 'health_and_safety', color: '#14b8a6' },
   { name: 'Pendidikan', icon: 'school', color: '#06b6d4' },
-  { name: 'Lainnya', icon: 'category', color: '#71717a' },
 ];
 
 const INCOME = [
@@ -18,7 +17,6 @@ const INCOME = [
   { name: 'Bonus', icon: 'card_giftcard', color: '#10b981' },
   { name: 'Usaha', icon: 'storefront', color: '#10b981' },
   { name: 'Hadiah', icon: 'redeem', color: '#10b981' },
-  { name: 'Lainnya', icon: 'category', color: '#10b981' },
 ];
 
 async function main() {

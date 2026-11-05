@@ -4,7 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Select } from '@/components/ui/select-premium';
 import { FieldError, FieldLabel, MoneyInput, TextField } from '@/components/ui/money-input';
 
@@ -23,6 +31,14 @@ export function WalletForm() {
   const [error, setError] = useState('');
   const [nameError, setNameError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  function reset() {
+    setName('');
+    setBalance('');
+    setType('CASH');
+    setNameError('');
+    setError('');
+  }
 
   async function save() {
     setError('');
@@ -44,9 +60,7 @@ export function WalletForm() {
         return;
       }
       setOpen(false);
-      setName('');
-      setBalance('');
-      setType('CASH');
+      reset();
       router.refresh();
     } catch {
       setError('Terjadi kesalahan jaringan.');
@@ -56,7 +70,13 @@ export function WalletForm() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) reset();
+      }}
+    >
       <DialogTrigger
         render={
           <Button className="h-9 gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-semibold text-white hover:bg-brand-600">
@@ -65,11 +85,15 @@ export function WalletForm() {
           </Button>
         }
       />
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="text-display text-[1.3rem]">Tambah dompet</DialogTitle>
+          <DialogTitle className="text-display text-[1.35rem]">Tambah dompet</DialogTitle>
+          <p className="text-[12.5px] text-muted-foreground">
+            Satu dompet untuk tiap sumber uang — tunai, rekening, atau e-wallet.
+          </p>
         </DialogHeader>
-        <div className="flex flex-col gap-4 p-4 pt-0">
+
+        <DialogBody>
           <div className="flex flex-col gap-1.5">
             <FieldLabel htmlFor="w-name">Nama dompet</FieldLabel>
             <TextField
@@ -82,6 +106,7 @@ export function WalletForm() {
               placeholder="cth: Tunai, BCA, GoPay"
               maxLength={50}
               invalid={Boolean(nameError)}
+              autoFocus
             />
             <FieldError message={nameError} />
           </div>
@@ -98,10 +123,12 @@ export function WalletForm() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <FieldLabel htmlFor="w-balance">Saldo awal</FieldLabel>
+            <FieldLabel htmlFor="w-balance" optional>
+              Saldo awal
+            </FieldLabel>
             <MoneyInput id="w-balance" value={balance} onChange={setBalance} placeholder="0" />
-            <p className="text-[11.5px] text-muted-foreground">
-              Isi sesuai saldo hari ini. Boleh 0 dan diperbarui lewat transaksi.
+            <p className="text-[11.5px] leading-relaxed text-muted-foreground">
+              Isi sesuai saldo hari ini. Boleh dikosongkan dan diperbarui lewat transaksi.
             </p>
           </div>
 
@@ -114,14 +141,16 @@ export function WalletForm() {
             </p>
           )}
 
-          <Button
-            onClick={save}
-            disabled={saving}
-            className="h-11 w-full rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
-          >
-            {saving ? 'Menyimpan…' : 'Simpan dompet'}
-          </Button>
-        </div>
+          <DialogActions>
+            <Button
+              onClick={save}
+              disabled={saving}
+              className="h-11 w-full rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
+            >
+              {saving ? 'Menyimpan…' : 'Simpan dompet'}
+            </Button>
+          </DialogActions>
+        </DialogBody>
       </DialogContent>
     </Dialog>
   );

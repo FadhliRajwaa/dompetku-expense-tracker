@@ -27,6 +27,13 @@ export function SmoothScroll() {
       // daripada emulasi JS, dan menghindari konflik dengan bottom sheet.
       syncTouch: false,
       touchMultiplier: 1.6,
+      // WAJIB. Tanpa ini Lenis memanggil preventDefault() pada setiap wheel,
+      // sehingga semua elemen `overflow-y-auto` di dalam halaman — sidebar,
+      // isi dropdown, dan dialog — tidak pernah bisa di-scroll. Dengan opsi
+      // ini Lenis memeriksa apakah pointer sedang di atas wadah yang masih
+      // bisa di-scroll, dan menyerahkan gesture ke wadah itu; begitu wadah
+      // mencapai ujung, scroll kembali ke halaman.
+      allowNestedScroll: true,
     });
 
     let raf = 0;

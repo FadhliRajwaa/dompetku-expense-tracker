@@ -6,6 +6,8 @@ import { formatIDR } from '@/lib/format';
 import { Select } from '@/components/ui/select-premium';
 import { DatePicker } from '@/components/ui/date-picker';
 import { MoneyInput, TextField } from '@/components/ui/money-input';
+import { createCategory } from '@/lib/categories-client';
+import { useConfirm } from '@/components/ui/confirm-dialog';
 
 interface Rule {
   id: string;
@@ -46,6 +48,8 @@ export function RecurringManager({
   categories: (Option & { type: 'INCOME' | 'EXPENSE' })[];
 }) {
   const router = useRouter();
+  const { confirm, confirmDialog } = useConfirm();
+  const [cats, setCats] = useState(categories);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -59,7 +63,15 @@ export function RecurringManager({
   const [interval, setInterval] = useState('1');
   const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
 
-  const filteredCats = categories.filter((c) => c.type === type);
+  const filteredCats = cats.filter((c) => c.type === type);
+
+  async function onCreateCategory(name: string) {
+    const created = await createCategory(name, type);
+    const opt = { id: created.value, name: created.label, type };
+    setCats((prev) => [...prev, opt]);
+    setCategoryId(opt.id);
+    return created;
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -111,13 +123,20 @@ export function RecurringManager({
   }
 
   async function remove(id: string) {
-    if (!confirm('Hapus aturan ini? Transaksi yang sudah dibuat tetap tersimpan.')) return;
+    const ok = await confirm({
+      title: 'Hapus aturan ini?',
+      description: 'Transaksi yang sudah dibuat tetap tersimpan. Jatuh tempo berikutnya dibatalkan.',
+      confirmLabel: 'Hapus',
+      destructive: true,
+    });
+    if (!ok) return;
     const res = await fetch(`/api/recurring/${id}`, { method: 'DELETE' });
     if (res.ok) router.refresh();
   }
 
   return (
     <div className="flex flex-col gap-4">
+      {confirmDialog}
       <div className="flex justify-end">
         <button
           onClick={() => setOpen((v) => !v)}
@@ -174,6 +193,10 @@ export function RecurringManager({
                 onValueChange={setCategoryId}
                 options={filteredCats.map((c) => ({ value: c.id, label: c.name }))}
                 aria-label="Kategori"
+                searchable
+                onCreate={onCreateCategory}
+                createLabel="Tambah kategori"
+                emptyText="Belum ada kategori"
               />
             </div>
             <div className="flex flex-col gap-1">

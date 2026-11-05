@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatIDR } from '@/lib/format';
+import { useConfirm } from '@/components/ui/confirm-dialog';
 
 interface Member {
   id: string;
@@ -43,6 +44,7 @@ export function HouseholdManager({
   wallets: Wallet[];
 }) {
   const router = useRouter();
+  const { confirm, confirmDialog } = useConfirm();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [name, setName] = useState('');
@@ -159,6 +161,7 @@ export function HouseholdManager({
   // ---------- Sudah tergabung ----------
   return (
     <div className="flex flex-col gap-4">
+      {confirmDialog}
       {error && (
         <div role="alert" className="rounded-xl bg-rose-50 px-3.5 py-2.5 text-[13px] text-rose-700">
           {error}
@@ -280,16 +283,18 @@ export function HouseholdManager({
       )}
 
       <button
-        onClick={() => {
-          if (
-            confirm(
-              household.isOwner
-                ? 'Keluar sebagai pemilik akan MENGHAPUS rumah tangga dan melepas semua dompet bersama. Lanjutkan?'
-                : 'Keluar dari rumah tangga ini?',
-            )
-          ) {
-            post('/api/household/leave');
-          }
+        onClick={async () => {
+          const ok = await confirm({
+            title: household.isOwner
+              ? 'Bubarkan rumah tangga ini?'
+              : 'Keluar dari rumah tangga ini?',
+            description: household.isOwner
+              ? 'Rumah tangga dihapus dan semua dompet bersama dilepas. Dompet pribadi anggota tidak terpengaruh.'
+              : 'Kamu tidak lagi melihat dompet yang dibagikan di rumah tangga ini.',
+            confirmLabel: household.isOwner ? 'Bubarkan' : 'Keluar',
+            destructive: true,
+          });
+          if (ok) post('/api/household/leave');
         }}
         disabled={busy}
         className="self-start rounded-xl border border-rose-500/30 px-4 py-2 text-[12.5px] font-semibold text-rose-600 transition-colors hover:bg-rose-50 disabled:opacity-60"

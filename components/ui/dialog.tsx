@@ -52,28 +52,36 @@ function DialogContent({
       <DialogOverlay />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
+        // `data-lenis-prevent`: dialog tidak boleh ikut menggeser halaman di
+        // belakangnya saat isinya digulir. Body juga sudah dikunci Base UI,
+        // tetapi Lenis punya loop scroll sendiri yang mengabaikan itu.
+        data-lenis-prevent
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          // `overflow-hidden` + anak yang menggulir: header dan tombol simpan
+          // tetap di tempat, hanya isi formulir yang bergerak. Dengan
+          // `overflow-y-auto` di level popup, judul ikut tergulir hilang.
+          "fixed top-1/2 left-1/2 z-50 flex w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl bg-popover text-sm text-popover-foreground shadow-xl ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-[26rem] data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
       >
         {children}
         {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
-            render={
-              <Button
-                variant="ghost"
-                className="absolute top-2 right-2"
-                size="icon-sm"
-              />
-            }
-          >
-            <XIcon
-            />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
+          <div className="pointer-events-none absolute right-2.5 top-2.5 z-20 flex">
+            <DialogPrimitive.Close
+              data-slot="dialog-close"
+              render={
+                <Button
+                  variant="ghost"
+                  className="pointer-events-auto text-muted-foreground hover:text-foreground"
+                  size="icon-sm"
+                />
+              }
+            >
+              <XIcon />
+              <span className="sr-only">Tutup</span>
+            </DialogPrimitive.Close>
+          </div>
         )}
       </DialogPrimitive.Popup>
     </DialogPortal>
@@ -84,7 +92,31 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2", className)}
+      // `pr-12`: ruang untuk tombol tutup agar judul panjang tidak menabraknya.
+      className={cn("flex shrink-0 flex-col gap-1 px-5 pb-2 pr-12 pt-5", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-body"
+      className={cn(
+        "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-5 pb-5",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogActions({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-actions"
+      className={cn("mt-1 flex flex-col gap-2", className)}
       {...props}
     />
   )
@@ -148,6 +180,8 @@ function DialogDescription({
 
 export {
   Dialog,
+  DialogActions,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogDescription,

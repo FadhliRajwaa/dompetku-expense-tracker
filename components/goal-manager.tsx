@@ -7,6 +7,7 @@ import { formatMoney } from '@/lib/currency';
 import { Select } from '@/components/ui/select-premium';
 import { DatePicker } from '@/components/ui/date-picker';
 import { MoneyInput, TextField } from '@/components/ui/money-input';
+import { useConfirm } from '@/components/ui/confirm-dialog';
 
 interface Entry {
   id: string;
@@ -36,6 +37,7 @@ function daysLeft(target: string | Date | null) {
 
 export function GoalManager({ goals }: { goals: Goal[] }) {
   const router = useRouter();
+  const { confirm, confirmDialog } = useConfirm();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -109,13 +111,19 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
   }
 
   async function archive(id: string) {
-    if (!confirm('Arsipkan target ini? Riwayat setoran tetap tersimpan.')) return;
+    const ok = await confirm({
+      title: 'Arsipkan target ini?',
+      description: 'Riwayat setoran tetap tersimpan, tetapi target tidak lagi muncul di daftar.',
+      confirmLabel: 'Arsipkan',
+    });
+    if (!ok) return;
     const res = await fetch(`/api/goals/${id}`, { method: 'DELETE' });
     if (res.ok) router.refresh();
   }
 
   return (
     <div className="flex flex-col gap-4">
+      {confirmDialog}
       {open && (
         <form
           onSubmit={createGoal}

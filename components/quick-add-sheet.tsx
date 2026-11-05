@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Select } from '@/components/ui/select-premium';
 import { DatePicker, toISODate } from '@/components/ui/date-picker';
 import { formatIDR } from '@/lib/format';
+import { createCategory } from '@/lib/categories-client';
 
 interface QuickAddSheetProps {
   open: boolean;
@@ -56,10 +57,12 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
   const [date, setDate] = useState(() => toISODate(new Date()));
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [loadingWallets, setLoadingWallets] = useState(true);
 
   useEffect(() => {
     if (!open) return;
     setError('');
+    setLoadingWallets(true);
     (async () => {
       try {
         const [w, c] = await Promise.all([
@@ -72,6 +75,8 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
         setWalletId((prev) => prev || ws[0]?.id || '');
       } catch {
         setError('Gagal memuat data. Periksa koneksimu.');
+      } finally {
+        setLoadingWallets(false);
       }
     })();
   }, [open]);
@@ -90,6 +95,18 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
   }, [tab, filteredCats]);
 
   const numericAmount = Number(amount.replace(/\./g, '')) || 0;
+
+  /**
+   * Tambah kategori langsung dari dropdown. Hasilnya disisipkan ke state lokal
+   * agar langsung muncul di daftar tanpa menunggu muat ulang server.
+   */
+  async function onCreateCategory(name: string) {
+    const catType = tab === 'TRANSFER' ? 'EXPENSE' : tab;
+    const created = await createCategory(name, catType);
+    setCategories((prev) => [...prev, { id: created.value, name: created.label, type: catType }]);
+    setCategoryId(created.value);
+    return created;
+  }
 
   function onAmountChange(raw: string) {
     // Hanya digit; titik ribuan ditambahkan ulang untuk tampilan.
@@ -111,7 +128,11 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
       return;
     }
     if (!walletId) {
-      setError('Pilih dompet dulu.');
+      setError(
+        wallets.length === 0
+          ? 'Kamu belum punya dompet. Buat dompet dulu di menu Dompet.'
+          : 'Pilih dompet dulu.',
+      );
       return;
     }
     if (tab === 'TRANSFER') {
@@ -184,15 +205,19 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
+      {/* Tiga lapis: kepala tetap, isi yang menggulir, kaki tetap.
+          Sebelumnya seluruh sheet yang menggulir dan tombol simpan ikut
+          terdorong keluar layar di HP — pengguna harus menggulir buta untuk
+          menemukannya. */}
       <SheetContent
         side="bottom"
-        className="mx-auto max-h-[92dvh] max-w-lg overflow-y-auto rounded-t-3xl border-border/70"
+        className="mx-auto max-h-[92dvh] max-w-lg gap-0 rounded-t-3xl border-border/70 p-0"
       >
-        <SheetHeader>
+        <SheetHeader className="shrink-0 border-b border-border/60 px-4 pb-3 pr-12 pt-4">
           <SheetTitle className="text-display text-[1.3rem]">Catat transaksi</SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-col gap-4 px-4 pb-8">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-4 py-4">
           {/* Tab */}
           <div
             role="tablist"
@@ -285,6 +310,23 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
             </div>
           </div>
 
+          {/* Dompet kosong = jalan buntu. Jelaskan dan beri jalan keluarnya,
+              jangan biarkan dropdown kosong tanpa sebab yang terlihat. */}
+          {!loadingWallets && wallets.length === 0 && (
+            <div className="flex items-start gap-2.5 rounded-xl border border-amber-300/60 bg-amber-50 px-3 py-2.5 text-[12px] leading-relaxed text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200">
+              <span aria-hidden="true" className="mt-px">
+                •
+              </span>
+              <span>
+                Kamu belum punya dompet. Transaksi harus punya dompet sebagai sumber dana.{' '}
+                <a href="/dompet" className="font-bold underline underline-offset-2">
+                  Buat dompet dulu
+                </a>
+                .
+              </span>
+            </div>
+          )}
+
           {/* Dompet & kategori */}
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -332,6 +374,10 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
                     options={filteredCats.map((c) => ({ value: c.id, label: c.name }))}
                     placeholder="Pilih kategori"
                     aria-label="Kategori"
+                    searchable
+                    onCreate={onCreateCategory}
+                    createLabel="Tambah kategori"
+                    emptyText="Belum ada kategori"
                   />
                 </div>
               </div>
@@ -374,11 +420,17 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
               {error}
             </p>
           )}
+        </div>
 
+        {/* Kaki tetap: tombol simpan selalu terlihat, tidak ikut tergulir. */}
+        <div
+          className="shrink-0 border-t border-border/60 bg-popover px-4 pb-4 pt-3"
+          style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+        >
           <button
             onClick={save}
             disabled={saving}
-            className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-[14.5px] font-bold text-white shadow-sm transition-all hover:bg-brand-600 active:translate-y-px disabled:pointer-events-none disabled:opacity-60"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-[14.5px] font-bold text-white shadow-sm transition-all hover:bg-brand-600 active:translate-y-px disabled:pointer-events-none disabled:opacity-60"
           >
             {saving ? (
               <>
