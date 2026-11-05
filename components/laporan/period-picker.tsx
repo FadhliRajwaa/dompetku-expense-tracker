@@ -52,7 +52,9 @@ export function PeriodPicker({
   }
 
   return (
-    <div className="flex items-center gap-1.5">
+    // Di HP pemilih mengisi satu baris penuh; di desktop lebarnya tetap supaya
+    // sejajar dengan tombol ekspor di sebelahnya.
+    <div className="flex w-full items-center gap-1.5 sm:w-auto">
       <button
         type="button"
         onClick={() => shift(-1)}
@@ -61,7 +63,7 @@ export function PeriodPicker({
       >
         <ChevronLeft className="size-4" />
       </button>
-      <div className="w-[178px]">
+      <div className="min-w-0 flex-1 sm:w-[178px] sm:flex-none">
         <Select
           value={current}
           onValueChange={(v) => {

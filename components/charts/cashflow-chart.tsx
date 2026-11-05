@@ -21,7 +21,10 @@ export function CashflowChart({ data }: { data: Point[] }) {
 
   return (
     <ResponsiveContainer width="100%" height={252}>
-      <AreaChart data={compact} margin={{ top: 8, right: 12, left: -14, bottom: 0 }}>
+      {/* `left: -14` dulu memotong label sumbu Y: "140rb" tampil sebagai
+          "40rb", "180rb" sebagai "80rb". Margin negatif itu dihapus dan lebar
+          sumbu dibiarkan cukup untuk empat digit. */}
+      <AreaChart data={compact} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id="cf-in" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.26} />
@@ -48,7 +51,7 @@ export function CashflowChart({ data }: { data: Point[] }) {
           tickLine={false}
           axisLine={false}
           tickFormatter={compactIDR}
-          width={44}
+          width={48}
         />
         <Tooltip
           cursor={{ stroke: 'var(--brand-300)', strokeWidth: 1, strokeDasharray: '4 4' }}

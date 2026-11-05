@@ -50,12 +50,16 @@ export default async function LaporanPage({
       label: 'Pemasukan',
       value: formatIDR(d.income),
       tone: 'text-brand-700 dark:text-brand-300',
+      span: '',
     },
-    { label: 'Pengeluaran', value: formatIDR(d.expense), tone: 'text-foreground' },
+    { label: 'Pengeluaran', value: formatIDR(d.expense), tone: 'text-foreground', span: '' },
     {
       label: 'Selisih',
       value: `${selisih >= 0 ? '+' : '−'}${formatIDR(Math.abs(selisih))}`,
       tone: selisih >= 0 ? 'text-brand-700 dark:text-brand-300' : 'text-rose-600',
+      // Tiga metrik di grid dua kolom menyisakan satu lubang kosong; Selisih
+      // dibuat selebar baris supaya kartu di bawahnya rata.
+      span: 'col-span-2 lg:col-span-1',
     },
   ];
 
@@ -70,40 +74,52 @@ export default async function LaporanPage({
           <p className="mt-0.5 text-[13px] text-muted-foreground">{monthName}</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Di HP pemilih periode memakai satu baris penuh dan dua tombol ekspor
+            berbagi baris berikutnya. Sebelumnya ketiganya berdesakan dalam satu
+            baris dan tombol CSV terlempar sendirian ke baris kedua. */}
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <PeriodPicker month={month} year={year} walletId={q.walletId} />
-          <a
-            href={csvHref.replace('format=csv', 'format=pdf')}
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-border bg-card px-3.5 text-[12.5px] font-semibold shadow-xs transition-colors hover:bg-muted"
-          >
-            <FileText className="size-4 text-muted-foreground" aria-hidden="true" />
-            PDF
-          </a>
-          <a
-            href={csvHref}
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-semibold text-white shadow-sm transition-colors hover:bg-brand-600"
-          >
-            <Download className="size-4" aria-hidden="true" />
-            CSV
-          </a>
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+            <a
+              href={csvHref.replace('format=csv', 'format=pdf')}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3.5 text-[12.5px] font-semibold shadow-xs transition-colors hover:bg-muted"
+            >
+              <FileText className="size-4 text-muted-foreground" aria-hidden="true" />
+              PDF
+            </a>
+            <a
+              href={csvHref}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-semibold text-white shadow-sm transition-colors hover:bg-brand-600"
+            >
+              <Download className="size-4" aria-hidden="true" />
+              CSV
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Metrik */}
-      <Reveal className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" stagger={0.06}>
+      {/* Metrik. Dua kolom sejak HP: satu kartu selebar layar membuat empat
+          angka ringkas memakan satu layar penuh sebelum grafik terlihat. */}
+      <Reveal className="grid grid-cols-2 gap-3 lg:grid-cols-4" stagger={0.06}>
         {METRICS.map((m) => (
           <div
             key={m.label}
-            className="reveal-item rounded-2xl border border-border/70 bg-card p-4 shadow-xs"
+            className={`reveal-item rounded-2xl border border-border/70 bg-card p-4 shadow-xs ${m.span}`}
           >
             <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
               {m.label}
             </p>
-            <p className={`numeral mt-2 text-[1.4rem] leading-none ${m.tone}`}>{m.value}</p>
+            <p
+              className={`numeral mt-2 text-[1.15rem] leading-none sm:text-[1.4rem] ${m.tone}`}
+            >
+              {m.value}
+            </p>
           </div>
         ))}
 
-        <div className="reveal-item rounded-2xl border border-border/70 bg-card p-4 shadow-xs">
+        {/* Rasio tabungan memakai lebar penuh di HP supaya bilah kemajuannya
+            terbaca sebagai skala, bukan garis pendek. */}
+        <div className="reveal-item col-span-2 rounded-2xl border border-border/70 bg-card p-4 shadow-xs lg:col-span-1">
           <div className="flex items-center justify-between">
             <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
               Rasio tabungan

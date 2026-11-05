@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
@@ -104,6 +104,7 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   // Baca pilihan terakhir setelah mount. Tidak dilakukan saat render agar
   // HTML server dan klien identik (tidak ada hydration mismatch).
@@ -134,16 +135,29 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
     setDrawerOpen(false);
   }, [pathname]);
 
-  // Kunci scroll + Escape saat drawer terbuka.
+  // Drawer hanya ada di layar kecil; kalau jendela diperlebar saat drawer
+  // terbuka, tutup supaya konten tidak tertinggal dalam keadaan `inert`.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const onChange = () => mq.matches && setDrawerOpen(false);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // Kunci scroll + Escape saat drawer terbuka, dan pindahkan fokus ke dalam
+  // panel. Tanpa ini Tab tetap berjalan di halaman di belakang overlay.
   useEffect(() => {
     if (!drawerOpen) return;
-    const prev = document.body.style.overflow;
+    const previous = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setDrawerOpen(false);
     window.addEventListener('keydown', onKey);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', onKey);
+      previous?.focus?.();
     };
   }, [drawerOpen]);
 
@@ -155,8 +169,14 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
    *
    * `mini` hanya berlaku di desktop: drawer mobile selalu lebar penuh karena
    * layar kecil tidak punya ruang untuk ikon tanpa label.
+   *
+   * `variant` memisahkan dua konteks yang butuh kontrol berbeda. Di drawer
+   * mobile hanya ada satu tombol — tutup. Tombol ciutkan tidak punya arti di
+   * layar kecil, dan tombol beranda sudah tersedia di header aplikasi; saat
+   * ketiganya dirender bersama, tombol tutup yang dulu berposisi `absolute`
+   * menimpa ikon beranda dan menghasilkan satu ikon rusak.
    */
-  const renderSidebar = (mini: boolean) => (
+  const renderSidebar = (mini: boolean, variant: 'desktop' | 'drawer' = 'desktop') => (
     <div className="flex h-full flex-col">
       {/* Brand + kontrol */}
       <div
@@ -180,7 +200,17 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
           )}
         </Link>
 
-        {mini ? (
+        {variant === 'drawer' ? (
+          <button
+            ref={closeRef}
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Tutup menu"
+            title="Tutup menu"
+            className="-mr-1 flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+          >
+            <X className="size-[18px]" aria-hidden="true" />
+          </button>
+        ) : mini ? (
           <div className="mt-1 flex flex-col gap-0.5">
             <button
               onClick={toggleCollapsed}
@@ -231,7 +261,15 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
           <span className="sr-only">Total saldo {formatIDR(totalBalance)}</span>
         </div>
       ) : (
-        <div className="mx-3 mt-4 rounded-2xl border border-border/70 bg-card px-3.5 py-3 shadow-xs">
+        <div
+          className={cn(
+            'mx-3 mt-4 rounded-2xl border border-border/70 bg-card px-3.5 py-3 shadow-xs',
+            // Di layar pendek (HP mendatar) kartu saldo memakan hampir separuh
+            // tinggi drawer dan menyisakan menu yang cuma muat tiga item.
+            // Saldo sudah tampil di header aplikasi, jadi aman disembunyikan.
+            variant === 'drawer' && '[@media(max-height:560px)]:hidden',
+          )}
+        >
           <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
             Total saldo
           </p>
@@ -242,7 +280,13 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
       )}
 
       {/* Catat cepat */}
-      <div className={cn('pt-3', mini ? 'px-2' : 'px-3')}>
+      <div
+        className={cn(
+          'pt-3',
+          mini ? 'px-2' : 'px-3',
+          variant === 'drawer' && '[@media(max-height:560px)]:hidden',
+        )}
+      >
         <button
           onClick={() => setQuickAddOpen(true)}
           aria-label="Catat transaksi"
@@ -381,12 +425,15 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
       </aside>
 
       {/* ============ Drawer mobile ============ */}
+      {/* `inert` saat tertutup: panel digeser keluar layar tetapi tetap ada di
+          DOM, jadi tanpa ini tautan di dalamnya masih bisa dijangkau Tab. */}
       <div
         className={cn(
           'fixed inset-0 z-50 lg:hidden',
           drawerOpen ? 'pointer-events-auto' : 'pointer-events-none',
         )}
         aria-hidden={!drawerOpen}
+        inert={!drawerOpen}
       >
         <div
           onClick={() => setDrawerOpen(false)}
@@ -399,24 +446,26 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
           role="dialog"
           aria-modal="true"
           aria-label="Menu aplikasi"
+          style={{
+            // Layar berponi: konten jangan masuk ke bawah notch atau bilah
+            // gestur saat aplikasi dipasang sebagai PWA.
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+          }}
           className={cn(
-            'absolute inset-y-0 left-0 w-[86%] max-w-[300px] border-r border-border/60 bg-sidebar shadow-xl transition-transform duration-300 ease-out',
+            'absolute inset-y-0 left-0 w-[86%] max-w-[304px] border-r border-border/60 bg-sidebar shadow-xl outline-none transition-transform duration-300 ease-out',
             drawerOpen ? 'translate-x-0' : '-translate-x-full',
           )}
         >
-          <button
-            onClick={() => setDrawerOpen(false)}
-            aria-label="Tutup menu"
-            className="absolute right-3 top-4 z-10 flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <X className="size-4" />
-          </button>
-          {renderSidebar(false)}
+          {renderSidebar(false, 'drawer')}
         </div>
       </div>
 
       {/* ============ Konten ============ */}
+      {/* `inert` selama drawer terbuka: halaman di belakang overlay tidak bisa
+          dijangkau Tab, jadi fokus tetap berputar di dalam menu. */}
       <div
+        inert={drawerOpen}
         className={cn(
           'transition-[padding] duration-200 ease-out',
           collapsed ? 'lg:pl-[76px]' : 'lg:pl-[264px]',
@@ -449,10 +498,13 @@ export function AppShell({ user, totalBalance, children }: AppShellProps) {
               >
                 <House className="size-4" />
               </Link>
+              {/* Avatar memakai brand pekat, sama seperti di sidebar dan kartu
+                  profil. Varian `brand-50` sebelumnya menghasilkan inisial hijau
+                  pucat di atas hijau pucat — hampir tidak terbaca. */}
               <Link
                 href="/pengaturan"
                 aria-label="Pengaturan akun"
-                className="flex size-9 items-center justify-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-700 dark:bg-brand-900/50 dark:text-brand-300"
+                className="flex size-9 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white shadow-sm shadow-brand-500/25"
               >
                 {initials(user.name)}
               </Link>
