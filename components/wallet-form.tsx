@@ -47,7 +47,7 @@ export function WalletForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button className="bg-[#2FA084] hover:bg-[#27856d] text-white">+ Tambah Dompet</Button>} />
+      <DialogTrigger render={<Button className="bg-brand-500 hover:bg-brand-600 text-white">+ Tambah Dompet</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tambah Dompet</DialogTitle>
@@ -70,7 +70,7 @@ export function WalletForm() {
             <Input id="w-balance" inputMode="numeric" value={balance} onChange={(e) => setBalance(e.target.value.replace(/[^0-9]/g, ''))} placeholder="0" className="mt-1" />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button onClick={save} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white">
+          <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white">
             {saving ? 'Menyimpan...' : 'Simpan'}
           </Button>
         </div>

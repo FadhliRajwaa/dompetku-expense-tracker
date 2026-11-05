@@ -42,8 +42,8 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
         <Label>Email</Label>
         <Input value={email} disabled className="mt-1 opacity-60" />
       </div>
-      {msg && <p className="text-sm text-zinc-600">{msg}</p>}
-      <Button onClick={save} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white w-fit">
+      {msg && <p className="text-sm text-foreground/80">{msg}</p>}
+      <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white w-fit">
         {saving ? 'Menyimpan...' : 'Simpan Profil'}
       </Button>
     </div>

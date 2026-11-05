@@ -47,8 +47,8 @@ export function PasswordForm() {
         <Label htmlFor="pw-new">Password baru (min. 8 karakter)</Label>
         <Input id="pw-new" type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className="mt-1" />
       </div>
-      {msg && <p className="text-sm text-zinc-600">{msg}</p>}
-      <Button onClick={save} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white w-fit">
+      {msg && <p className="text-sm text-foreground/80">{msg}</p>}
+      <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white w-fit">
         {saving ? 'Menyimpan...' : 'Ubah Password'}
       </Button>
     </div>

@@ -29,7 +29,7 @@ export function DangerZone({ email }: { email: string }) {
 
   return (
     <div className="flex max-w-md flex-col gap-3">
-      <p className="text-sm text-zinc-600">
+      <p className="text-sm text-foreground/80">
         Menghapus akun akan menghapus seluruh dompet, transaksi, budget, dan kategori kamu secara permanen. Tindakan ini tidak bisa dibatalkan.
       </p>
       <div>

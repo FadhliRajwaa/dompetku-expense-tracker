@@ -4,12 +4,31 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ==========================================================================
+   DompetKu — Design System
+   Arah: "editorial finance" — tegas, tenang, presisi. Hijau #2FA084 sebagai
+   satu-satunya aksen kuat di atas netral yang di-tint ke arah hijau.
+   ========================================================================== */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-fraunces);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-manrope);
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,98 +58,245 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --color-income: var(--income);
+  --color-expense: var(--expense);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.72);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-xl: calc(var(--radius) * 1.35);
   --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-3xl: calc(var(--radius) * 2.4);
+  --radius-4xl: calc(var(--radius) * 3);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Hijau brand — turunan OKLCH dari #2FA084 (brand-500) */
+  --brand-50: oklch(0.977 0.015 167);
+  --brand-100: oklch(0.949 0.036 167);
+  --brand-200: oklch(0.898 0.064 167);
+  --brand-300: oklch(0.823 0.09 167);
+  --brand-400: oklch(0.722 0.107 167);
+  --brand-500: oklch(0.633 0.105 167);
+  --brand-600: oklch(0.551 0.094 167);
+  --brand-700: oklch(0.468 0.079 167);
+  --brand-800: oklch(0.383 0.062 167);
+  --brand-900: oklch(0.297 0.047 167);
+
+  /* Netral di-tint ke hijau: tidak ada abu-abu mati */
+  --background: oklch(0.986 0.004 167);
+  --foreground: oklch(0.213 0.019 167);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.213 0.019 167);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --popover-foreground: oklch(0.213 0.019 167);
+  --primary: oklch(0.633 0.105 167);
+  --primary-foreground: oklch(0.99 0.006 167);
+  --secondary: oklch(0.957 0.008 167);
+  --secondary-foreground: oklch(0.297 0.03 167);
+  --muted: oklch(0.962 0.006 167);
+  --muted-foreground: oklch(0.523 0.017 167);
+  --accent: oklch(0.949 0.036 167);
+  --accent-foreground: oklch(0.383 0.062 167);
+  --destructive: oklch(0.577 0.196 25.5);
+  --border: oklch(0.911 0.009 167);
+  --input: oklch(0.898 0.011 167);
+  --ring: oklch(0.633 0.105 167);
+
+  --income: oklch(0.62 0.128 162);
+  --expense: oklch(0.596 0.187 20);
+
+  /* Grafik — harmonis dengan brand, bukan pelangi acak */
+  --chart-1: oklch(0.633 0.105 167);
+  --chart-2: oklch(0.704 0.116 195);
+  --chart-3: oklch(0.778 0.132 82);
+  --chart-4: oklch(0.673 0.152 41);
+  --chart-5: oklch(0.601 0.121 285);
+
+  --radius: 0.75rem;
+
+  --sidebar: oklch(0.999 0.002 167);
+  --sidebar-foreground: oklch(0.28 0.02 167);
+  --sidebar-primary: oklch(0.633 0.105 167);
+  --sidebar-primary-foreground: oklch(0.99 0.006 167);
+  --sidebar-accent: oklch(0.962 0.026 167);
+  --sidebar-accent-foreground: oklch(0.383 0.062 167);
+  --sidebar-border: oklch(0.915 0.009 167);
+  --sidebar-ring: oklch(0.633 0.105 167);
+
+  /* Bayangan berlapis, ditint hijau sangat tipis */
+  --shadow-xs: 0 1px 2px oklch(0.25 0.03 167 / 0.05);
+  --shadow-sm: 0 1px 2px oklch(0.25 0.03 167 / 0.05), 0 2px 6px -1px oklch(0.25 0.03 167 / 0.06);
+  --shadow-md: 0 2px 4px -1px oklch(0.25 0.03 167 / 0.05), 0 8px 20px -6px oklch(0.25 0.03 167 / 0.10);
+  --shadow-lg: 0 4px 8px -2px oklch(0.25 0.03 167 / 0.06), 0 20px 40px -12px oklch(0.25 0.03 167 / 0.16);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --background: oklch(0.187 0.014 167);
+  --foreground: oklch(0.955 0.008 167);
+  --card: oklch(0.229 0.017 167);
+  --card-foreground: oklch(0.955 0.008 167);
+  --popover: oklch(0.229 0.017 167);
+  --popover-foreground: oklch(0.955 0.008 167);
+  --primary: oklch(0.72 0.115 167);
+  --primary-foreground: oklch(0.187 0.014 167);
+  --secondary: oklch(0.276 0.019 167);
+  --secondary-foreground: oklch(0.955 0.008 167);
+  --muted: oklch(0.276 0.019 167);
+  --muted-foreground: oklch(0.72 0.016 167);
+  --accent: oklch(0.31 0.03 167);
+  --accent-foreground: oklch(0.898 0.064 167);
+  --destructive: oklch(0.704 0.17 22);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.72 0.115 167);
+  --income: oklch(0.74 0.132 162);
+  --expense: oklch(0.71 0.166 20);
+  --chart-1: oklch(0.72 0.115 167);
+  --chart-2: oklch(0.76 0.116 195);
+  --chart-3: oklch(0.82 0.132 82);
+  --chart-4: oklch(0.74 0.152 41);
+  --chart-5: oklch(0.7 0.121 285);
+  --sidebar: oklch(0.213 0.016 167);
+  --sidebar-foreground: oklch(0.93 0.008 167);
+  --sidebar-primary: oklch(0.72 0.115 167);
+  --sidebar-primary-foreground: oklch(0.187 0.014 167);
+  --sidebar-accent: oklch(0.29 0.026 167);
+  --sidebar-accent-foreground: oklch(0.898 0.064 167);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.72 0.115 167);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01" 1, "cv11" 1;
+    text-rendering: optimizeLegibility;
+  }
+  /* Angka selalu tabular agar kolom nominal rata */
+  .tabular,
+  table,
+  [data-slot="card"] p {
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection {
+    background: var(--brand-200);
+    color: var(--brand-900);
+  }
+  /* Fokus terlihat jelas untuk keyboard */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }
 
-:root {
-  --brand: #2fa084;
-  --brand-dark: #27856d;
-  --brand-tint: #d9f2e7;
+@layer utilities {
+  /* Permukaan bertingkat: kartu "mengambang" tanpa border kasar */
+  .surface {
+    background: var(--card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+  .surface-raised {
+    background: var(--card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+  /* Latar hero: mesh halus berarah brand */
+  .mesh-brand {
+    background-image:
+      radial-gradient(58% 62% at 12% 8%, oklch(0.949 0.036 167 / 0.95) 0%, transparent 62%),
+      radial-gradient(46% 54% at 88% 0%, oklch(0.898 0.064 167 / 0.55) 0%, transparent 58%),
+      radial-gradient(70% 60% at 62% 100%, oklch(0.962 0.026 167 / 0.9) 0%, transparent 64%);
+  }
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  }
+  .text-display {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    font-variation-settings: "SOFT" 20, "WONK" 1, "opsz" 96;
+  }
+  /* Eyebrow kecil dengan garis — pola berulang landing */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-700);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 18px;
+    height: 1.5px;
+    background: var(--brand-500);
+    border-radius: 999px;
+  }
+  /* Garis pemisah tipis yang memudar */
+  .rule-fade {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+  /* Angka besar: sans tegas + tracking negatif, bukan display serif */
+  .numeral {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  .animate-rise {
+    animation: rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .animate-fade {
+    animation: fade 0.4s ease-out both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

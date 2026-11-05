@@ -53,7 +53,7 @@ export function BudgetForm({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button className="bg-[#2FA084] hover:bg-[#27856d] text-white">+ Tambah Budget</Button>} />
+      <DialogTrigger render={<Button className="bg-brand-500 hover:bg-brand-600 text-white">+ Tambah Budget</Button>} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tambah Budget</DialogTitle>
@@ -72,7 +72,7 @@ export function BudgetForm({
             <Input id="b-limit" inputMode="numeric" value={limit} onChange={(e) => setLimit(e.target.value.replace(/[^0-9]/g, ''))} placeholder="0" className="mt-1" />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button onClick={save} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white">
+          <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white">
             {saving ? 'Menyimpan...' : 'Simpan'}
           </Button>
         </div>

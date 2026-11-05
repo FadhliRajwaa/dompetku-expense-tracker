@@ -89,10 +89,10 @@ export function TransferForm({ wallets }: { wallets: W[] }) {
         <Input id="t-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="cth: top up GoPay" maxLength={200} className="mt-1" />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <Button onClick={save} disabled={saving || wallets.length < 2} className="bg-[#2FA084] hover:bg-[#27856d] text-white">
+      <Button onClick={save} disabled={saving || wallets.length < 2} className="bg-brand-500 hover:bg-brand-600 text-white">
         {saving ? 'Memproses...' : 'Transfer'}
       </Button>
-      {wallets.length < 2 && <p className="text-xs text-zinc-500">Butuh minimal 2 dompet aktif untuk transfer.</p>}
+      {wallets.length < 2 && <p className="text-xs text-muted-foreground">Butuh minimal 2 dompet aktif untuk transfer.</p>}
     </div>
   );
 }

@@ -192,7 +192,7 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
           )}
 
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button onClick={save} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white h-12 text-base">
+          <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white h-12 text-base">
             {saving ? 'Menyimpan...' : 'Simpan'}
           </Button>
         </div>

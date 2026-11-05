@@ -1,18 +1,28 @@
-import { Skeleton } from '@/components/ui/skeleton';
-
 export default function DashboardLoading() {
   return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-8 w-48" />
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-28" />
-        ))}
+    <div className="flex flex-col gap-5" aria-busy="true" aria-label="Memuat dashboard">
+      <div className="flex items-end justify-between">
+        <div className="space-y-2">
+          <div className="h-2.5 w-24 animate-pulse rounded-full bg-muted" />
+          <div className="h-8 w-44 animate-pulse rounded-lg bg-muted" />
+        </div>
+        <div className="h-9 w-32 animate-pulse rounded-lg bg-muted" />
       </div>
-      <Skeleton className="h-72" />
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Skeleton className="h-56" />
-        <Skeleton className="h-56" />
+
+      <div className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr]">
+        <div className="h-[168px] animate-pulse rounded-2xl bg-foreground/10" />
+        <div className="h-[168px] animate-pulse rounded-2xl bg-muted" />
+        <div className="h-[168px] animate-pulse rounded-2xl bg-muted" />
+      </div>
+
+      <div className="grid gap-3 lg:grid-cols-[1.62fr_1fr]">
+        <div className="h-[320px] animate-pulse rounded-2xl bg-muted" />
+        <div className="h-[320px] animate-pulse rounded-2xl bg-muted" />
+      </div>
+
+      <div className="grid gap-3 lg:grid-cols-2">
+        <div className="h-[280px] animate-pulse rounded-2xl bg-muted" />
+        <div className="h-[280px] animate-pulse rounded-2xl bg-muted" />
       </div>
     </div>
   );

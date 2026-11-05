@@ -49,3 +49,6 @@ next-env.d.ts
 
 client_secret_*.json
 client_secret*.json
+
+# Screenshot QA lokal
+.shots/

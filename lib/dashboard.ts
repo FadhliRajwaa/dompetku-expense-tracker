@@ -116,6 +116,16 @@ export async function getDashboardData({ userId, month, year }: DashboardFilter)
     budgetProgress: budgetProgress.sort((a, b) => b.percent - a.percent),
     recent,
     activeWallets: wallets.length,
+    // Untuk ringkasan "dompet & saldo tersimpan" di dashboard.
+    wallets: wallets
+      .map((w) => ({
+        id: w.id,
+        name: w.name,
+        type: w.type,
+        icon: w.icon,
+        balance: Number(w.balance),
+      }))
+      .sort((a, b) => b.balance - a.balance),
   };
 }
 

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 
 interface C {
   id: string;
@@ -51,32 +50,68 @@ export function CategoryManager({ categories }: { categories: C[] }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama kategori baru" className="sm:max-w-xs" maxLength={30} />
-        <select value={type} onChange={(e) => setType(e.target.value as 'INCOME' | 'EXPENSE')} className="h-10 rounded-lg border px-2 text-sm">
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama kategori baru"
+          className="h-10 sm:max-w-xs"
+          maxLength={30}
+        />
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value as 'INCOME' | 'EXPENSE')}
+          className="h-10 rounded-xl border border-input bg-card px-2.5 text-[13px] shadow-xs outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12"
+        >
           <option value="EXPENSE">Pengeluaran</option>
           <option value="INCOME">Pemasukan</option>
         </select>
-        <Button onClick={add} disabled={saving} className="bg-[#2FA084] hover:bg-[#27856d] text-white w-fit">
-          {saving ? 'Menambah...' : 'Tambah'}
+        <Button
+          onClick={add}
+          disabled={saving}
+          className="h-10 w-fit bg-brand-500 text-[13px] font-semibold text-white hover:bg-brand-600"
+        >
+          {saving ? 'Menambah…' : 'Tambah'}
         </Button>
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <ul className="divide-y">
-        {categories.map((c) => (
-          <li key={c.id} className="flex items-center justify-between py-2 text-sm">
-            <span>
-              <span className="font-medium">{c.name}</span>{' '}
-              <span className="text-xs text-zinc-500">{c.type === 'INCOME' ? 'Pemasukan' : 'Pengeluaran'}</span>
-            </span>
-            {c.global ? (
-              <Badge variant="outline">Bawaan</Badge>
-            ) : (
-              <Badge className="bg-[#d9f2e7] text-[#1f6b4d] hover:bg-[#d9f2e7]">Saya{c.used > 0 ? ` • dipakai ${c.used}x` : ''}</Badge>
-            )}
-          </li>
-        ))}
+      {error && <p className="text-sm text-rose-600">{error}</p>}
+
+      <ul className="divide-y divide-border/60">
+        {categories.map((c) => {
+          const income = c.type === 'INCOME';
+          return (
+            <li key={c.id} className="flex items-center gap-3 py-2.5">
+              <span
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+                  income ? 'bg-brand-50 text-brand-600' : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[15px]">
+                  {income ? 'south_west' : 'north_east'}
+                </span>
+              </span>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-semibold leading-tight">{c.name}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  {income ? 'Pemasukan' : 'Pengeluaran'}
+                  {c.used > 0 && ` · dipakai ${c.used}×`}
+                </p>
+              </div>
+
+              {c.global ? (
+                <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                  Bawaan
+                </span>
+              ) : (
+                <span className="shrink-0 rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">
+                  Milikmu
+                </span>
+              )}
+            </li>
+          );
+        })}
       </ul>
-      <p className="text-xs text-zinc-500">Kategori bawaan tidak bisa dihapus. Kategori sendiri yang sudah dipakai transaksi tidak bisa dihapus agar riwayat tetap utuh.</p>
+      <p className="text-xs text-muted-foreground">Kategori bawaan tidak bisa dihapus. Kategori sendiri yang sudah dipakai transaksi tidak bisa dihapus agar riwayat tetap utuh.</p>
     </div>
   );
 }
