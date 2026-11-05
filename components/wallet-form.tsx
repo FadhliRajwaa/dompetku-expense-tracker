@@ -2,10 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select } from '@/components/ui/select-premium';
+import { FieldError, FieldLabel, MoneyInput, TextField } from '@/components/ui/money-input';
+
+const TYPES = [
+  { value: 'CASH', label: 'Tunai', icon: 'payments' },
+  { value: 'BANK', label: 'Rekening bank', icon: 'account_balance' },
+  { value: 'E_WALLET', label: 'E-Wallet', icon: 'smartphone' },
+];
 
 export function WalletForm() {
   const router = useRouter();
@@ -14,14 +21,16 @@ export function WalletForm() {
   const [type, setType] = useState('CASH');
   const [balance, setBalance] = useState('');
   const [error, setError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function save() {
     setError('');
     if (name.trim().length < 2) {
-      setError('Nama dompet minimal 2 karakter');
+      setNameError('Nama dompet minimal 2 karakter.');
       return;
     }
+    setNameError('');
     setSaving(true);
     try {
       const res = await fetch('/api/wallets', {
@@ -31,15 +40,16 @@ export function WalletForm() {
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? 'Gagal menyimpan');
+        setError(json.error ?? 'Gagal menyimpan dompet.');
         return;
       }
       setOpen(false);
       setName('');
       setBalance('');
+      setType('CASH');
       router.refresh();
     } catch {
-      setError('Terjadi kesalahan jaringan');
+      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }
@@ -47,31 +57,69 @@ export function WalletForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button className="bg-brand-500 hover:bg-brand-600 text-white">+ Tambah Dompet</Button>} />
+      <DialogTrigger
+        render={
+          <Button className="h-9 gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-semibold text-white hover:bg-brand-600">
+            <Plus className="size-4" aria-hidden="true" />
+            Tambah dompet
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tambah Dompet</DialogTitle>
+          <DialogTitle className="text-display text-[1.3rem]">Tambah dompet</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-3 p-4 pt-0">
-          <div>
-            <Label htmlFor="w-name">Nama dompet</Label>
-            <Input id="w-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="cth: Cash, BCA, GoPay" className="mt-1" />
+        <div className="flex flex-col gap-4 p-4 pt-0">
+          <div className="flex flex-col gap-1.5">
+            <FieldLabel htmlFor="w-name">Nama dompet</FieldLabel>
+            <TextField
+              id="w-name"
+              value={name}
+              onChange={(v) => {
+                setName(v);
+                setNameError('');
+              }}
+              placeholder="cth: Tunai, BCA, GoPay"
+              maxLength={50}
+              invalid={Boolean(nameError)}
+            />
+            <FieldError message={nameError} />
           </div>
-          <div>
-            <Label htmlFor="w-type">Tipe</Label>
-            <select id="w-type" value={type} onChange={(e) => setType(e.target.value)} className="mt-1 h-10 w-full rounded-lg border px-2 text-sm">
-              <option value="CASH">Tunai (Cash)</option>
-              <option value="BANK">Bank</option>
-              <option value="E_WALLET">E-Wallet</option>
-            </select>
+
+          <div className="flex flex-col gap-1.5">
+            <FieldLabel>Tipe dompet</FieldLabel>
+            <Select
+              value={type}
+              onValueChange={setType}
+              options={TYPES}
+              aria-label="Tipe dompet"
+              size="md"
+            />
           </div>
-          <div>
-            <Label htmlFor="w-balance">Saldo awal (Rp)</Label>
-            <Input id="w-balance" inputMode="numeric" value={balance} onChange={(e) => setBalance(e.target.value.replace(/[^0-9]/g, ''))} placeholder="0" className="mt-1" />
+
+          <div className="flex flex-col gap-1.5">
+            <FieldLabel htmlFor="w-balance">Saldo awal</FieldLabel>
+            <MoneyInput id="w-balance" value={balance} onChange={setBalance} placeholder="0" />
+            <p className="text-[11.5px] text-muted-foreground">
+              Isi sesuai saldo hari ini. Boleh 0 dan diperbarui lewat transaksi.
+            </p>
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white">
-            {saving ? 'Menyimpan...' : 'Simpan'}
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-xl bg-rose-50 px-3 py-2 text-[12.5px] font-medium text-rose-700 dark:bg-rose-950/40 dark:text-rose-300"
+            >
+              {error}
+            </p>
+          )}
+
+          <Button
+            onClick={save}
+            disabled={saving}
+            className="h-11 w-full rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
+          >
+            {saving ? 'Menyimpan…' : 'Simpan dompet'}
           </Button>
         </div>
       </DialogContent>

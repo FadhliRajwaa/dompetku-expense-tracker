@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Select } from '@/components/ui/select-premium';
+import { FieldLabel, MoneyInput, TextField } from '@/components/ui/money-input';
 import { formatIDR } from '@/lib/format';
 
 interface W {
@@ -26,15 +27,15 @@ export function TransferForm({ wallets }: { wallets: W[] }) {
     setError('');
     const num = Number(amount);
     if (!(num > 0)) {
-      setError('Nominal harus lebih dari 0');
+      setError('Nominal harus lebih dari nol.');
       return;
     }
     if (!fromId || !toId) {
-      setError('Pilih dompet asal dan tujuan');
+      setError('Pilih dompet asal dan tujuan.');
       return;
     }
     if (fromId === toId) {
-      setError('Dompet asal dan tujuan harus berbeda');
+      setError('Dompet asal dan tujuan harus berbeda.');
       return;
     }
     setSaving(true);
@@ -42,57 +43,107 @@ export function TransferForm({ wallets }: { wallets: W[] }) {
       const res = await fetch('/api/transfers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fromWalletId: fromId, toWalletId: toId, amount: num, date: new Date().toISOString(), note: note || undefined }),
+        body: JSON.stringify({
+          fromWalletId: fromId,
+          toWalletId: toId,
+          amount: num,
+          date: new Date().toISOString(),
+          note: note.trim() || undefined,
+        }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error ?? 'Gagal transfer');
+        setError(json.error ?? 'Gagal memproses transfer.');
         return;
       }
       setAmount('');
       setNote('');
       router.refresh();
     } catch {
-      setError('Terjadi kesalahan jaringan');
+      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }
   }
 
+  const options = wallets.map((w) => ({
+    value: w.id,
+    label: w.name,
+    hint: formatIDR(w.balance),
+  }));
+  const disabled = wallets.length < 2;
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3.5">
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <Label htmlFor="t-from">Dari</Label>
-          <select id="t-from" value={fromId} onChange={(e) => setFromId(e.target.value)} className="mt-1 h-10 w-full rounded-lg border px-2 text-sm">
-            {wallets.map((w) => (
-              <option key={w.id} value={w.id}>{w.name} ({formatIDR(w.balance)})</option>
-            ))}
-          </select>
+        <div className="flex flex-col gap-1.5">
+          <FieldLabel>Dari</FieldLabel>
+          <Select
+            value={fromId}
+            onValueChange={(v) => {
+              setFromId(v);
+              if (toId === v) setToId('');
+            }}
+            options={options}
+            placeholder="Pilih dompet"
+            aria-label="Dari dompet"
+            disabled={disabled}
+          />
         </div>
-        <div>
-          <Label htmlFor="t-to">Ke</Label>
-          <select id="t-to" value={toId} onChange={(e) => setToId(e.target.value)} className="mt-1 h-10 w-full rounded-lg border px-2 text-sm">
-            <option value="">Pilih...</option>
-            {wallets.filter((w) => w.id !== fromId).map((w) => (
-              <option key={w.id} value={w.id}>{w.name}</option>
-            ))}
-          </select>
+        <div className="flex flex-col gap-1.5">
+          <FieldLabel>Ke</FieldLabel>
+          <Select
+            value={toId}
+            onValueChange={setToId}
+            options={options.filter((w) => w.value !== fromId)}
+            placeholder="Pilih tujuan"
+            aria-label="Ke dompet"
+            disabled={disabled}
+          />
         </div>
       </div>
-      <div>
-        <Label htmlFor="t-amount">Nominal (Rp)</Label>
-        <Input id="t-amount" inputMode="numeric" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ''))} placeholder="0" className="mt-1" />
+
+      <div className="flex flex-col gap-1.5">
+        <FieldLabel htmlFor="t-amount">Nominal</FieldLabel>
+        <MoneyInput id="t-amount" value={amount} onChange={setAmount} placeholder="0" />
       </div>
-      <div>
-        <Label htmlFor="t-note">Catatan (opsional)</Label>
-        <Input id="t-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="cth: top up GoPay" maxLength={200} className="mt-1" />
+
+      <div className="flex flex-col gap-1.5">
+        <FieldLabel htmlFor="t-note" optional>
+          Catatan
+        </FieldLabel>
+        <TextField
+          id="t-note"
+          value={note}
+          onChange={setNote}
+          placeholder="cth: top up GoPay"
+          maxLength={200}
+        />
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <Button onClick={save} disabled={saving || wallets.length < 2} className="bg-brand-500 hover:bg-brand-600 text-white">
-        {saving ? 'Memproses...' : 'Transfer'}
+
+      {error && (
+        <p
+          role="alert"
+          className="rounded-xl bg-rose-50 px-3 py-2 text-[12.5px] font-medium text-rose-700 dark:bg-rose-950/40 dark:text-rose-300"
+        >
+          {error}
+        </p>
+      )}
+
+      <Button
+        onClick={save}
+        disabled={saving || disabled}
+        className="h-11 w-full gap-1.5 rounded-xl bg-brand-500 text-[13.5px] font-bold text-white hover:bg-brand-600"
+      >
+        <ArrowLeftRight className="size-4" aria-hidden="true" />
+        {saving ? 'Memproses…' : 'Transfer sekarang'}
       </Button>
-      {wallets.length < 2 && <p className="text-xs text-muted-foreground">Butuh minimal 2 dompet aktif untuk transfer.</p>}
+
+      {disabled && (
+        <p className="text-[11.5px] text-muted-foreground">
+          Butuh minimal dua dompet aktif untuk melakukan transfer.
+        </p>
+      )}
     </div>
   );
 }

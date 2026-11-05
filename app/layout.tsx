@@ -3,6 +3,7 @@ import { Fraunces, Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { PwaRegister } from "@/components/pwa-register";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 
 // Display: Fraunces — serif variabel dengan optical sizing, berkarakter premium.
 // UI/body: Manrope — grotesque geometris yang rapi di ukuran kecil.
@@ -89,6 +90,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#2FA084" />
       </head>
       <body className="antialiased">
+        <SmoothScroll />
         {children}
         <ThemeProvider initial="system" />
         <PwaRegister />

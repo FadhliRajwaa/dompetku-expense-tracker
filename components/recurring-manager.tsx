@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatIDR } from '@/lib/format';
+import { Select } from '@/components/ui/select-premium';
+import { DatePicker } from '@/components/ui/date-picker';
+import { MoneyInput, TextField } from '@/components/ui/money-input';
 
 interface Rule {
   id: string;
@@ -80,7 +83,8 @@ export function RecurringManager({
           note: note || undefined,
           freq,
           interval: Number(interval) || 1,
-          startDate: new Date(startDate).toISOString(),
+          // Tengah hari lokal: cegah pergeseran hari di zona waktu negatif.
+          startDate: new Date(`${startDate}T12:00:00`).toISOString(),
         }),
       });
       const json = await res.json();
@@ -150,61 +154,36 @@ export function RecurringManager({
           </div>
 
           <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2">
-            <label className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Nominal</span>
-              <input
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="500000"
-                inputMode="numeric"
-                required
-                className={field}
-              />
-            </label>
-            <label className="flex flex-col gap-1">
+              <MoneyInput value={amount} onChange={setAmount} placeholder="0" />
+            </div>
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Dompet</span>
-              <select value={walletId} onChange={(e) => setWalletId(e.target.value)} className={field}>
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold">Kategori</span>
-              <select
-                value={categoryId || filteredCats[0]?.id || ''}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className={field}
-              >
-                {filteredCats.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold">Catatan</span>
-              <input
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Sewa kos"
-                maxLength={200}
-                className={field}
+              <Select
+                value={walletId}
+                onValueChange={setWalletId}
+                options={wallets.map((w) => ({ value: w.id, label: w.name }))}
+                aria-label="Dompet"
               />
-            </label>
-            <label className="flex flex-col gap-1">
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[12px] font-semibold">Kategori</span>
+              <Select
+                value={categoryId || filteredCats[0]?.id || ''}
+                onValueChange={setCategoryId}
+                options={filteredCats.map((c) => ({ value: c.id, label: c.name }))}
+                aria-label="Kategori"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[12px] font-semibold">Catatan</span>
+              <TextField value={note} onChange={setNote} placeholder="Sewa kos" maxLength={200} />
+            </div>
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Frekuensi</span>
-              <select value={freq} onChange={(e) => setFreq(e.target.value)} className={field}>
-                {FREQ.map((f) => (
-                  <option key={f.value} value={f.value}>
-                    {f.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <Select value={freq} onValueChange={setFreq} options={FREQ} aria-label="Frekuensi" />
+            </div>
             <div className="grid grid-cols-2 gap-2.5">
               <label className="flex flex-col gap-1">
                 <span className="text-[12px] font-semibold">Tiap</span>
@@ -215,15 +194,10 @@ export function RecurringManager({
                   className={field}
                 />
               </label>
-              <label className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <span className="text-[12px] font-semibold">Mulai</span>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className={field}
-                />
-              </label>
+                <DatePicker value={startDate} onChange={setStartDate} aria-label="Mulai" />
+              </div>
             </div>
           </div>
 

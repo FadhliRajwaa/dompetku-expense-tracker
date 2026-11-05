@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTheme } from '@/components/theme-provider';
+import { Select } from '@/components/ui/select-premium';
 import { CURRENCY_META, SUPPORTED_CURRENCIES } from '@/lib/currency';
 
 const THEMES = [
@@ -75,19 +76,20 @@ export function PreferencesForm({ initialCurrency }: { initialCurrency: string }
         <p className="text-[11.5px] text-muted-foreground">
           Dipakai sebagai acuan konversi saat melihat total lintas mata uang.
         </p>
-        <select
-          id="currency"
-          value={currency}
-          onChange={(e) => saveCurrency(e.target.value)}
-          disabled={saving}
-          className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-[14px] shadow-xs outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12 disabled:opacity-60"
-        >
-          {SUPPORTED_CURRENCIES.map((c) => (
-            <option key={c} value={c}>
-              {c} — {CURRENCY_META[c].label}
-            </option>
-          ))}
-        </select>
+        <div className="mt-2">
+          <Select
+            id="currency"
+            value={currency}
+            onValueChange={saveCurrency}
+            disabled={saving}
+            options={SUPPORTED_CURRENCIES.map((c) => ({
+              value: c,
+              label: c,
+              hint: CURRENCY_META[c].label,
+            }))}
+            aria-label="Mata uang utama"
+          />
+        </div>
       </div>
 
       {msg && <p className="text-[12px] font-medium text-brand-700">{msg}</p>}

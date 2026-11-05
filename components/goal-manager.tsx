@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Plus } from 'lucide-react';
 import { formatMoney } from '@/lib/currency';
+import { Select } from '@/components/ui/select-premium';
+import { DatePicker } from '@/components/ui/date-picker';
+import { MoneyInput, TextField } from '@/components/ui/money-input';
 
 interface Entry {
   id: string;
@@ -23,9 +27,6 @@ interface Goal {
   color: string;
   entries: Entry[];
 }
-
-const field =
-  'h-11 w-full rounded-xl border border-input bg-card px-3 text-[14px] text-foreground shadow-xs outline-none transition-all placeholder:text-muted-foreground/60 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12';
 
 function daysLeft(target: string | Date | null) {
   if (!target) return null;
@@ -64,7 +65,10 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
           name,
           targetAmount: value,
           currency,
-          targetDate: targetDate ? new Date(targetDate).toISOString() : null,
+          // `new Date('YYYY-MM-DD')` diparse sebagai UTC tengah malam; di zona
+          // waktu negatif itu jatuh ke hari sebelumnya. Tambahkan waktu lokal
+          // tengah hari supaya tanggal yang dipilih tetap sama.
+          targetDate: targetDate ? new Date(`${targetDate}T12:00:00`).toISOString() : null,
         }),
       });
       const json = await res.json();
@@ -123,48 +127,42 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
           </p>
 
           <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-            <label className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Nama target</span>
-              <input
+              <TextField
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={setName}
                 placeholder="Dana darurat"
-                required
-                minLength={2}
                 maxLength={50}
-                className={field}
               />
-            </label>
-            <label className="flex flex-col gap-1">
+            </div>
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Nominal target</span>
-              <input
+              <MoneyInput
                 value={target}
-                onChange={(e) => setTarget(e.target.value)}
-                placeholder="10000000"
-                inputMode="numeric"
-                required
-                className={field}
+                onChange={setTarget}
+                placeholder="0"
+                currency={currency === 'IDR' ? 'Rp' : currency}
               />
-            </label>
-            <label className="flex flex-col gap-1">
+            </div>
+            <div className="flex flex-col gap-1">
               <span className="text-[12px] font-semibold">Mata uang</span>
-              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={field}>
-                {['IDR', 'USD', 'EUR', 'SGD', 'MYR'].map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold">Target tanggal (opsional)</span>
-              <input
-                type="date"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                className={field}
+              <Select
+                value={currency}
+                onValueChange={setCurrency}
+                options={['IDR', 'USD', 'EUR', 'SGD', 'MYR'].map((c) => ({ value: c, label: c }))}
+                aria-label="Mata uang"
               />
-            </label>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[12px] font-semibold">Target tanggal (opsional)</span>
+              <DatePicker
+                value={targetDate}
+                onChange={setTargetDate}
+                clearable
+                aria-label="Target tanggal"
+              />
+            </div>
           </div>
 
           {error && <p className="mt-2 text-[12px] text-rose-600">{error}</p>}
@@ -188,14 +186,16 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
         </form>
       )}
 
-      {/* Tombol buka form — di bawah ringkasan, sejajar kanan */}
+      {/* Tombol buka form — mengambang di kanan atas daftar target.
+          Diposisikan sebagai baris sendiri agar tidak bersaing dengan judul
+          halaman, dan disembunyikan saat form terbuka. */}
       {!open && (
         <div className="flex justify-end">
           <button
             onClick={() => setOpen(true)}
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-bold text-white shadow-sm transition-colors hover:bg-brand-600"
+            className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 text-[12.5px] font-bold text-white shadow-sm shadow-brand-500/25 transition-colors hover:bg-brand-600"
           >
-            <span className="material-symbols-outlined text-[17px]">add</span>
+            <Plus className="size-4" aria-hidden="true" />
             Target baru
           </button>
         </div>
@@ -289,13 +289,7 @@ export function GoalManager({ goals }: { goals: Goal[] }) {
                       </button>
                     ))}
                   </div>
-                  <input
-                    value={depositAmount}
-                    onChange={(e) => setDepositAmount(e.target.value)}
-                    placeholder="Nominal"
-                    inputMode="numeric"
-                    className={field}
-                  />
+                  <MoneyInput value={depositAmount} onChange={setDepositAmount} placeholder="0" />
                   <div className="flex gap-2">
                     <button
                       onClick={() => addEntry(g.id)}

@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useEffect, useMemo, useState } from 'react';
+import { cn } from 'cn';
+import { ArrowLeftRight, ArrowDownLeft, ArrowUpRight, Check } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select } from '@/components/ui/select-premium';
+import { DatePicker, toISODate } from '@/components/ui/date-picker';
+import { formatIDR } from '@/lib/format';
 
 interface QuickAddSheetProps {
   open: boolean;
@@ -24,10 +25,26 @@ interface Category {
   type: 'INCOME' | 'EXPENSE';
 }
 
-const CHIPS = [10000, 50000, 100000, 500000];
+const CURRENCIES = ['IDR', 'USD', 'EUR', 'SGD', 'MYR'];
+const CHIPS = [10_000, 50_000, 100_000, 500_000];
 
+type Tab = 'EXPENSE' | 'INCOME' | 'TRANSFER';
+
+const TABS: { key: Tab; label: string; icon: typeof ArrowUpRight }[] = [
+  { key: 'EXPENSE', label: 'Pengeluaran', icon: ArrowUpRight },
+  { key: 'INCOME', label: 'Pemasukan', icon: ArrowDownLeft },
+  { key: 'TRANSFER', label: 'Transfer', icon: ArrowLeftRight },
+];
+
+/**
+ * Lembar catat cepat.
+ *
+ * Semua kontrol memakai komponen premium (bukan `<select>` / `<input type=date>`
+ * native) agar tampilannya konsisten dengan sisa aplikasi di desktop maupun HP.
+ * Nominal diformat ribuan saat diketik supaya angka panjang tetap terbaca.
+ */
 export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProps) {
-  const [tab, setTab] = useState<'EXPENSE' | 'INCOME' | 'TRANSFER'>('EXPENSE');
+  const [tab, setTab] = useState<Tab>('EXPENSE');
   const [amount, setAmount] = useState('');
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -36,6 +53,7 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
   const [categoryId, setCategoryId] = useState('');
   const [currency, setCurrency] = useState('IDR');
   const [note, setNote] = useState('');
+  const [date, setDate] = useState(() => toISODate(new Date()));
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -48,33 +66,84 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
           fetch('/api/wallets').then((r) => r.json()),
           fetch('/api/categories').then((r) => r.json()),
         ]);
-        setWallets(w.data ?? []);
+        const ws: Wallet[] = w.data ?? [];
+        setWallets(ws);
         setCategories(c.data ?? []);
-        if (w.data?.length && !walletId) setWalletId(w.data[0].id);
+        setWalletId((prev) => prev || ws[0]?.id || '');
       } catch {
-        setError('Gagal memuat data');
+        setError('Gagal memuat data. Periksa koneksimu.');
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open ]);
+  }, [open]);
 
-  const filteredCats = categories.filter((c) => c.type === (tab === 'TRANSFER' ? 'EXPENSE' : tab));
+  const filteredCats = useMemo(
+    () => categories.filter((c) => c.type === (tab === 'TRANSFER' ? 'EXPENSE' : tab)),
+    [categories, tab],
+  );
+
+  // Kategori bisa berubah saat tab diganti; jangan biarkan nilai lama tertinggal.
+  useEffect(() => {
+    if (tab === 'TRANSFER') return;
+    if (categoryId && filteredCats.some((c) => c.id === categoryId)) return;
+    setCategoryId(filteredCats[0]?.id ?? '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, filteredCats]);
+
+  const numericAmount = Number(amount.replace(/\./g, '')) || 0;
+
+  function onAmountChange(raw: string) {
+    // Hanya digit; titik ribuan ditambahkan ulang untuk tampilan.
+    const digits = raw.replace(/\D/g, '').slice(0, 15);
+    setAmount(digits ? Number(digits).toLocaleString('id-ID') : '');
+    setError('');
+  }
+
+  function addChip(v: number) {
+    const next = numericAmount + v;
+    setAmount(next ? next.toLocaleString('id-ID') : '');
+    setError('');
+  }
 
   async function save() {
     setError('');
-    const numAmount = Number(amount);
-    if (!(numAmount > 0)) {
-      setError('Nominal harus lebih dari 0');
+    if (numericAmount <= 0) {
+      setError('Nominal harus lebih dari nol.');
       return;
     }
+    if (!walletId) {
+      setError('Pilih dompet dulu.');
+      return;
+    }
+    if (tab === 'TRANSFER') {
+      if (!toWalletId) {
+        setError('Pilih dompet tujuan.');
+        return;
+      }
+      if (toWalletId === walletId) {
+        setError('Dompet asal dan tujuan tidak boleh sama.');
+        return;
+      }
+    } else if (!categoryId) {
+      setError('Pilih kategori dulu.');
+      return;
+    }
+
     setSaving(true);
     try {
+      // Tanggal dipilih sebagai hari lokal; simpan pada tengah hari lokal
+      // agar tidak bergeser ke hari sebelumnya saat dikonversi ke UTC.
+      const d = new Date(`${date}T12:00:00`);
       const res =
         tab === 'TRANSFER'
           ? await fetch('/api/transfers', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ fromWalletId: walletId, toWalletId, amount: numAmount, date: new Date().toISOString() }),
+              body: JSON.stringify({
+                fromWalletId: walletId,
+                toWalletId,
+                amount: numericAmount,
+                date: d.toISOString(),
+              }),
             })
           : await fetch('/api/transactions', {
               method: 'POST',
@@ -83,141 +152,249 @@ export function QuickAddSheet({ open, onOpenChange, onSaved }: QuickAddSheetProp
                 walletId,
                 categoryId,
                 type: tab,
-                amount: numAmount,
-                date: new Date().toISOString(),
-                note: note || undefined,
+                amount: numericAmount,
+                date: d.toISOString(),
+                note: note.trim() || undefined,
                 currency,
               }),
             });
-      const json = await res.json();
+
+      const json = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
-        setError(json.error ?? 'Gagal menyimpan');
+        setError(json.error ?? 'Gagal menyimpan. Coba lagi.');
         return;
       }
       setAmount('');
       setNote('');
+      setDate(toISODate(new Date()));
       onOpenChange(false);
       onSaved();
     } catch {
-      setError('Terjadi kesalahan jaringan');
+      setError('Terjadi kesalahan jaringan.');
     } finally {
       setSaving(false);
     }
   }
 
+  const walletOptions = wallets.map((w) => ({
+    value: w.id,
+    label: w.name,
+    hint: formatIDR(Number(w.balance)),
+  }));
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="mx-auto max-w-lg rounded-t-2xl">
+      <SheetContent
+        side="bottom"
+        className="mx-auto max-h-[92dvh] max-w-lg overflow-y-auto rounded-t-3xl border-border/70"
+      >
         <SheetHeader>
-          <SheetTitle>Catat Transaksi</SheetTitle>
+          <SheetTitle className="text-display text-[1.3rem]">Catat transaksi</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-4 px-4 pb-6">
-          <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="EXPENSE">Pengeluaran</TabsTrigger>
-              <TabsTrigger value="INCOME">Pemasukan</TabsTrigger>
-              <TabsTrigger value="TRANSFER">Transfer</TabsTrigger>
-            </TabsList>
-          </Tabs>
 
-          <div>
-            <div className="flex items-end justify-between gap-2">
-              <Label htmlFor="qa-amount">Nominal</Label>
-              {tab !== 'TRANSFER' && (
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  aria-label="Mata uang"
-                  className="h-7 rounded-lg border border-border bg-card px-1.5 text-[11.5px] font-semibold text-muted-foreground outline-none focus:border-brand-400"
+        <div className="flex flex-col gap-4 px-4 pb-8">
+          {/* Tab */}
+          <div
+            role="tablist"
+            aria-label="Jenis transaksi"
+            className="grid grid-cols-3 gap-1 rounded-xl bg-muted p-1"
+          >
+            {TABS.map((t) => {
+              const Icon = t.icon;
+              const active = tab === t.key;
+              return (
+                <button
+                  key={t.key}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => {
+                    setTab(t.key);
+                    setError('');
+                  }}
+                  className={cn(
+                    'flex h-10 items-center justify-center gap-1.5 rounded-lg text-[12.5px] font-semibold transition-all',
+                    active
+                      ? 'bg-card text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
                 >
-                  {['IDR', 'USD', 'EUR', 'SGD', 'MYR'].map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
+                  <Icon className="size-3.5" aria-hidden="true" />
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Nominal */}
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <label htmlFor="qa-amount" className="text-[13px] font-semibold">
+                Nominal
+              </label>
+              {tab !== 'TRANSFER' && (
+                <div className="w-[92px]">
+                  <Select
+                    value={currency}
+                    onValueChange={setCurrency}
+                    options={CURRENCIES.map((c) => ({ value: c, label: c }))}
+                    size="sm"
+                    aria-label="Mata uang"
+                  />
+                </div>
               )}
             </div>
-            <Input
-              id="qa-amount"
-              inputMode="numeric"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
-              placeholder="0"
-              className="mt-1 text-2xl font-bold h-14"
-            />
+
+            <div className="relative mt-1.5">
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[15px] font-bold text-muted-foreground">
+                {currency === 'IDR' ? 'Rp' : currency}
+              </span>
+              <input
+                id="qa-amount"
+                inputMode="numeric"
+                value={amount}
+                onChange={(e) => onAmountChange(e.target.value)}
+                placeholder="0"
+                aria-describedby={error ? 'qa-error' : undefined}
+                className={cn(
+                  'numeral h-16 w-full rounded-xl border bg-card pl-14 pr-4 text-right text-[1.75rem] leading-none outline-none transition-all',
+                  'placeholder:text-muted-foreground/40 focus:ring-4',
+                  error && numericAmount <= 0
+                    ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/12'
+                    : 'border-input focus:border-brand-400 focus:ring-brand-500/12',
+                )}
+              />
+            </div>
+
             {currency !== 'IDR' && tab !== 'TRANSFER' && (
               <p className="mt-1 text-[11px] text-muted-foreground">
                 Dikonversi ke Rupiah oleh server memakai kurs terkini.
               </p>
             )}
+
             <div className="mt-2 flex gap-2">
               {CHIPS.map((c) => (
-                <Button key={c} type="button" variant="outline" size="sm" onClick={() => setAmount(String((Number(amount) || 0) + c))}>
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => addChip(c)}
+                  className="h-8 flex-1 rounded-lg border border-border bg-card text-[11.5px] font-semibold text-muted-foreground transition-colors hover:border-brand-300 hover:text-foreground"
+                >
                   +{c >= 1000 ? `${c / 1000}rb` : c}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
 
+          {/* Dompet & kategori */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="qa-wallet">{tab === 'TRANSFER' ? 'Dari dompet' : 'Dompet'}</Label>
-              <select
-                id="qa-wallet"
-                value={walletId}
-                onChange={(e) => setWalletId(e.target.value)}
-                className="mt-1 h-11 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
-              >
-                {wallets.map((w) => (
-                  <option key={w.id} value={w.id}>{w.name}</option>
-                ))}
-              </select>
+              <label htmlFor="qa-wallet" className="text-[13px] font-semibold">
+                {tab === 'TRANSFER' ? 'Dari dompet' : 'Dompet'}
+              </label>
+              <div className="mt-1.5">
+                <Select
+                  id="qa-wallet"
+                  value={walletId}
+                  onValueChange={setWalletId}
+                  options={walletOptions}
+                  placeholder="Pilih dompet"
+                  aria-label={tab === 'TRANSFER' ? 'Dari dompet' : 'Dompet'}
+                />
+              </div>
             </div>
+
             {tab === 'TRANSFER' ? (
               <div>
-                <Label htmlFor="qa-to">Ke dompet</Label>
-                <select
-                  id="qa-to"
-                  value={toWalletId}
-                  onChange={(e) => setToWalletId(e.target.value)}
-                  className="mt-1 h-11 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
-                >
-                  <option value="">Pilih...</option>
-                  {wallets.filter((w) => w.id !== walletId).map((w) => (
-                    <option key={w.id} value={w.id}>{w.name}</option>
-                  ))}
-                </select>
+                <label htmlFor="qa-to" className="text-[13px] font-semibold">
+                  Ke dompet
+                </label>
+                <div className="mt-1.5">
+                  <Select
+                    id="qa-to"
+                    value={toWalletId}
+                    onValueChange={setToWalletId}
+                    options={walletOptions.filter((w) => w.value !== walletId)}
+                    placeholder="Pilih tujuan"
+                    aria-label="Ke dompet"
+                  />
+                </div>
               </div>
             ) : (
               <div>
-                <Label htmlFor="qa-cat">Kategori</Label>
-                <select
-                  id="qa-cat"
-                  value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
-                  className="mt-1 h-11 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
-                >
-                  <option value="">Pilih...</option>
-                  {filteredCats.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+                <label htmlFor="qa-cat" className="text-[13px] font-semibold">
+                  Kategori
+                </label>
+                <div className="mt-1.5">
+                  <Select
+                    id="qa-cat"
+                    value={categoryId}
+                    onValueChange={setCategoryId}
+                    options={filteredCats.map((c) => ({ value: c.id, label: c.name }))}
+                    placeholder="Pilih kategori"
+                    aria-label="Kategori"
+                  />
+                </div>
               </div>
             )}
           </div>
 
+          {/* Tanggal */}
+          <div>
+            <label htmlFor="qa-date" className="text-[13px] font-semibold">
+              Tanggal
+            </label>
+            <div className="mt-1.5">
+              <DatePicker id="qa-date" value={date} onChange={setDate} size="md" />
+            </div>
+          </div>
+
           {tab !== 'TRANSFER' && (
             <div>
-              <Label htmlFor="qa-note">Catatan (opsional)</Label>
-              <Input id="qa-note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="cth: makan siang" maxLength={200} className="mt-1" />
+              <label htmlFor="qa-note" className="text-[13px] font-semibold">
+                Catatan <span className="font-normal text-muted-foreground">(opsional)</span>
+              </label>
+              <input
+                id="qa-note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="cth: makan siang"
+                maxLength={200}
+                className="mt-1.5 h-11 w-full rounded-xl border border-input bg-card px-3.5 text-[13.5px] outline-none transition-all placeholder:text-muted-foreground/60 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12"
+              />
             </div>
           )}
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <Button onClick={save} disabled={saving} className="bg-brand-500 hover:bg-brand-600 text-white h-12 text-base">
-            {saving ? 'Menyimpan...' : 'Simpan'}
-          </Button>
+          {error && (
+            <p
+              id="qa-error"
+              role="alert"
+              className="flex items-start gap-1.5 rounded-xl bg-rose-50 px-3 py-2 text-[12.5px] font-medium text-rose-700 dark:bg-rose-950/40 dark:text-rose-300"
+            >
+              <span aria-hidden="true">•</span>
+              {error}
+            </p>
+          )}
+
+          <button
+            onClick={save}
+            disabled={saving}
+            className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-[14.5px] font-bold text-white shadow-sm transition-all hover:bg-brand-600 active:translate-y-px disabled:pointer-events-none disabled:opacity-60"
+          >
+            {saving ? (
+              <>
+                <span
+                  aria-hidden="true"
+                  className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+                />
+                Menyimpan…
+              </>
+            ) : (
+              <>
+                <Check className="size-4" aria-hidden="true" />
+                Simpan transaksi
+              </>
+            )}
+          </button>
         </div>
       </SheetContent>
     </Sheet>

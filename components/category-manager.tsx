@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select-premium';
+import { FieldError, TextField } from '@/components/ui/money-input';
 
 interface C {
   id: string;
@@ -50,30 +51,39 @@ export function CategoryManager({ categories }: { categories: C[] }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 sm:flex-row">
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nama kategori baru"
-          className="h-10 sm:max-w-xs"
-          maxLength={30}
-        />
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value as 'INCOME' | 'EXPENSE')}
-          className="h-10 rounded-xl border border-input bg-card px-2.5 text-[13px] shadow-xs outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12"
-        >
-          <option value="EXPENSE">Pengeluaran</option>
-          <option value="INCOME">Pemasukan</option>
-        </select>
+        <div className="sm:max-w-xs sm:flex-1">
+          <TextField
+            value={name}
+            onChange={(v) => {
+              setName(v);
+              setError('');
+            }}
+            placeholder="Nama kategori baru"
+            maxLength={30}
+            invalid={Boolean(error)}
+          />
+        </div>
+        <div className="w-[150px]">
+          <Select
+            value={type}
+            onValueChange={(v) => setType(v as 'INCOME' | 'EXPENSE')}
+            options={[
+              { value: 'EXPENSE', label: 'Pengeluaran', icon: 'north_east' },
+              { value: 'INCOME', label: 'Pemasukan', icon: 'south_west' },
+            ]}
+            aria-label="Tipe kategori"
+            size="md"
+          />
+        </div>
         <Button
           onClick={add}
           disabled={saving}
-          className="h-10 w-fit bg-brand-500 text-[13px] font-semibold text-white hover:bg-brand-600"
+          className="h-11 w-fit rounded-xl bg-brand-500 px-4 text-[13px] font-semibold text-white hover:bg-brand-600"
         >
           {saving ? 'Menambah…' : 'Tambah'}
         </Button>
       </div>
-      {error && <p className="text-sm text-rose-600">{error}</p>}
+      <FieldError message={error} />
 
       <ul className="divide-y divide-border/60">
         {categories.map((c) => {

@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { Prisma } from '@prisma/client';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { formatIDR } from '@/lib/format';
 import { TxnActions } from '@/components/txn-actions';
-
-const inputCls =
-  'h-10 rounded-xl border border-input bg-card px-3 text-[13px] text-foreground shadow-xs outline-none transition-all placeholder:text-muted-foreground/60 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/12';
+import { FilterBar } from '@/components/transaksi/filter-bar';
+import { Reveal } from '@/components/motion/reveal';
 
 export default async function TransaksiPage({
   searchParams,
@@ -25,21 +25,41 @@ export default async function TransaksiPage({
   if (q.categoryId) where.categoryId = q.categoryId;
   if (q.from || q.to) {
     where.date = {};
-    if (q.from) (where.date as Prisma.DateTimeFilter).gte = new Date(q.from);
-    if (q.to) (where.date as Prisma.DateTimeFilter).lte = new Date(q.to);
+    // Rentang tanggal dipilih sebagai hari LOKAL. `new Date('YYYY-MM-DD')`
+    // diparse sebagai UTC sehingga transaksi sore hari (yang tersimpan sebagai
+    // UTC) bisa lolos dari filter. Bangun batas hari secara lokal, dan
+    // "sampai" dibuat eksklusif di awal hari berikutnya.
+    const dayStart = (iso: string) => new Date(`${iso}T00:00:00`);
+    const dayEndExclusive = (iso: string) => {
+      const d = new Date(`${iso}T00:00:00`);
+      d.setDate(d.getDate() + 1);
+      return d;
+    };
+    const range: Prisma.DateTimeFilter = {};
+    if (q.from) range.gte = dayStart(q.from);
+    if (q.to) range.lt = dayEndExclusive(q.to);
+    where.date = range;
   }
   if (q.q) where.note = { contains: q.q, mode: 'insensitive' };
 
   const [items, total, wallets, categories] = await Promise.all([
-    db.transaction.findMany({ where, orderBy: { date: 'desc' }, skip: (page - 1) * limit, take: limit }),
+    db.transaction.findMany({
+      where,
+      orderBy: { date: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
     db.transaction.count({ where }),
     db.wallet.findMany({ where: { userId, isActive: true } }),
-    db.category.findMany({ where: { OR: [{ userId }, { userId: null }] }, orderBy: { name: 'asc' } }),
+    db.category.findMany({
+      where: { OR: [{ userId }, { userId: null }] },
+      orderBy: { name: 'asc' },
+    }),
   ]);
   const walletMap = new Map(wallets.map((w) => [w.id, w]));
   const catMap = new Map(categories.map((c) => [c.id, c]));
   const pages = Math.max(1, Math.ceil(total / limit));
-  const hasFilter = Boolean(q.q || q.type || q.walletId || q.categoryId);
+  const hasFilter = Boolean(q.q || q.type || q.walletId || q.categoryId || q.from || q.to);
 
   const keep = (k: string, v: string) => {
     const clean: Record<string, string> = {};
@@ -48,102 +68,63 @@ export default async function TransaksiPage({
     return `/transaksi?${new URLSearchParams(clean).toString()}`;
   };
 
-  // Ringkasan periode yang sedang tampil (bukan seluruh riwayat)
   const sumIn = items.filter((t) => t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
   const sumOut = items.filter((t) => t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Judul */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-600">Riwayat</p>
-          <h1 className="text-display mt-1 text-[2rem] leading-tight sm:text-[2.35rem]">Transaksi</h1>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-600 dark:text-brand-400">
+            Riwayat
+          </p>
+          <h1 className="text-display mt-1 text-[2rem] leading-tight sm:text-[2.35rem]">
+            Transaksi
+          </h1>
           <p className="mt-0.5 text-[13px] text-muted-foreground">
-            {total} transaksi tercatat
-            {hasFilter && ' · sesuai filter'}
+            {total} transaksi tercatat{hasFilter && ' · sesuai filter'}
           </p>
         </div>
       </div>
 
-      {/* Ringkasan halaman ini */}
+      {/* Ringkasan halaman */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-border/70 bg-card px-4 py-3 shadow-xs">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-            Masuk (halaman ini)
+            Masuk
           </p>
-          <p className="numeral mt-1 text-[17px] text-brand-700">{formatIDR(sumIn)}</p>
+          <p className="numeral mt-1 text-[17px] text-brand-700 dark:text-brand-300">
+            {formatIDR(sumIn)}
+          </p>
+          <p className="mt-0.5 text-[10px] text-muted-foreground/70">halaman ini</p>
         </div>
         <div className="rounded-xl border border-border/70 bg-card px-4 py-3 shadow-xs">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-            Keluar (halaman ini)
+            Keluar
           </p>
-          <p className="numeral mt-1 text-[17px] text-foreground">{formatIDR(sumOut)}</p>
+          <p className="numeral mt-1 text-[17px]">{formatIDR(sumOut)}</p>
+          <p className="mt-0.5 text-[10px] text-muted-foreground/70">halaman ini</p>
         </div>
         <div className="col-span-2 rounded-xl border border-border/70 bg-card px-4 py-3 shadow-xs sm:col-span-1">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
             Selisih
           </p>
           <p
-            className={`numeral mt-1 text-[17px] ${sumIn - sumOut >= 0 ? 'text-brand-700' : 'text-rose-600'}`}
+            className={`numeral mt-1 text-[17px] ${
+              sumIn - sumOut >= 0 ? 'text-brand-700 dark:text-brand-300' : 'text-rose-600'
+            }`}
           >
             {sumIn - sumOut >= 0 ? '+' : '−'}
             {formatIDR(Math.abs(sumIn - sumOut))}
           </p>
+          <p className="mt-0.5 text-[10px] text-muted-foreground/70">halaman ini</p>
         </div>
       </div>
 
-      {/* Filter */}
-      <form
-        action="/transaksi"
-        method="get"
-        className="flex flex-col gap-2.5 rounded-2xl border border-border/70 bg-card p-3.5 shadow-xs sm:flex-row sm:flex-wrap sm:items-center"
-      >
-        <div className="relative flex-1 sm:min-w-[190px]">
-          <span className="material-symbols-outlined pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-muted-foreground/70">
-            search
-          </span>
-          <input
-            name="q"
-            defaultValue={q.q ?? ''}
-            placeholder="Cari catatan transaksi…"
-            className={`${inputCls} w-full pl-9`}
-            aria-label="Cari catatan"
-          />
-        </div>
-
-        <select name="type" defaultValue={q.type ?? ''} className={inputCls} aria-label="Tipe transaksi">
-          <option value="">Semua tipe</option>
-          <option value="EXPENSE">Pengeluaran</option>
-          <option value="INCOME">Pemasukan</option>
-        </select>
-
-        <select name="walletId" defaultValue={q.walletId ?? ''} className={inputCls} aria-label="Dompet">
-          <option value="">Semua dompet</option>
-          {wallets.map((w) => (
-            <option key={w.id} value={w.id}>
-              {w.name}
-            </option>
-          ))}
-        </select>
-
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            className="h-10 flex-1 rounded-xl bg-brand-500 px-4 text-[13px] font-semibold text-white shadow-sm transition-colors hover:bg-brand-600 sm:flex-none"
-          >
-            Terapkan
-          </button>
-          {hasFilter && (
-            <Link
-              href="/transaksi"
-              className="flex h-10 items-center justify-center rounded-xl border border-border px-3 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              Reset
-            </Link>
-          )}
-        </div>
-      </form>
+      <FilterBar
+        initial={{ q: q.q, type: q.type, walletId: q.walletId, from: q.from, to: q.to }}
+        wallets={wallets.map((w) => ({ id: w.id, name: w.name }))}
+      />
 
       {/* Tabel desktop */}
       {items.length > 0 && (
@@ -151,21 +132,16 @@ export default async function TransaksiPage({
           <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-border/70 bg-muted/40 text-left">
-                <th className="px-4 py-2.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
-                  Tanggal
-                </th>
-                <th className="px-4 py-2.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
-                  Keterangan
-                </th>
-                <th className="px-4 py-2.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
-                  Dompet
-                </th>
-                <th className="px-4 py-2.5 text-right text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
-                  Nominal
-                </th>
-                <th className="px-4 py-2.5 text-right text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
-                  Aksi
-                </th>
+                {['Tanggal', 'Keterangan', 'Dompet', 'Nominal', 'Aksi'].map((h, i) => (
+                  <th
+                    key={h}
+                    className={`px-4 py-2.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-muted-foreground ${
+                      i >= 3 ? 'text-right' : ''
+                    }`}
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
@@ -184,8 +160,10 @@ export default async function TransaksiPage({
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2.5">
                         <span
-                          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
-                            income ? 'bg-brand-50 text-brand-600' : 'bg-muted text-muted-foreground'
+                          className={`flex size-7 shrink-0 items-center justify-center rounded-lg ${
+                            income
+                              ? 'bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300'
+                              : 'bg-muted text-muted-foreground'
                           }`}
                         >
                           <span className="material-symbols-outlined text-[15px]">
@@ -193,7 +171,7 @@ export default async function TransaksiPage({
                           </span>
                         </span>
                         <div className="min-w-0">
-                          <p className="truncate font-semibold text-foreground">
+                          <p className="truncate font-semibold">
                             {t.note || (income ? 'Pemasukan' : 'Pengeluaran')}
                           </p>
                           {cat && (
@@ -235,8 +213,10 @@ export default async function TransaksiPage({
               className="flex items-center gap-3 rounded-xl border border-border/70 bg-card p-3 shadow-xs"
             >
               <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                  income ? 'bg-brand-50 text-brand-600' : 'bg-muted text-muted-foreground'
+                className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${
+                  income
+                    ? 'bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-300'
+                    : 'bg-muted text-muted-foreground'
                 }`}
               >
                 <span className="material-symbols-outlined text-[17px]">
@@ -251,12 +231,17 @@ export default async function TransaksiPage({
                   {cat?.name ?? ''} · {walletMap.get(t.walletId)?.name ?? ''}
                 </p>
                 <p className="text-[10.5px] text-muted-foreground/70">
-                  {new Date(t.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                  {new Date(t.date).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                  })}
                 </p>
               </div>
               <div className="flex shrink-0 flex-col items-end gap-1">
                 <span
-                  className={`text-[13px] font-bold tabular ${income ? 'text-income' : 'text-foreground'}`}
+                  className={`text-[13px] font-bold tabular ${
+                    income ? 'text-income' : 'text-foreground'
+                  }`}
                 >
                   {income ? '+' : '−'}
                   {formatIDR(Number(t.amount))}
@@ -270,27 +255,29 @@ export default async function TransaksiPage({
 
       {/* Kosong */}
       {items.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-border bg-card py-14 text-center">
-          <span className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-muted text-muted-foreground">
-            <span className="material-symbols-outlined text-[24px]">receipt_long</span>
-          </span>
-          <h2 className="mt-3 text-[15px] font-bold">
-            {hasFilter ? 'Tidak ada yang cocok' : 'Belum ada transaksi'}
-          </h2>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            {hasFilter
-              ? 'Coba ubah kata kunci atau hapus filter.'
-              : 'Tekan tombol + di navigasi untuk mencatat yang pertama.'}
-          </p>
-          {hasFilter && (
-            <Link
-              href="/transaksi"
-              className="mt-4 inline-flex h-9 items-center rounded-lg border border-border px-4 text-[13px] font-medium transition-colors hover:bg-muted"
-            >
-              Hapus filter
-            </Link>
-          )}
-        </div>
+        <Reveal>
+          <div className="rounded-2xl border border-dashed border-border bg-card py-14 text-center">
+            <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <span className="material-symbols-outlined text-[24px]">receipt_long</span>
+            </span>
+            <h2 className="mt-3 text-[15px] font-bold">
+              {hasFilter ? 'Tidak ada yang cocok' : 'Belum ada transaksi'}
+            </h2>
+            <p className="mt-1 text-[13px] text-muted-foreground">
+              {hasFilter
+                ? 'Coba ubah kata kunci atau hapus filter.'
+                : 'Tekan tombol + di navigasi untuk mencatat yang pertama.'}
+            </p>
+            {hasFilter && (
+              <Link
+                href="/transaksi"
+                className="mt-4 inline-flex h-9 items-center rounded-lg border border-border px-4 text-[13px] font-medium transition-colors hover:bg-muted"
+              >
+                Hapus filter
+              </Link>
+            )}
+          </div>
+        </Reveal>
       )}
 
       {/* Pagination */}
@@ -300,24 +287,24 @@ export default async function TransaksiPage({
             Halaman <span className="font-semibold text-foreground">{page}</span> dari {pages}
           </span>
           <div className="flex gap-2">
-            {page > 1 ? (
+            {page > 1 && (
               <Link
                 href={keep('page', String(page - 1))}
                 className="flex h-9 items-center gap-1 rounded-lg border border-border bg-card px-3 text-[12.5px] font-medium transition-colors hover:bg-muted"
               >
-                <span className="material-symbols-outlined text-[17px]">chevron_left</span>
+                <ChevronLeft className="size-4" aria-hidden="true" />
                 Sebelumnya
               </Link>
-            ) : null}
-            {page < pages ? (
+            )}
+            {page < pages && (
               <Link
                 href={keep('page', String(page + 1))}
                 className="flex h-9 items-center gap-1 rounded-lg border border-border bg-card px-3 text-[12.5px] font-medium transition-colors hover:bg-muted"
               >
                 Berikutnya
-                <span className="material-symbols-outlined text-[17px]">chevron_right</span>
+                <ChevronRight className="size-4" aria-hidden="true" />
               </Link>
-            ) : null}
+            )}
           </div>
         </div>
       )}
