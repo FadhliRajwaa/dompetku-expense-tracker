@@ -175,13 +175,22 @@ export function LandingSections({
         <Reveal className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" stagger={0.07}>
           {FEATURES.map((f, i) => {
             const Icon = f.icon;
+            // Properti transisi ditulis eksplisit, BUKAN `transition-all`:
+            // GSAP menganimasikan `transform` + `opacity` kartu ini saat masuk
+            // layar, dan `transition-all` ikut men-transisikan tiap nilai yang
+            // GSAP tulis — animasi diperebutkan dua mesin (terukur 4-8 frame
+            // panjang per scroll). `translate` (yang dipakai hover) tetap
+            // halus, `transform` milik GSAP bebas.
             return (
               <article
                 key={f.title}
-                className="reveal-item group relative overflow-hidden rounded-2xl border border-border/70 bg-card p-5 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/70 hover:shadow-md"
+                className="reveal-item group relative overflow-hidden rounded-2xl border border-border/70 bg-card p-5 shadow-xs transition-[translate,background-color,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-brand-300/70 hover:shadow-md"
               >
-                {/* Sorot halus saat hover: memberi umpan balik tanpa menggeser layout */}
-                <div className="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full bg-brand-400/0 blur-2xl transition-colors duration-300 group-hover:bg-brand-400/20" />
+                {/* Sorot halus saat hover: memberi umpan balik tanpa menggeser layout.
+                    Gradien + opacity, bukan blur + warna: filter blur di enam
+                    kartu ini diraster ulang saat kartu masuk layar (~30-100 ms
+                    per frame). Opacity cukup di-composite. */}
+                <div className="glow-400 pointer-events-none absolute -right-8 -top-8 size-24 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="relative flex items-start justify-between">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors duration-300 group-hover:bg-brand-500 group-hover:text-white dark:bg-brand-900/40 dark:text-brand-300">
                     <Icon className="size-[19px]" aria-hidden="true" />
@@ -236,7 +245,11 @@ export function LandingSections({
               koin turun, drum berputar, jarum dial mencatat total.
               Dikirim sebagai prop dari server supaya geometri tidak ikut ke
               bundle klien; hanya komponen live-nya yang berjalan di browser. */}
-          <Reveal delay={0.1}>{figure}</Reveal>
+          {/* Sengaja TANPA Reveal. Menganimasikan opasitas atau posisi pada
+              pembungkus ilustrasi isometrik memaksa browser me-raster ulang
+              seluruh subtree SVG setiap frame dan sempat memicu hitch ~117 ms
+              tepat saat kartu masuk layar. Ilustrasi besar tampil statis. */}
+          {figure}
         </div>
       </section>
 
@@ -337,10 +350,7 @@ export function LandingSections({
       <section className="mx-auto max-w-[1200px] px-5 pb-16 sm:px-8 lg:pb-24">
         <Reveal>
           <div className="mesh-brand relative overflow-hidden rounded-[28px] border border-brand-200/60 px-6 py-14 sm:px-12 lg:py-16">
-            <div
-              aria-hidden="true"
-              className="absolute -right-16 -top-16 size-64 rounded-full bg-brand-400/25 blur-3xl"
-            />
+            <div aria-hidden="true" className="glow-400 absolute -right-16 -top-16 size-64 rounded-full" />
             <div className="relative max-w-lg">
               <h2 className="text-display text-[2.05rem] leading-[1.08] sm:text-[2.8rem]">
                 {loggedIn ? 'Lanjutkan dari tempat kamu berhenti.' : 'Mulai tahu ke mana uangmu pergi.'}

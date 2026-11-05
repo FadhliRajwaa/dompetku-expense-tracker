@@ -19,9 +19,13 @@ export function SmoothScroll() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const lenis = new Lenis({
-      duration: 1.05,
-      // ease-out-expo: deselerasi panjang di ujung, tidak terasa "kenyal"
-      easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+      // `lerp` (bukan `duration` + `easing`). Mode durasi memasang tween tetap
+      // yang di-restart tiap ketukan roda: dengan ease-out-expo, ~60% jarak
+      // habis di 100 ms pertama lalu sisanya merayap di bawah 1 px/frame
+      // selama hampir sedetik — persis yang terasa "patah-patah". `lerp`
+      // menggerakkan sebagian tetap dari sisa jarak setiap frame, jadi
+      // kecepatannya turun mulus tanpa ekor panjang. 0.1 = rekomendasi Lenis.
+      lerp: 0.1,
       smoothWheel: true,
       // Sentuhan dibiarkan native: inertia jari di HP sudah lebih baik
       // daripada emulasi JS, dan menghindari konflik dengan bottom sheet.

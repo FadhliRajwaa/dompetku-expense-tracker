@@ -153,7 +153,18 @@ export function FlowMachineLive() {
         height={HEIGHT}
         label="Mesin alur uang DompetKu: corong tempat koin masuk, talang tempat koin menggelinding, drum penyortir enam lubang yang berputar, dan dial penghitung di sebelah kanan yang mencatat total."
       >
-        {/* Bayangan */}
+        {/* Bayangan.
+            Kit bawaan memakai `filter: blur(9px)`. Di atas SVG sebesar ini,
+            blur harus diraster ulang setiap kali kartu digulir masuk layar —
+            terukur 117 ms satu frame. Gradien radial memberi kesan bayangan
+            yang sama lembutnya tanpa biaya filter sama sekali. */}
+        <defs>
+          <radialGradient id="fm-halo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="var(--anatomy-halo)" stopOpacity="0.95" />
+            <stop offset="58%" stopColor="var(--anatomy-halo)" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="var(--anatomy-halo)" stopOpacity="0" />
+          </radialGradient>
+        </defs>
         <path className="iso-halo" d={GEO.base.halo} />
 
         {/* Kaki alas */}

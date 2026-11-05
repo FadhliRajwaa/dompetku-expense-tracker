@@ -220,6 +220,39 @@
     background: oklch(0.145 0.014 167);
     color: oklch(0.985 0.008 167);
   }
+  /* Sorotan lembut TANPA `filter: blur()`.
+     Blur pada elemen 96-288 px memaksa raster ulang di main thread setiap
+     kali pembungkusnya beranimasi (reveal saat scroll) — terukur hitch
+     sampai ~100 ms di satu frame. Gradien radial memberi kesan yang sama
+     dan hanya di-composite. Angka pada nama kelas = kekuatan warna inti. */
+  .glow-200 {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklch, var(--brand-200) 30%, transparent),
+      transparent
+    );
+  }
+  .glow-300 {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklch, var(--brand-300) 25%, transparent),
+      transparent
+    );
+  }
+  .glow-400 {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklch, var(--brand-400) 22%, transparent),
+      transparent
+    );
+  }
+  .glow-500 {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklch, var(--brand-500) 10%, transparent),
+      transparent
+    );
+  }
   /* Latar hero: mesh halus berarah brand */
   .mesh-brand {
     background-image:

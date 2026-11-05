@@ -70,8 +70,9 @@ export function Hero({ loggedIn }: { loggedIn: boolean }) {
             WebkitMaskImage: 'radial-gradient(60% 55% at 50% 30%, #000 20%, transparent 100%)',
           }}
         />
-        <div className="absolute -left-32 top-10 size-64 rounded-full bg-brand-300/25 blur-3xl" />
-        <div className="absolute -right-24 top-40 size-72 rounded-full bg-brand-200/30 blur-3xl" />
+        {/* Sorotan latar: gradien, bukan `blur-3xl`. Lihat `.glow-*` di globals.css. */}
+        <div className="glow-300 absolute -left-32 top-10 size-64 rounded-full" />
+        <div className="glow-200 absolute -right-24 top-40 size-72 rounded-full" />
       </div>
 
       <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 pb-16 sm:px-8 lg:grid-cols-[1.03fr_0.97fr] lg:gap-8 lg:pb-24">

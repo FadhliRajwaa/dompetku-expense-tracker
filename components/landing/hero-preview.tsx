@@ -61,7 +61,9 @@ export function HeroPreview() {
 
   return (
     <div ref={root} className="relative w-full max-w-[452px] pb-[104px]">
-      <div aria-hidden="true" className="absolute -inset-6 -z-10 rounded-[40px] bg-brand-500/10 blur-3xl" />
+      {/* Halo di belakang kartu: gradien, bukan blur — filter blur dirender
+          ulang tiap frame saat kartu bergerak masuk. */}
+      <div aria-hidden="true" className="glow-500 absolute -inset-6 -z-10 rounded-[40px]" />
 
       {/* Kartu utama */}
       <div className="relative overflow-hidden rounded-[26px] border border-border/70 bg-card p-5 shadow-[var(--shadow-lg)]">

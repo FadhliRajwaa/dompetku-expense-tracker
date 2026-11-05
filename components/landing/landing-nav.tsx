@@ -43,14 +43,22 @@ export function LandingNav({ loggedIn }: { loggedIn: boolean }) {
   }, [menuOpen]);
 
   return (
-    <header
-      className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'border-b border-border/60 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/65'
-          : 'border-b border-transparent bg-transparent',
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/*
+        Lapisan latar dipisah dari header dan hanya di-transisikan `opacity`.
+        Sebelumnya header sendiri yang berubah warna sambil memakai
+        `backdrop-blur`: men-transisikan `background-color` pada elemen
+        ber-blur memaksa blur dihitung ulang di main thread tiap frame —
+        satu frame membeku sampai ~100 ms tiap kali status scroll berganti.
+        Dengan lapisan terpisah, blur cukup di-composite.
+      */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          'pointer-events-none absolute inset-0 -z-10 border-b bg-background/80 backdrop-blur-xl transition-opacity duration-300 supports-[backdrop-filter]:bg-background/65',
+          scrolled ? 'border-border/60 opacity-100' : 'border-transparent opacity-0',
+        )}
+      />
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-5 sm:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="DompetKu, beranda">
           <img src="/logo.svg" alt="" className="h-8 w-8 rounded-lg" />

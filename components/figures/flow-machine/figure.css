@@ -94,6 +94,17 @@
   line-height: 1.6;
 }
 
+/* Bayangan mesin.
+   Kit memakai `filter: blur(9px)`; di SVG sebesar ini blur diraster ulang
+   setiap kartu masuk layar dan sempat membekukan frame ~117 ms. Gradien
+   radial (didefinisikan di live.tsx sebagai #fm-halo) memberi kesan yang
+   sama tanpa biaya filter, jadi blur-nya dimatikan. */
+.flow-machine .iso-halo {
+  filter: none;
+  fill: url(#fm-halo);
+  opacity: var(--anatomy-halo-opacity);
+}
+
 /* Koin: satu-satunya benda yang menyala, supaya mata mengikutinya. */
 .flow-machine .coin .iso-top {
   fill: color-mix(in oklch, var(--anatomy-lit) 22%, var(--anatomy-top));
